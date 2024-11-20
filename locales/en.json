@@ -1,0 +1,21 @@
+{
+    "contactList": {
+      "title": "Liste de Contacts",
+      "permissionDenied": "Permission Refusée",
+      "permissionMessage": "Vous devez accorder l'autorisation d'accès aux contacts pour utiliser cette fonctionnalité.",
+      "ok": "D'accord"
+    },
+    "settings": {
+      "language": "paramètres",
+      "darkMode": "Mode sombre"
+    },
+    "menus": {
+      "logout": "Se déconnecter",
+      "profile": "Profil",
+      "home": "Accueil",
+      "signin": "Se connecter",
+      "signup": "S'inscrire",
+      "calculator": "Calculatrice" 
+    }
+  }
+  
