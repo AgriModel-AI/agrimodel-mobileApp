@@ -70,12 +70,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center',
+    fontFamily: 'Poppins_900Black',
+    textTransform: 'capitalize',
     marginBottom: 10,
   },
   description: {
     fontSize: 18,
     color: '#fff',
     textAlign: 'center',
+    fontFamily: 'Poppins_400Regular',
     paddingHorizontal: 20,
   },
   button: {
@@ -85,10 +88,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 40,
     alignItems: 'center',
+    fontFamily: 'Poppins_400Regular',
   },
   buttonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+    fontFamily: 'Poppins_400Regular',
   },
 });

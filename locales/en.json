@@ -1,21 +1,88 @@
 {
-    "contactList": {
-      "title": "Liste de Contacts",
-      "permissionDenied": "Permission Refusée",
-      "permissionMessage": "Vous devez accorder l'autorisation d'accès aux contacts pour utiliser cette fonctionnalité.",
-      "ok": "D'accord"
+  "auth": {
+    "login": {
+      "welcome": "Welcome to AgriModel",
+      "email_label": "Email",
+      "email_placeholder": "Enter your email",
+      "password_label": "Password",
+      "password_placeholder": "Enter your password",
+      "forgot_password": "Forgot Password?",
+      "login": "Login",
+      "signup_prompt": "Don't have an account?",
+      "signup_link": "Sign Up",
+      "or_text": "- OR -",
+      "google_login": "Continue with Google",
+      "switch_theme": "Switch Theme"
     },
-    "settings": {
-      "language": "paramètres",
-      "darkMode": "Mode sombre"
+    "signup": {
+      "create_account": "Create an account",
+      "names_label": "Names",
+      "names_placeholder": "Enter your names",
+      "email_label": "Email",
+      "email_placeholder": "Enter your email",
+      "phone_label": "Phone",
+      "phone_placeholder": "Enter your phone number",
+      "password_label": "Password",
+      "password_placeholder": "Enter your password",
+      "confirm_password_label": "Confirm Password",
+      "confirm_password_placeholder": "Confirm your password",
+      "agree_terms": "I agree with your",
+      "terms_and_conditions": "terms & conditions",
+      "already_have_account": "Already have an account?",
+      "login_link": "Login",
+      "google_signup": "Sign Up with Google",
+      "or_text": "- OR -"
     },
-    "menus": {
-      "logout": "Se déconnecter",
-      "profile": "Profil",
-      "home": "Accueil",
-      "signin": "Se connecter",
-      "signup": "S'inscrire",
-      "calculator": "Calculatrice" 
+    "forgot_password": {
+      "title": "Forgot Password",
+      "description": "Enter your email to reset your account",
+      "email_label": "Email Address",
+      "email_placeholder": "Enter your email",
+      "continue": "Continue",
+      "cancel": "Cancel"
+    },
+    "verification": {
+      "title": "Enter Verification Code",
+      "description": "We have sent a code to your email {{email}}",
+      "verify": "Verify",
+      "resend_prompt": "Didn't receive code?",
+      "resend_code": "Resend Code",
+      "back_to_login": "Back to Login"
+    },
+    "reset_password": {
+      "title": "Reset Your Password",
+      "description": "The password must be different than before",
+      "password_label": "New Password",
+      "password_placeholder": "Enter new password",
+      "confirm_password_label": "Confirm Password",
+      "confirm_password_placeholder": "Confirm password",
+      "continue": "Continue",
+      "cancel": "Cancel"
+    },
+    "success": {
+      "title": "Successful",
+      "description": "Congratulations! Your password has been changed.",
+      "continue": "Continue"
     }
+  },
+  "terms": {
+    "title": "Terms and Conditions",
+    "subtitle": "General Site Usage",
+    "last_revised": "Last Revised:",
+    "last_revised_date": "September 11, 2024",
+    "content": [
+      {
+        "header": "1. YOUR AGREEMENT",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vel diam eget dolor vehicula dictum sit amet id lectus. Integer blandit nulla ac risus consequat, nec elementum metus aliquam. Quisque fringilla nisi in felis facilisis, a gravida enim dignissim. Donec eget justo ut lectus ultrices fermentum vitae id nisl."
+      },
+      {
+        "header": "PLEASE NOTE",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vel diam eget dolor vehicula dictum sit amet id lectus. Integer blandit nulla ac risus consequat, nec elementum metus aliquam. Quisque fringilla nisi in felis facilisis."
+      },
+      {
+        "header": "OUR AGREEMENT",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vel diam eget dolor vehicula dictum sit amet id lectus. Integer blandit nulla ac risus consequat, nec elementum metus aliquam."
+      }
+    ]
   }
-  
+}

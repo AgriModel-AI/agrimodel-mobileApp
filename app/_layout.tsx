@@ -7,7 +7,6 @@ import { Provider } from 'react-redux';
 import { store } from '@/redux/store';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@/i18n';
-import { StatusBar } from 'react-native';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 
@@ -55,11 +54,17 @@ export default function RootLayout() {
   return (
     <Provider store={store}>
       <PaperProvider>
-        <StatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} />
         <I18nextProvider i18n={i18n}>
           <Stack>
             <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="login" options={{ headerShown: false }} />
+            <Stack.Screen name="signup" options={{ headerShown: false }} />
+            <Stack.Screen name="terms" options={{ headerShown: false }} />
+            <Stack.Screen name="forget" options={{ headerShown: false }} />
+            <Stack.Screen name="verify" options={{ headerShown: false }} />
+            <Stack.Screen name="reset" options={{ headerShown: false }} />
+            <Stack.Screen name="success" options={{ headerShown: false }} />
+            <Stack.Screen name="(authenticated)/(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="+not-found" />
           </Stack>
         </I18nextProvider>

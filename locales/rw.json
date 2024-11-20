@@ -1,21 +1,88 @@
 {
-    "contactList": {
-      "title": "Liste de Contacts",
-      "permissionDenied": "Permission Refusée",
-      "permissionMessage": "Vous devez accorder l'autorisation d'accès aux contacts pour utiliser cette fonctionnalité.",
-      "ok": "D'accord"
+  "auth": {
+    "login": {
+      "welcome": "Murakaza neza kuri AgriModel",
+      "email_label": "Imeyili",
+      "email_placeholder": "Injiza imeyili yawe",
+      "password_label": "Ijambo ry'ibanga",
+      "password_placeholder": "Injiza ijambo ry'ibanga",
+      "forgot_password": "Wibagiwe ijambo ry'ibanga?",
+      "login": "Injira",
+      "signup_prompt": "Nta konti ufite?",
+      "signup_link": "Iyandikishe",
+      "or_text": "- CYANGWA -",
+      "google_login": "Komeza na Google",
+      "switch_theme": "Hindura Uburyo"
     },
-    "settings": {
-      "language": "paramètres",
-      "darkMode": "Mode sombre"
+    "signup": {
+      "create_account": "Fungura Konti",
+      "names_label": "Amazina",
+      "names_placeholder": "Injiza amazina yawe",
+      "email_label": "Imeyili",
+      "email_placeholder": "Injiza imeyili yawe",
+      "phone_label": "Telefone",
+      "phone_placeholder": "Injiza nimero ya telefone yawe",
+      "password_label": "Ijambo ry'ibanga",
+      "password_placeholder": "Injiza ijambo ry'ibanga",
+      "confirm_password_label": "Emeza Ijambo ry'ibanga",
+      "confirm_password_placeholder": "Emeza ijambo ry'ibanga",
+      "agree_terms": "Nemeranya n'ibyerekeye",
+      "terms_and_conditions": "amategeko & amateka",
+      "already_have_account": "Ufite konti?",
+      "login_link": "Injira",
+      "google_signup": "Iyandikishe ukoresheje Google",
+      "or_text": "- CYANGWA -"
     },
-    "menus": {
-      "logout": "Se déconnecter",
-      "profile": "Profil",
-      "home": "Accueil",
-      "signin": "Se connecter",
-      "signup": "S'inscrire",
-      "calculator": "Calculatrice" 
+    "forgot_password": {
+      "title": "Wibagiwe ijambo ry'ibanga",
+      "description": "Injiza imeri yawe kugira ngo usubizeho konti yawe",
+      "email_label": "Imeli",
+      "email_placeholder": "Injiza imeri yawe",
+      "continue": "Komeza",
+      "cancel": "Hagarika"
+    },
+    "verification": {
+      "title": "Injiza Umubare W'ibyemezo",
+      "description": "Twakohereje umubare kuri email yawe {{email}}",
+      "verify": "Emeza",
+      "resend_prompt": "Ntabwo wakiriye umubare?",
+      "resend_code": "Ohereza nanone",
+      "back_to_login": "Subira kwinjira"
+    },
+    "reset_password": {
+      "title": "Shyiramo Ijambo Ry'ibanga Rishya",
+      "description": "Ijambo ry’ibanga rigomba kuba ritarakoreshejwe mbere",
+      "password_label": "Ijambo ry'ibanga rishya",
+      "password_placeholder": "Injiza ijambo ry'ibanga rishya",
+      "confirm_password_label": "Emeza ijambo ry'ibanga",
+      "confirm_password_placeholder": "Emeza ijambo ry'ibanga",
+      "continue": "Komeza",
+      "cancel": "Hagarika"
+    },
+    "success": {
+      "title": "Byakozwe Neza",
+      "description": "Mwakoze neza! Ijambo ry'ibanga ryanyu ryahinduwe.",
+      "continue": "Komeza"
     }
+  },
+  "terms": {
+    "title": "Amategeko n'Amabwiriza",
+    "subtitle": "Gukoresha Urubuga Rusange",
+    "last_revised": "Igihe Gishya Cyavuguruwe:",
+    "last_revised_date": "Nzeri 11, 2024",
+    "content": [
+      {
+        "header": "1. AMASEZERANO YAWE",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vel diam eget dolor vehicula dictum sit amet id lectus. Integer blandit nulla ac risus consequat, nec elementum metus aliquam. Quisque fringilla nisi in felis facilisis, a gravida enim dignissim. Donec eget justo ut lectus ultrices fermentum vitae id nisl."
+      },
+      {
+        "header": "NYIRIRINDE",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vel diam eget dolor vehicula dictum sit amet id lectus. Integer blandit nulla ac risus consequat, nec elementum metus aliquam. Quisque fringilla nisi in felis facilisis."
+      },
+      {
+        "header": "AMASEZERANO YACU",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vel diam eget dolor vehicula dictum sit amet id lectus. Integer blandit nulla ac risus consequat, nec elementum metus aliquam."
+      }
+    ]
   }
-  
+}
