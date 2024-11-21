@@ -30,7 +30,7 @@ const LandingPage = ({ navigation }: { navigation: any }) => {
             {/* Bottom Button */}
             <Link href="/login" replace asChild>
               <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>Start</Text>
+                <Text style={styles.buttonText}>Get Started</Text>
               </TouchableOpacity>
               </Link>
           </View>

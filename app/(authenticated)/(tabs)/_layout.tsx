@@ -3,12 +3,15 @@ import React from 'react';
 import { Animated, Easing } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/ThemeProvider';
+import { useSafeAreaInsets } from 'react-native-safe-area-context'; // For dynamic padding
+import CustomHeader from '@/component/CustomHeader';
 
 export default function TabLayout() {
   const { theme } = useTheme();
+  const insets = useSafeAreaInsets(); // Get safe area insets for padding
 
   // Animation state for active/inactive tabs
-  const animatedScale = new Animated.Value(2);
+  const animatedScale = new Animated.Value(1);
 
   const animateTab = () => {
     Animated.sequence([
@@ -37,18 +40,17 @@ export default function TabLayout() {
           shadowOpacity: 0.1, // Shadow opacity
           shadowRadius: 2, // Shadow blur radius
           elevation: 6, // Shadow on Android
-          height: 70,
-          paddingHorizontal: 8,
-          paddingTop: 8
+          height: 70, // Add dynamic bottom padding for iPhone gesture bar or Android nav bar
+          paddingBottom: insets.bottom, // Add safe area bottom padding
         },
         tabBarActiveTintColor: theme.colors.primary, // Active tab color
         tabBarInactiveTintColor: theme.colors.text, // Inactive tab color
         tabBarLabelStyle: {
-          fontSize: 12, // Font size for labels
+          fontSize: 12,
           fontFamily: 'Poppins_400Regular', // Custom font
         },
         tabBarItemStyle: {
-          marginBottom: 5, // Spacing between items
+          marginBottom: 5,
         },
       }}
     >
@@ -65,6 +67,8 @@ export default function TabLayout() {
               </Animated.View>
             );
           },
+          header: () => <CustomHeader />,
+          headerTransparent: true,
         }}
       />
       {/* Diagnosis Tab */}
@@ -102,6 +106,7 @@ export default function TabLayout() {
         name="profile/index"
         options={{
           tabBarLabel: 'Profile',
+          headerShown: false,
           tabBarIcon: ({ color, focused }) => {
             if (focused) animateTab(); // Trigger animation on focus
             return (

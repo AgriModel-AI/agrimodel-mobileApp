@@ -84,5 +84,24 @@
         "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vel diam eget dolor vehicula dictum sit amet id lectus. Integer blandit nulla ac risus consequat, nec elementum metus aliquam."
       }
     ]
+  },
+  "home": {
+    "greeting": "Welcome",
+    "today_weather": "Today's Weather",
+    "good_weather_advice": "Today is a good weather to apply pesticides",
+    "crops_detected": "Crops We Diagnose and Detect",
+    "community": "Community",
+    "members": "Members",
+    "join": "Join",
+    "humidity": "Humidity"
+  },
+  "profile": {
+    "edit_profile": "Edit Profile",
+    "preferences": "Preferences",
+    "change_theme": "Change Theme",
+    "change_language": "Change Language",
+    "actions": "Actions",
+    "terms_and_conditions": "Terms & Conditions",
+    "logout": "Logout"
   }
 }

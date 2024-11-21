@@ -84,5 +84,24 @@
         "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vel diam eget dolor vehicula dictum sit amet id lectus. Integer blandit nulla ac risus consequat, nec elementum metus aliquam."
       }
     ]
+  },
+  "home": {
+    "greeting": "Murakaza neza",
+    "today_weather": "Ikirere Cy'uyu munsi",
+    "good_weather_advice": "Uyu munsi ni ikirere cyiza cyo gukoresha imiti yica udukoko",
+    "crops_detected": "Imyaka Tubasha Gusesengura no Guhishura",
+    "community": "Umuryango",
+    "members": "Abanyamuryango",
+    "join": "Injira",
+    "humidity": "Ubushuhe"
+  },
+  "profile": {
+    "edit_profile": "Hindura Umwirondoro",
+    "preferences": "Preferences",
+    "change_theme": "Hindura Insanganyamatsiko",
+    "change_language": "Hindura Ururimi",
+    "actions": "Ibikorwa",
+    "terms_and_conditions": "Amategeko n'Amabwiriza",
+    "logout": "Sohoka"
   }
 }

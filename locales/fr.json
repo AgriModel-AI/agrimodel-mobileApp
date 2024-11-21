@@ -84,5 +84,24 @@
         "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vel diam eget dolor vehicula dictum sit amet id lectus."
       }
     ]
+  },
+  "home": {
+    "greeting": "Bienvenue",
+    "today_weather": "Météo d'aujourd'hui",
+    "good_weather_advice": "Aujourd'hui, c'est un bon temps pour appliquer des pesticides",
+    "crops_detected": "Cultures que nous diagnostiquons et détectons",
+    "community": "Communauté",
+    "members": "Membres",
+    "join": "Rejoindre",
+    "humidity": "Humidité"
+  },
+  "profile": {
+    "edit_profile": "Modifier le profil",
+    "preferences": "Préférences",
+    "change_theme": "Changer le thème",
+    "change_language": "Changer de langue",
+    "actions": "Actions",
+    "terms_and_conditions": "Termes et conditions",
+    "logout": "Se déconnecter"
   }
 }

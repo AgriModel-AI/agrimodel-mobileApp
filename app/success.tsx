@@ -19,7 +19,6 @@ const SuccessScreen = () => {
 
   return (
     <View style={[globalStyles.container, { backgroundColor: theme.colors.background }]}>
-      <StatusBar translucent backgroundColor="transparent" barStyle={theme.dark ? 'light-content' : 'dark-content'} />
 
       {/* Icon and Title */}
       <View style={styles.content}>

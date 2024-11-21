@@ -51,8 +51,6 @@ const VerificationScreen = ({ navigation }: { navigation: any }) => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={[globalStyles.container, { backgroundColor: theme.colors.background }]}
       >
-        <StatusBar translucent backgroundColor="transparent" barStyle={theme.dark ? 'light-content' : 'dark-content'} />
-
         {/* Back to Login */}
         <TouchableOpacity
           onPress={() => router.replace('/login')}

@@ -25,7 +25,6 @@ const TermsScreen = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <StatusBar translucent backgroundColor="transparent" barStyle={theme.dark ? 'light-content' : 'dark-content'} />
 
       {/* Header */}
       <View style={styles.header}>

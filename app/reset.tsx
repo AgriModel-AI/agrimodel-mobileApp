@@ -27,7 +27,6 @@ const ResetPasswordScreen = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={[globalStyles.container, { backgroundColor: theme.colors.background }]}>
-        <StatusBar translucent backgroundColor="transparent" barStyle={theme.dark ? 'light-content' : 'dark-content'} />
 
         {/* Back to Login */}
         <View style={styles.backContainer}>

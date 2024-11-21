@@ -28,7 +28,6 @@ const SignupScreen = () => {
 
   return (
     <View style={[globalStyles.container, { backgroundColor: theme.colors.background }]}>
-      <StatusBar translucent backgroundColor="transparent" barStyle={theme.dark ? 'light-content' : 'dark-content'} />
 
       {/* Fixed Title */}
       <Text style={[globalStyles.title, { color: theme.colors.primary, marginTop: 20 }]}>

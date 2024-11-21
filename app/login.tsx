@@ -37,7 +37,6 @@ const SignInScreen = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
         {/* Logo */}
-        <StatusBar translucent backgroundColor="transparent" barStyle={theme.dark ? 'light-content' : 'dark-content'} />
         <View style={styles.logoContainer}>
           <Text style={[styles.appName, { color: theme.colors.primary, fontFamily: 'Poppins_800ExtraBold' }]}>
             {t('auth.login.welcome')}
