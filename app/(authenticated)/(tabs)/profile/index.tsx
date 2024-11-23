@@ -15,12 +15,14 @@ import { useTranslation } from 'react-i18next';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Link, useRouter } from 'expo-router';
 
 const ProfileScreen = () => {
   const { theme, toggleTheme } = useTheme();
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
   const headerHeight = useHeaderHeight();
+  const router = useRouter();
 
   const changeLanguage = (lang: string | undefined) => {
     i18n.changeLanguage(lang);
@@ -52,21 +54,22 @@ const ProfileScreen = () => {
           <Text style={[styles.email, { color: theme.colors.text }]}>
             uwizeyeeddie@gmail.com
           </Text>
-          <TouchableOpacity
-            style={[
-              styles.editProfileButton,
-              { backgroundColor: theme.colors.primary },
-            ]}
-          >
-            <Text
+            <TouchableOpacity
               style={[
-                styles.editProfileText,
-                { color: theme.colors.background },
+                styles.editProfileButton,
+                { backgroundColor: theme.colors.primary },
               ]}
+              onPress={()=> router.push('/(authenticated)/(tabs)/profile/edit')}
             >
-              {t('profile.edit_profile')}
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={[
+                  styles.editProfileText,
+                  { color: theme.colors.background },
+                ]}
+              >
+                {t('profile.edit_profile')}
+              </Text>
+            </TouchableOpacity>
         </View>
 
         {/* Preferences Section */}
