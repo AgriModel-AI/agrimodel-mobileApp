@@ -102,6 +102,19 @@
     "change_language": "Hindura Ururimi",
     "actions": "Ibikorwa",
     "terms_and_conditions": "Amategeko n'Amabwiriza",
-    "logout": "Sohoka"
-  }
+    "logout": "Sohoka",
+    "change_password": "Hindura Ijambo ry’ibanga"
+  },
+  "profileEdit": {
+    "edit_profile": "Hindura Umwirondoro",
+    "save_changes": "Bika Impinduka",
+    "select_district": "Hitamo Akarere Kawe",
+    "close": "Funga",
+    "take_photo": "Fata Ifoto",
+    "choose_from_gallery": "Hitamo Muri Galeri",
+    "cancel": "Hagarika",
+    "permission_denied": "Uburenganzira Bwanze",
+    "enable_permissions_camera": "Ugomba kwemerera gukoresha Camera."
+}
+
 }

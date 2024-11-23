@@ -102,6 +102,19 @@
     "change_language": "Change Language",
     "actions": "Actions",
     "terms_and_conditions": "Terms & Conditions",
-    "logout": "Logout"
-  }
+    "logout": "Logout",
+    "change_password": "Change Password"
+  },
+  "profileEdit": {
+    "edit_profile": "Edit Profile",
+    "save_changes": "Save Changes",
+    "select_district": "Select your district",
+    "close": "Close",
+    "take_photo": "Take Photo",
+    "choose_from_gallery": "Choose from Gallery",
+    "cancel": "Cancel",
+    "permission_denied": "Permission Denied",
+    "enable_permissions_camera": "You need to enable permissions to use the camera."
+}
+
 }

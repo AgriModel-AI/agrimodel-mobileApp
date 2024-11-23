@@ -22,6 +22,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { router } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
+import { useTranslation } from 'react-i18next';
 
 const rwandaDistricts = [
   'Gasabo',
@@ -61,6 +62,8 @@ const { width, height } = Dimensions.get('window');
 const EditProfileScreen = () => {
   const { theme } = useTheme();
   const headerHeight = useHeaderHeight();
+  const { t } = useTranslation();
+  
   const [dob, setDob] = useState(new Date());
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -130,7 +133,7 @@ const EditProfileScreen = () => {
   const openCamera = async () => {
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
     if (!permissionResult.granted) {
-      Alert.alert('Permission Denied', 'You need to enable permissions to use the camera.');
+      Alert.alert(t('profileEdit.permission_denied'), t('profileEdit.enable_permissions_camera'));
       return;
     }
     const cameraResult = await ImagePicker.launchCameraAsync({
@@ -149,7 +152,7 @@ const EditProfileScreen = () => {
           <Feather name="arrow-left" onPress={()=>router.back()} size={24} color={theme.colors.text} />
         </TouchableOpacity>
         <Text style={[styles.headerTitle, { color: theme.colors.text }]}>
-          Edit Profile
+          {t('profileEdit.edit_profile')}
         </Text>
         <View style={{ width: 24 }} />
       </View>
@@ -229,7 +232,7 @@ const EditProfileScreen = () => {
           >
             <Feather name="map-pin" size={20} color={theme.colors.text} />
             <Text style={[styles.textInput, { color: theme.colors.text }]}>
-              {district || 'Select your district'}
+              {district || t('profileEdit.select_district')}
             </Text>
           </TouchableOpacity>
 
@@ -243,7 +246,7 @@ const EditProfileScreen = () => {
             <View style={styles.modalContainer}>
               <View style={[styles.modalContent, { backgroundColor: theme.colors.background }]}>
                 <Text style={[styles.modalTitle, { color: theme.colors.text }]}>
-                  Select District
+                  {t('profileEdit.select_district')}
                 </Text>
                 <FlatList
                   data={rwandaDistricts}
@@ -259,7 +262,7 @@ const EditProfileScreen = () => {
                 />
                 <TouchableOpacity style={styles.modalCloseButton} onPress={toggleModal}>
                   <Text style={[styles.modalCloseText, { color: theme.colors.primary }]}>
-                    Close
+                    {t('profileEdit.close')}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -307,7 +310,7 @@ const EditProfileScreen = () => {
             style={[styles.saveButton, { backgroundColor: theme.colors.primary }]}
           >
             <Text style={[styles.saveButtonText, { color: theme.colors.background }]}>
-              Save Changes
+              {t('profileEdit.save_changes')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -323,15 +326,15 @@ const EditProfileScreen = () => {
               ]}
             >
               <TouchableOpacity style={styles.photoOption} onPress={openCamera}>
-                <Text style={[styles.photoOptionText, { color: theme.colors.text }]}>Take Photo</Text>
+                <Text style={[styles.photoOptionText, { color: theme.colors.text }]}>{t('profileEdit.take_photo')}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.photoOption} onPress={openImagePicker}>
                 <Text style={[styles.photoOptionText, { color: theme.colors.text }]}>
-                  Choose from Gallery
+                {t('profileEdit.choose_from_gallery')}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.photoOption} onPress={togglePhotoModal}>
-                <Text style={[styles.photoOptionText, { color: theme.colors.primary }]}>Cancel</Text>
+                <Text style={[styles.photoOptionText, { color: theme.colors.primary }]}>{t('profileEdit.cancel')}</Text>
               </TouchableOpacity>
             </Animated.View>
           </View>

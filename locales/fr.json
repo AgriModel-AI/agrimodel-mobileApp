@@ -102,6 +102,19 @@
     "change_language": "Changer de langue",
     "actions": "Actions",
     "terms_and_conditions": "Termes et conditions",
-    "logout": "Se déconnecter"
-  }
+    "logout": "Se déconnecter",
+    "change_password": "Changer le mot de passe"
+  },
+  "profileEdit": {
+    "edit_profile": "Modifier le profil",
+    "save_changes": "Enregistrer les modifications",
+    "select_district": "Sélectionnez votre district",
+    "close": "Fermer",
+    "take_photo": "Prendre une photo",
+    "choose_from_gallery": "Choisir depuis la galerie",
+    "cancel": "Annuler",
+    "permission_denied": "Permission refusée",
+    "enable_permissions_camera": "Vous devez activer les autorisations pour utiliser l'appareil photo."
+}
+
 }

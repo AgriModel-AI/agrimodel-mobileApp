@@ -64,7 +64,7 @@ const ProfileScreen = () => {
               <Text
                 style={[
                   styles.editProfileText,
-                  { color: theme.colors.background },
+                  { color: 'white' },
                 ]}
               >
                 {t('profile.edit_profile')}
@@ -93,6 +93,7 @@ const ProfileScreen = () => {
               onValueChange={toggleTheme}
               trackColor={{ false: '#767577', true: theme.colors.background }}
               thumbColor={theme.dark ? theme.colors.inputBackground : '#f4f3f4'}
+              style={{padding: 0, marginVertical: -3}}
             />
           </View>
           <View style={[styles.divider]} />
@@ -141,6 +142,16 @@ const ProfileScreen = () => {
           {t('profile.actions')}
         </Text>
         <View style={[styles.card, { backgroundColor: theme.colors.inputBackground }]}>
+          <TouchableOpacity style={styles.actionItem}>
+            <View style={styles.preferenceContent}>
+              <Feather name="lock" size={24} color={theme.colors.text} />
+              <Text style={[styles.preferenceText, { color: theme.colors.text }]}>
+                {t('profile.change_password')}
+              </Text>
+            </View>
+            <Feather name="chevron-right" size={24} color={theme.colors.text} />
+          </TouchableOpacity>
+          <View style={[styles.divider]} />
           <TouchableOpacity style={styles.actionItem}>
             <View style={styles.preferenceContent}>
               <Feather name="file-text" size={24} color={theme.colors.text} />
@@ -194,7 +205,7 @@ const styles = StyleSheet.create({
   editProfileButton: {
     paddingVertical: 10,
     paddingHorizontal: 32,
-    borderRadius: 8,
+    borderRadius: 32,
   },
   editProfileText: {
     fontSize: 14,
