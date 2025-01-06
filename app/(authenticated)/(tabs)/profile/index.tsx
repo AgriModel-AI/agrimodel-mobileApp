@@ -14,7 +14,6 @@ import { useTheme } from '@/hooks/ThemeProvider';
 import { useTranslation } from 'react-i18next';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useHeaderHeight } from '@react-navigation/elements';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, useRouter } from 'expo-router';
 
 const ProfileScreen = () => {
@@ -29,13 +28,9 @@ const ProfileScreen = () => {
   };
 
   return (
-    <SafeAreaView
-      style={[
-        styles.container,
-        { backgroundColor: theme.colors.background },
-      ]}
-    >
+    <View style={styles.container}>
       <ScrollView
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
         contentContainerStyle={{
           paddingBottom: 20,
           paddingTop: headerHeight + Platform.OS === 'android' ? StatusBar.currentHeight : 40,
@@ -172,7 +167,7 @@ const ProfileScreen = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+      </View>
   );
 };
 

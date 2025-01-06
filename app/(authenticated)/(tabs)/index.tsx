@@ -185,13 +185,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
   },
   joinButton: {
-    borderWidth: 1.5,
-    borderRadius: 8,
-    paddingVertical: 6,
-    paddingHorizontal: 16,
+    borderWidth: 2,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    borderRadius: 20,
   },
   joinButtonText: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: 'Poppins_600SemiBold',
   },
 });

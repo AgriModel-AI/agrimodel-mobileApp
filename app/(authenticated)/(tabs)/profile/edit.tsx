@@ -145,7 +145,7 @@ const EditProfileScreen = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background, paddingTop: headerHeight + Platform.OS === 'android' ? StatusBar.currentHeight : 40, }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity>
@@ -158,7 +158,7 @@ const EditProfileScreen = () => {
       </View>
 
       {/* Scrollable Content */}
-      <ScrollView contentContainerStyle={{ paddingBottom: 20 }} showsVerticalScrollIndicator={false}>
+      <ScrollView  showsVerticalScrollIndicator={false}>
         {/* Profile Section */}
         <View style={styles.profileSection}>
           <Image source={{ uri: profileImage }} style={styles.profileImage} />
@@ -350,6 +350,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    paddingBottom: 0,
   },
   header: {
     flexDirection: 'row',

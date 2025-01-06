@@ -30,9 +30,10 @@ const SignupScreen = () => {
     <View style={[globalStyles.container, { backgroundColor: theme.colors.background }]}>
 
       {/* Fixed Title */}
-      <Text style={[globalStyles.title, { color: theme.colors.primary, marginTop: 20 }]}>
-        {t('auth.signup.create_account')}
-      </Text>
+      <View style={[globalStyles.logoContainer, { marginTop: 40 }]}>
+          <Text style={[globalStyles.appName, { color: theme.colors.primary }]}>🌿 AgriModel</Text>
+          <Text style={[globalStyles.tagline, { color: theme.colors.text }]}>{t('auth.login.welcome')}</Text>
+        </View>
 
       {/* Scrollable Form */}
       <ScrollView

@@ -134,4 +134,10 @@ export const globalStyles = StyleSheet.create({
     marginBottom: 20,
     lineHeight: 24,
   },  
+  tagline: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 8,
+    fontFamily: 'Poppins_400Regular',
+  },
 });

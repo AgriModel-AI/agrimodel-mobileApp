@@ -8,12 +8,11 @@ import { useTheme } from '@/hooks/ThemeProvider';
 import { useTranslation } from 'react-i18next';
 
 const CustomHeader = () => {
-  const { top } = useSafeAreaInsets();
   const { theme } = useTheme();
   const { t } = useTranslation();
 
   return (
-    <BlurView intensity={0} style={{ paddingTop: top, backgroundColor: theme.colors.background, }}>
+    <BlurView intensity={0} style={{backgroundColor: theme.colors.background, }}>
       <View
         style={[
           styles.container,

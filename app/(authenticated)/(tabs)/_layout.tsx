@@ -1,56 +1,95 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Animated, Easing } from 'react-native';
+import { Animated, Easing, TextStyle } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/ThemeProvider';
-import { useSafeAreaInsets } from 'react-native-safe-area-context'; // For dynamic padding
+import { Text } from 'react-native';
 import CustomHeader from '@/component/CustomHeader';
 
-export default function TabLayout() {
-  const { theme } = useTheme();
-  const insets = useSafeAreaInsets(); // Get safe area insets for padding
+interface TabLabelProps {
+  title: string;
+  color: string;
+  focused: boolean;
+  style?: TextStyle;
+}
 
-  // Animation state for active/inactive tabs
-  const animatedScale = new Animated.Value(1);
+interface TabIconProps {
+  name: keyof typeof Feather.glyphMap;
+  color: string;
+  focused: boolean;
+  scale: Animated.Value;
+}
 
-  const animateTab = () => {
+export const TabLabel: React.FC<TabLabelProps> = ({ 
+  title, 
+  color, 
+  focused, 
+  style 
+}) => {
+  return (
+    <Text
+      style={[
+        {
+          color,
+          fontSize: 12,
+          fontFamily: focused ? 'Poppins_700Bold' : 'Poppins_400Regular',
+          paddingBottom: 0,
+        },
+        style
+      ]}
+    >
+      {title}
+    </Text>
+  );
+};
+
+const TabIcon: React.FC<TabIconProps> = ({ name, color, focused, scale }) => {
+  if (focused) {
     Animated.sequence([
-      Animated.timing(animatedScale, {
-        toValue: 1.2, // Scale up
+      Animated.timing(scale, {
+        toValue: 1.2,
         duration: 150,
         easing: Easing.inOut(Easing.ease),
         useNativeDriver: true,
       }),
-      Animated.timing(animatedScale, {
-        toValue: 1, // Scale back
+      Animated.timing(scale, {
+        toValue: 1,
         duration: 150,
         easing: Easing.inOut(Easing.ease),
         useNativeDriver: true,
       }),
     ]).start();
-  };
+  }
+
+  return (
+    <Animated.View style={{ transform: [{ scale }] }}>
+      <Feather name={name} size={20} color={color} />
+    </Animated.View>
+  );
+};
+
+export default function TabLayout() {
+  const { theme } = useTheme();
+
+  // Fix: Create a separate animated value for each tab
+  const createAnimatedScale = () => new Animated.Value(1);
 
   return (
     <Tabs
       screenOptions={{
         tabBarStyle: {
-          backgroundColor: theme.colors.background, // Tab bar background color
-          shadowColor: '#000', // Shadow color
-          shadowOffset: { width: 0, height: 1 }, // Shadow offset
-          shadowOpacity: 0.1, // Shadow opacity
-          shadowRadius: 2, // Shadow blur radius
-          elevation: 6, // Shadow on Android
-          height: 70, // Add dynamic bottom padding for iPhone gesture bar or Android nav bar
-          paddingBottom: insets.bottom, // Add safe area bottom padding
+          backgroundColor: theme.colors.background,
+          paddingBottom: 0,      // Removed padding below items
+          paddingTop: 0,         // Removed padding above items
+          height: 60,            // Fixed height to avoid excess space
+          justifyContent: 'center',
+          alignItems: 'center',
         },
-        tabBarActiveTintColor: theme.colors.primary, // Active tab color
-        tabBarInactiveTintColor: theme.colors.text, // Inactive tab color
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontFamily: 'Poppins_400Regular', // Custom font
-        },
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: theme.colors.text,
         tabBarItemStyle: {
-          marginBottom: 5,
+          paddingBottom: 0,      // Removed item padding
+          marginBottom: 0,       // Removed item margin
         },
       }}
     >
@@ -58,62 +97,51 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: ({ focused, color }) => <TabLabel title="Home" color={color} focused={focused} />,
           tabBarIcon: ({ color, focused }) => {
-            if (focused) animateTab(); // Trigger animation on focus
-            return (
-              <Animated.View style={{ transform: [{ scale: focused ? animatedScale : 1 }] }}>
-                <Feather name={focused ? 'home' : 'home'} size={20} color={color} />
-              </Animated.View>
-            );
+            const animatedScale = createAnimatedScale();
+            return <TabIcon name="home" color={color} focused={focused} scale={animatedScale} />;
           },
           header: () => <CustomHeader />,
           headerTransparent: true,
         }}
       />
+
       {/* Diagnosis Tab */}
       <Tabs.Screen
-        name="diagnosis/index"
+        name="diagnosis"
         options={{
-          tabBarLabel: 'Diagnosis',
+          tabBarLabel: ({ focused, color }) => <TabLabel title="Diagnosis" color={color} focused={focused} />,
+          headerShown: false,
           tabBarIcon: ({ color, focused }) => {
-            if (focused) animateTab(); // Trigger animation on focus
-            return (
-              <Animated.View style={{ transform: [{ scale: focused ? animatedScale : 1 }] }}>
-                <Feather name={focused ? 'activity' : 'activity'} size={20} color={color} />
-              </Animated.View>
-            );
+            const animatedScale = createAnimatedScale();
+            return <TabIcon name="activity" color={color} focused={focused} scale={animatedScale} />;
           },
         }}
       />
+
       {/* Community Tab */}
       <Tabs.Screen
-        name="community/index"
+        name="community"
         options={{
-          tabBarLabel: 'Community',
+          tabBarLabel: ({ focused, color }) => <TabLabel title="Community" color={color} focused={focused} />,
+          headerShown: false,
           tabBarIcon: ({ color, focused }) => {
-            if (focused) animateTab(); // Trigger animation on focus
-            return (
-              <Animated.View style={{ transform: [{ scale: focused ? animatedScale : 1 }] }}>
-                <Feather name={focused ? 'users' : 'users'} size={20} color={color} />
-              </Animated.View>
-            );
+            const animatedScale = createAnimatedScale();
+            return <TabIcon name="users" color={color} focused={focused} scale={animatedScale} />;
           },
         }}
       />
+
       {/* Profile Tab */}
       <Tabs.Screen
         name="profile"
         options={{
-          tabBarLabel: 'Profile',
+          tabBarLabel: ({ focused, color }) => <TabLabel title="Profile" color={color} focused={focused} />,
           headerShown: false,
           tabBarIcon: ({ color, focused }) => {
-            if (focused) animateTab(); // Trigger animation on focus
-            return (
-              <Animated.View style={{ transform: [{ scale: focused ? animatedScale : 1 }] }}>
-                <Feather name={focused ? 'user' : 'user'} size={20} color={color} />
-              </Animated.View>
-            );
+            const animatedScale = createAnimatedScale();
+            return <TabIcon name="user" color={color} focused={focused} scale={animatedScale} />;
           },
         }}
       />

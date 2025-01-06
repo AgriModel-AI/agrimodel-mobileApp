@@ -1,5 +1,4 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-// import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { ThemeProvider as PaperProvider, useTheme } from '@/hooks/ThemeProvider';
@@ -7,25 +6,15 @@ import { Provider } from 'react-redux';
 import { store } from '@/redux/store';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@/i18n';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import * as NavigationBar from 'expo-navigation-bar';
-
-import {
-  useFonts,
-  Poppins_100Thin,
-  Poppins_200ExtraLight,
-  Poppins_300Light,
-  Poppins_400Regular,
-  Poppins_500Medium,
-  Poppins_600SemiBold,
-  Poppins_700Bold,
-  Poppins_800ExtraBold,
-  Poppins_900Black,
-} from '@expo-google-fonts/poppins';
-import { Platform, StatusBar } from 'react-native';
-
+import { useFonts, Poppins_100Thin, Poppins_200ExtraLight, Poppins_300Light, 
+         Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold, 
+         Poppins_700Bold, Poppins_800ExtraBold, Poppins_900Black } from '@expo-google-fonts/poppins';
+import { Platform, StatusBar, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -42,9 +31,9 @@ export default function RootLayout() {
     Poppins_900Black,
   });
 
-  useEffect(() => {
+  const onLayoutRootView = useCallback(async () => {
     if (loaded) {
-      SplashScreen.hideAsync();
+      await SplashScreen.hideAsync();
     }
   }, [loaded]);
 
@@ -56,7 +45,7 @@ export default function RootLayout() {
     <Provider store={store}>
       <PaperProvider>
         <I18nextProvider i18n={i18n}>
-          <GestureHandlerRootView style={{ flex: 1 }}>
+          <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
             <ThemedRootLayout />
           </GestureHandlerRootView>
         </I18nextProvider>
@@ -69,34 +58,52 @@ function ThemedRootLayout() {
   const { theme } = useTheme();
 
   useEffect(() => {
-    const customizeNavigationBar = async () => {
+    const customizeSystemBars = async () => {
       if (Platform.OS === 'android') {
+        // Configure Android navigation bar
         await NavigationBar.setPositionAsync('absolute');
         await NavigationBar.setBackgroundColorAsync(theme.colors.background);
         await NavigationBar.setButtonStyleAsync(theme.dark ? 'light' : 'dark');
+      } else if (Platform.OS === 'ios') {
+        // For iOS, we can only control the status bar style
+        // The home indicator will automatically adapt to light/dark based on background
+        StatusBar.setBarStyle(theme.dark ? 'light-content' : 'dark-content', true);
       }
     };
-  
-    customizeNavigationBar();
+
+    customizeSystemBars();
   }, [theme]);
 
   return (
-    <>
-      <StatusBar translucent backgroundColor="transparent" barStyle={theme.dark ? 'light-content' : 'dark-content'} />
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="login" options={{ headerShown: false }} />
-        <Stack.Screen name="signup" options={{ headerShown: false }} />
-        <Stack.Screen name="terms" options={{ headerShown: false }} />
-        <Stack.Screen name="forget" options={{ headerShown: false }} />
-        <Stack.Screen name="verify" options={{ headerShown: false }} />
-        <Stack.Screen name="reset" options={{ headerShown: false }} />
-        <Stack.Screen name="success" options={{ headerShown: false }} />
-        <Stack.Screen name="(authenticated)/notification" options={{ headerShown: false }} />
-        <Stack.Screen name="(authenticated)/(tabs)" options={{ headerShown: false }} />
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: theme.colors.background }}
+    >
+      <StatusBar 
+        translucent 
+        backgroundColor="transparent" 
+        barStyle={theme.dark ? 'light-content' : 'dark-content'} 
+      />
+      <Stack screenOptions={{
+        headerShown: false,
+        contentStyle: { backgroundColor: theme.colors.background }
+      }}>
+        <Stack.Screen name="index" 
+          options={{
+            headerShown: false,
+            contentStyle: { flex: 1 }, // No SafeAreaView effect
+          }}
+        />
+        <Stack.Screen name="login" />
+        <Stack.Screen name="signup" />
+        <Stack.Screen name="terms" />
+        <Stack.Screen name="forget" />
+        <Stack.Screen name="verify" />
+        <Stack.Screen name="reset" />
+        <Stack.Screen name="success" />
+        <Stack.Screen name="(authenticated)/notification" />
+        <Stack.Screen name="(authenticated)/(tabs)" />
         <Stack.Screen name="+not-found" />
-    </Stack>
-    </>
-    
+      </Stack>
+    </SafeAreaView>
   );
 }
