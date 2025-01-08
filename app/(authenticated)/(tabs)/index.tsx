@@ -86,7 +86,7 @@ const HomeScreen = () => {
                 120 {t('home.members')}
               </Text>
             </View>
-            <TouchableOpacity style={[styles.joinButton, { borderColor: theme.colors.primary }]}>
+            <TouchableOpacity style={[styles.joinButton, { backgroundColor: theme.colors.primaryTransparent }]}>
               <Text style={[styles.joinButtonText, { color: theme.colors.primary }]}>
                 {t('home.join')}
               </Text>
@@ -185,13 +185,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
   },
   joinButton: {
-    borderWidth: 2,
+    borderWidth: 0,
     paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 20,
   },
   joinButtonText: {
     fontSize: 16,
-    fontFamily: 'Poppins_600SemiBold',
+    fontFamily: 'Poppins_500Medium',
   },
 });

@@ -15,6 +15,7 @@ import { useFonts, Poppins_100Thin, Poppins_200ExtraLight, Poppins_300Light,
          Poppins_700Bold, Poppins_800ExtraBold, Poppins_900Black } from '@expo-google-fonts/poppins';
 import { Platform, StatusBar, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { CommunityProvider } from '@/contexts/CommunityContext';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -45,9 +46,11 @@ export default function RootLayout() {
     <Provider store={store}>
       <PaperProvider>
         <I18nextProvider i18n={i18n}>
-          <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
-            <ThemedRootLayout />
-          </GestureHandlerRootView>
+          <CommunityProvider>
+            <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
+              <ThemedRootLayout />
+            </GestureHandlerRootView>
+            </CommunityProvider>
         </I18nextProvider>
       </PaperProvider>
     </Provider>
@@ -102,6 +105,13 @@ function ThemedRootLayout() {
         <Stack.Screen name="success" />
         <Stack.Screen name="(authenticated)/notification" />
         <Stack.Screen name="(authenticated)/(tabs)" />
+        <Stack.Screen name="(authenticated)/(modals)/community" 
+          options={{
+            presentation: 'containedModal',
+            animation: 'fade',
+            headerShown: true,
+          }}
+        />
         <Stack.Screen name="+not-found" />
       </Stack>
     </SafeAreaView>

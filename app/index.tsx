@@ -24,14 +24,11 @@ const LandingPage = ({ navigation }: { navigation: any }) => {
   }));
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
       <ImageBackground
         source={require('@/assets/images/landing.jpg')}
-        style={[
-          styles.background,
-          Platform.select({ android: { paddingBottom: insets.bottom } })
-        ]}
+        style={styles.background}
         resizeMode="cover"
         onLoadEnd={handleImageLoad}
       >
