@@ -1,8 +1,7 @@
-import Header from '@/component/community/header';
 import { useTheme } from '@/hooks/ThemeProvider';
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, Image, TouchableOpacity, Alert } from 'react-native';
-import Animated, { FadeInDown, FadeInUp, FadeOut } from 'react-native-reanimated';
+import Animated, { FadeInUp, FadeOut } from 'react-native-reanimated';
 import HeaderList from '@/component/community/headerList';
 
 interface CommunityItem {

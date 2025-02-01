@@ -1,10 +1,11 @@
 import Header from '@/component/community/header';
 import { useTheme } from '@/hooks/ThemeProvider';
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Image, TouchableOpacity, Modal, TextInput, FlatList, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableOpacity, Modal, TextInput, FlatList, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback, Alert } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useCommunity } from '@/contexts/CommunityContext';
+import HeaderPost from '@/component/community/HeaderPost';
 
 
 interface Post {
@@ -66,39 +67,19 @@ const commentsData: Comment[] = [
     text: "Great post! Would love to see more content like this.",
     userName: "Charlie Brown",
     date: "2025-01-07 2:30 PM",
+  },{
+    id: 8,
+    text: "Great post! Would love to see more content like this.",
+    userName: "Charlie Brown",
+    date: "2025-01-07 2:30 PM",
+  },{
+    id: 9,
+    text: "Great post! Would love to see more content like this.",
+    userName: "Charlie Brown",
+    date: "2025-01-07 2:30 PM",
   }];
 
-const Community = () => {
-  const { theme } = useTheme();
-  const { scrollY, searchIconClicked } = useCommunity();
-
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-  const [newComment, setNewComment] = useState('');
-  const [comments, setComments] = useState<Comment[]>(commentsData);
-
-  const handleOpenModal = (post: Post) => {
-    setSelectedPost(post);
-    setModalVisible(true);
-  };
-
-  const handleAddComment = () => {
-    if (newComment.trim()) {
-      setComments([
-        ...comments,
-        { 
-          id: comments.length + 1, 
-          text: newComment, 
-          userName: 'User',  // You can replace with actual username
-          date: new Date().toLocaleString()  // Current date and time
-        }
-      ]);
-      setNewComment('');
-    }
-  };
-  
-
-  const posts = Array.from({ length: 5 }).map((_, index) => ({
+  const postsData = Array.from({ length: 5 }).map((_, index) => ({
     id: index,
     userName: 'Uwambaje Eddy',
     time: '1 hour',
@@ -109,9 +90,40 @@ const Community = () => {
     comments: 120,
   }));
 
+const Community = () => {
+  const { theme } = useTheme();
+  const { scrollY, searchIconClicked } = useCommunity();
+  const [posts, setPosts] = useState<Post[]>(postsData);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+  const [newComment, setNewComment] = useState('');
+  const [comments, setComments] = useState<Comment[]>(commentsData);
+
+  const handleRemovePost = (postId: number) => {
+    Alert.alert(
+      "Confirm Deletion",
+      "Are you sure you want to delete this post?",
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Delete", onPress: () => removePost(postId), style: "destructive" }
+      ]
+    );
+  };
+
+  const removePost = (postId: number) => {
+    setPosts(prevPosts => prevPosts.filter(post => post.id !== postId));
+  };
+
+  const handleOpenModal = (post: Post) => {
+    setSelectedPost(post);
+    setModalVisible(true);
+  };
+
+
   return (
     <View style={styles.container}>
-      <Header />
+      <HeaderPost />
 
       {/* Scrollable Content */}
       <Animated.ScrollView
@@ -123,7 +135,7 @@ const Community = () => {
           }
         }}
         scrollEventThrottle={16}
-        contentContainerStyle={{ paddingTop: 170 }}
+        contentContainerStyle={{ paddingTop: 100 }}
         showsVerticalScrollIndicator={false}
       >
         {/* Render Post Cards */}
@@ -135,6 +147,9 @@ const Community = () => {
                 <Text style={[styles.userName, { color: theme.colors.text }]}>{post.userName}</Text>
                 <Text style={[styles.postTime, { color: theme.colors.text }]}>{post.time}</Text>
               </View>
+              <TouchableOpacity onPress={() => handleRemovePost(post.id)} style={styles.removeButton}>
+                <MaterialCommunityIcons name="delete" size={24} color="red" />
+                </TouchableOpacity>
             </View>
 
             <Text style={[styles.postDescription, { color: theme.colors.text }]}>{post.description}</Text>
@@ -162,31 +177,16 @@ const Community = () => {
       {/* Modal for Comments */}
       {selectedPost && (
         <Modal visible={modalVisible} animationType="fade" onRequestClose={() => setModalVisible(false)} transparent>
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.modalWrapper}>
-          {/* Close Modal when clicking on the overlay */}
-          <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          
             <View style={[styles.modalBackground]}>
-              {/* Modal Content: Prevent close when clicking inside */}
-              <TouchableWithoutFeedback>
                 <View style={[styles.modalContainer, { backgroundColor: theme.colors.background }]}>
                   {/* Close Button */}
                   <View style={styles.modalHeader}>
-                    <Text style={[styles.modalTitle, { color: theme.colors.text }]}>{selectedPost.userName}'s Post</Text>
+                    <Text style={[styles.modalTitle, { color: theme.colors.text }]}>Comments</Text>
                     <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
                       <MaterialCommunityIcons name="close" size={24} color={ theme.colors.text } />
                     </TouchableOpacity>
                   </View>
-      
-                  <Image source={{ uri: selectedPost.image }} style={styles.modalImage} />
-                  <Text style={[styles.modalDescription, { color: theme.colors.text }]}>{selectedPost.description}</Text>
-                  <View style={styles.modalStats}>
-                    <Text style={[styles.modalStat, { color: theme.colors.text }]}>{selectedPost.likes} likes</Text>
-                    <Text style={[styles.modalStat, { color: theme.colors.text }]}>{selectedPost.comments} comments</Text>
-                  </View>
-      
-                  {/* Comments Title */}
-                  <Text style={[styles.commentsTitle, { color: theme.colors.text }]}>Comments</Text>
-      
                   {/* Use FlatList instead of ScrollView */}
                   <FlatList
                     data={comments}
@@ -203,24 +203,9 @@ const Community = () => {
                     style={styles.commentsContainer}  // Adjust the FlatList styling
                   />
       
-                  {/* Add Comment Input */}
-                  <View style={styles.commentInputContainer}>
-                    <TextInput
-                      style={styles.commentInput}
-                      placeholder="Add a comment..."
-                      placeholderTextColor="#aaa"
-                      value={newComment}
-                      onChangeText={setNewComment}
-                    />
-                    <TouchableOpacity onPress={handleAddComment} style={styles.addCommentButton}>
-                      <Text style={styles.addCommentButtonText}>Post</Text>
-                    </TouchableOpacity>
-                  </View>
+                
                 </View>
-              </TouchableWithoutFeedback>
             </View>
-          </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
       </Modal>
       
       )}
@@ -263,6 +248,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'Poppins_400Regular',
     marginBottom: 10,
+  },
+  removeButton: {
+    position: 'absolute',
+    top: 2,
+    right: 10,
+    padding: 5,
+    backgroundColor: 'rgba(255, 0, 0, 0.1)',
+    borderRadius: 20,
   },
   postImage: {
     width: '100%',
@@ -412,10 +405,9 @@ const styles = StyleSheet.create({
   },
   commentsContainer: {
     flex: 1,
-    maxHeight: 210,
     paddingBottom: 0,
   },
-  commentsList: { height: 300, paddingBottom: 10, },
+  commentsList: { paddingBottom: 10, },
 });
 
 export default Community;

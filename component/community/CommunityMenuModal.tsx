@@ -107,7 +107,7 @@ const BottomSheetModal = forwardRef<BottomSheetModalRef>((props, ref) => {
                 </TouchableOpacity>
 
                 {/* My Posts */}
-                <TouchableOpacity style={[styles.cardOption]} onPress={() => handleNavigation('/my-posts')}>
+                <TouchableOpacity style={[styles.cardOption]} onPress={() => handleNavigation('/(authenticated)/(tabs)/community/post')}>
                     <View style={styles.cardInfo}>
                         <View style={{ flex: 1 }}>
                             <Text style={[styles.cardName, { color: theme.colors.text }]}>My Posts</Text>
