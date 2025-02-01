@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useState } from 'react';
+import React, { forwardRef, useImperativeHandle, useState, useEffect } from 'react';
 import {
     Modal,
     Text,
@@ -17,6 +17,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useTheme } from '@/hooks/ThemeProvider';
 import { Feather } from '@expo/vector-icons';
+import { useRouter, usePathname } from 'expo-router';
 
 export interface BottomSheetModalRef {
     slideIn: () => void;
@@ -28,14 +29,24 @@ const BottomSheetModal = forwardRef<BottomSheetModalRef>((props, ref) => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const slideAnim = useSharedValue(Dimensions.get('window').height);
+    const router = useRouter();
+    const pathname = usePathname();  // Get the current route
 
     useImperativeHandle(ref, () => ({
         slideIn,
         slideOut
     }));
 
+    // Close modal when navigating to another page
+    useEffect(() => {
+        if (modalVisible) {
+            slideOut();
+        }
+    }, [pathname]);  // Runs when the route changes
+
     // Slide in animation
     const slideIn = () => {
+        slideAnim.value = Dimensions.get('window').height;  // Reset position before opening
         setModalVisible(true);
         slideAnim.value = withTiming(0, { duration: 300 });
     };
@@ -45,6 +56,14 @@ const BottomSheetModal = forwardRef<BottomSheetModalRef>((props, ref) => {
         slideAnim.value = withTiming(Dimensions.get('window').height, { duration: 300 }, () => {
             runOnJS(setModalVisible)(false);
         });
+    };
+
+    // Handle navigation safely
+    const handleNavigation = (route: any) => {
+        slideOut();
+        setTimeout(() => {
+            router.push(route);
+        }, 300);  // Ensure modal is closed before navigating
     };
 
     const animatedStyle = useAnimatedStyle(() => ({
@@ -76,28 +95,28 @@ const BottomSheetModal = forwardRef<BottomSheetModalRef>((props, ref) => {
                 </View>
 
                 
-                {/* Payment Options */}
-                <TouchableOpacity style={[styles.cardOption]}>
+                {/* Manage Communities */}
+                <TouchableOpacity style={[styles.cardOption]} onPress={() => handleNavigation('/(authenticated)/(tabs)/community/list')}>
                     <View style={styles.cardInfo}>
                         <View style={{ flex: 1 }}>
                             <Text style={[styles.cardName, { color: theme.colors.text }]}>Manage Communities</Text>
                             <Text style={styles.cardDesc}>Manage your farming communities. Join existing communities, and connect with other farmers. Share knowledge, experiences and best practices with fellow community members.</Text>
                         </View>
-                    <Feather name="chevron-right" size={24} color={theme.colors.primary} />
+                        <Feather name="chevron-right" size={24} color={theme.colors.primary} />
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={[styles.cardOption]}>
+                {/* My Posts */}
+                <TouchableOpacity style={[styles.cardOption]} onPress={() => handleNavigation('/my-posts')}>
                     <View style={styles.cardInfo}>
                         <View style={{ flex: 1 }}>
                             <Text style={[styles.cardName, { color: theme.colors.text }]}>My Posts</Text>
-                            <Text style={styles.cardDesc}>View and manage your community posts. edit content, and see how your posts are helping other farmers. Share your agricultural journey and insights with the community.</Text>
+                            <Text style={styles.cardDesc}>View and manage your community posts. Edit content, and see how your posts are helping other farmers. Share your agricultural journey and insights with the community.</Text>
                         </View>
-                    <Feather name="chevron-right" size={24} color={theme.colors.primary} />
+                        <Feather name="chevron-right" size={24} color={theme.colors.primary} />
                     </View>
                 </TouchableOpacity>
 
-                
             </Animated.View>
         </Modal>
     );
@@ -164,13 +183,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         width: '100%'
-    },
-    cardIconVisa: {
-        width: 40,
-        height: 25,
-        backgroundColor: '#1a73e8',
-        marginRight: 10,
-        borderRadius: 5,
     },
     cardName: {
         fontSize: 16,
