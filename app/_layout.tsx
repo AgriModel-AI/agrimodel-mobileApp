@@ -107,9 +107,9 @@ function ThemedRootLayout() {
         <Stack.Screen name="(authenticated)/(tabs)" />
         <Stack.Screen name="(authenticated)/(modals)/community" 
           options={{
-            presentation: 'containedModal',
-            animation: 'fade',
-            headerShown: true,
+            presentation: 'modal',
+            animation: 'fade_from_bottom',
+            headerShown: false,
           }}
         />
         <Stack.Screen name="+not-found" />

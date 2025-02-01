@@ -5,6 +5,7 @@ import { View, StyleSheet, Text, Image, TouchableOpacity, Modal, TextInput, Flat
 import Animated from 'react-native-reanimated';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useCommunity } from '@/contexts/CommunityContext';
+import { router } from 'expo-router';
 
 
 interface Post {
@@ -155,7 +156,7 @@ const Community = () => {
       </Animated.ScrollView>
 
       {/* Fixed "Ask Community" Button */}
-      <TouchableOpacity style={styles.askCommunityButton}>
+      <TouchableOpacity style={styles.askCommunityButton} onPress={() => router.push('/(authenticated)/(modals)/community')}>
         <Text style={styles.askCommunityButtonText}>Ask Community</Text>
       </TouchableOpacity>
 
