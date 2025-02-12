@@ -11,6 +11,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/ThemeProvider';
 import { useTranslation } from 'react-i18next';
 import { useHeaderHeight } from '@react-navigation/elements';
+import Animated, { FadeIn, FadeInUp, FadeOut, BounceIn } from 'react-native-reanimated';
 
 const HomeScreen = () => {
   const { theme } = useTheme();
@@ -18,83 +19,58 @@ const HomeScreen = () => {
   const headerHeight = useHeaderHeight();
 
   return (
-    <>
-      <ScrollView
-        style={[styles.container, { backgroundColor: theme.colors.background }]}
-        contentContainerStyle={{
-          paddingTop: headerHeight,
-        }}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Today's Weather */}
-        <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
-          {t('home.today_weather')}
-        </Text>
-        <View style={[styles.weatherCard, { backgroundColor: 'rgba(83, 158, 246, 1)' }]}>
-          <Text style={[styles.weatherLocation, { color: 'white' }]}>
-            Kigali City, 10 Sept 2024
-          </Text>
-          <View style={styles.weatherInfo}>
-            <Text style={[styles.temperature, { color: 'white' }]}>28°C</Text>
-            <View>
-              <Text style={[styles.humidityText, { color: 'white' }]}>
-                {t('home.humidity')} 82%
-              </Text>
-              <Text style={[styles.weatherCondition, { color: 'white' }]}>Cloudy</Text>
-            </View>
-            <MaterialCommunityIcons name="weather-cloudy" size={48} color="white" />
+    <ScrollView
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+      contentContainerStyle={{ paddingTop: headerHeight }}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* Today's Weather */}
+      <Animated.Text entering={FadeInUp.duration(500)} style={[styles.sectionTitle, { color: theme.colors.text }]}>
+        {t('home.today_weather')}
+      </Animated.Text>
+      <Animated.View entering={FadeInUp.delay(100).duration(600)} style={[styles.weatherCard, { backgroundColor: 'rgba(83, 158, 246, 1)' }]}>
+        <Text style={[styles.weatherLocation, { color: 'white' }]}>Kigali City, 10 Sept 2024</Text>
+        <View style={styles.weatherInfo}>
+          <Text style={[styles.temperature, { color: 'white' }]}>28°C</Text>
+          <View>
+            <Text style={[styles.humidityText, { color: 'white' }]}>{t('home.humidity')} 82%</Text>
+            <Text style={[styles.weatherCondition, { color: 'white' }]}>Cloudy</Text>
           </View>
-          <Text style={[styles.weatherAdvice, { color: 'white' }]}>
-            {t('home.good_weather_advice')}
-          </Text>
+          <MaterialCommunityIcons name="weather-cloudy" size={48} color="white" />
         </View>
+        <Text style={[styles.weatherAdvice, { color: 'white' }]}>{t('home.good_weather_advice')}</Text>
+      </Animated.View>
 
-        {/* Crops Section */}
-        <Text style={[styles.sectionTitle, { color: theme.colors.text, marginTop: 10 }]}>
-          {t('home.crops_detected')}
-        </Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.cropsContainer}>
-          {[1, 2, 3].map((_, index) => (
-            <View key={index} style={styles.cropItem}>
-              <Image
-                source={require('@/assets/images/landing.jpg')} // Replace with actual crop image
-                style={styles.cropImage}
-              />
-              <Text style={[styles.cropName, { color: theme.colors.text }]}>Coffee</Text>
-            </View>
-          ))}
-        </ScrollView>
-
-        {/* Community Section */}
-        <Text style={[styles.sectionTitle, { color: theme.colors.text, marginTop: 10 }]}>
-          {t('home.community')}
-        </Text>
-        {[1, 2, 3, 4, 5].map((_, index) => (
-          <View
-            key={index}
-            style={[styles.communityItem, { backgroundColor: theme.colors.inputBackground }]}
-          >
-            <Image
-              source={require('@/assets/images/landing.jpg')} // Replace with community image
-              style={styles.communityImage}
-            />
-            <View style={styles.communityInfo}>
-              <Text style={[styles.communityTitle, { color: theme.colors.text }]}>
-                Farming Community
-              </Text>
-              <Text style={[styles.communityMembers, { color: theme.colors.text }]}>
-                120 {t('home.members')}
-              </Text>
-            </View>
-            <TouchableOpacity style={[styles.joinButton, { backgroundColor: theme.colors.primaryTransparent }]}>
-              <Text style={[styles.joinButtonText, { color: theme.colors.primary }]}>
-                {t('home.join')}
-              </Text>
-            </TouchableOpacity>
-          </View>
+      {/* Crops Section */}
+      <Animated.Text entering={FadeInUp.delay(200).duration(500)} style={[styles.sectionTitle, { color: theme.colors.text, marginTop: 10 }]}>
+        {t('home.crops_detected')}
+      </Animated.Text>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.cropsContainer}>
+        {[1, 2, 3].map((_, index) => (
+          <Animated.View key={index} entering={BounceIn.delay(300 * index).duration(700)} style={styles.cropItem}>
+            <Image source={require('@/assets/images/landing.jpg')} style={styles.cropImage} />
+            <Text style={[styles.cropName, { color: theme.colors.text }]}>Coffee</Text>
+          </Animated.View>
         ))}
       </ScrollView>
-    </>
+
+      {/* Community Section */}
+      <Animated.Text entering={FadeInUp.delay(300).duration(500)} style={[styles.sectionTitle, { color: theme.colors.text, marginTop: 10 }]}>
+        {t('home.community')}
+      </Animated.Text>
+      {[1, 2, 3, 4, 5].map((_, index) => (
+        <Animated.View key={index} entering={FadeIn.delay(400 * index).duration(600)} exiting={FadeOut} style={[styles.communityItem, { backgroundColor: theme.colors.inputBackground }]}>
+          <Image source={require('@/assets/images/landing.jpg')} style={styles.communityImage} />
+          <View style={styles.communityInfo}>
+            <Text style={[styles.communityTitle, { color: theme.colors.text }]}>Farming Community</Text>
+            <Text style={[styles.communityMembers, { color: theme.colors.text }]}>120 {t('home.members')}</Text>
+          </View>
+          <TouchableOpacity style={[styles.joinButton, { backgroundColor: theme.colors.primaryTransparent }]}>
+            <Text style={[styles.joinButtonText, { color: theme.colors.primary }]}>{t('home.join')}</Text>
+          </TouchableOpacity>
+        </Animated.View>
+      ))}
+    </ScrollView>
   );
 };
 

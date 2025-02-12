@@ -105,7 +105,7 @@ const Community = () => {
     time: '1 hour',
     description:
       'Lorem ipsum dolor sit amet consectetur. Volutpat a vitae pellentesque neque ultricies vulputate. Neque vel nibh laoreet rhoncus netus orci. Phasellus feugiat mauris amet.',
-    image: 'https://via.placeholder.com/100',
+    image: require('@/assets/images/landing.jpg'),
     likes: 120,
     comments: 120,
   }));
@@ -131,7 +131,7 @@ const Community = () => {
         {posts.map((post) => (
           <TouchableOpacity key={post.id} onPress={() => handleOpenModal(post)} style={[styles.postCard, {borderBottomColor: theme.colors.inputBackground}]}>
             <View style={styles.userInfo}>
-              <Image source={{ uri: post.image }} style={styles.userAvatar} />
+              <Image source={post.image} style={styles.userAvatar} />
               <View>
                 <Text style={[styles.userName, { color: theme.colors.text }]}>{post.userName}</Text>
                 <Text style={[styles.postTime, { color: theme.colors.text }]}>{post.time}</Text>
@@ -139,7 +139,7 @@ const Community = () => {
             </View>
 
             <Text style={[styles.postDescription, { color: theme.colors.text }]}>{post.description}</Text>
-            <Image source={{ uri: post.image }} style={styles.postImage} />
+            <Image source={post.image} style={styles.postImage} />
 
             <View style={styles.postActions}>
               <View style={styles.actionItem}>

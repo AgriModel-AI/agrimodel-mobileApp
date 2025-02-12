@@ -1,12 +1,247 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, Alert, ScrollView, Platform, ActionSheetIOS, Image } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Camera, CameraView } from "expo-camera";
+import { useTheme } from "@/hooks/ThemeProvider";
+import Animated, { FadeInUp, useSharedValue, useAnimatedStyle, withSpring, FadeIn } from "react-native-reanimated";
+import { Pressable } from "react-native";
+import * as ImagePicker from 'expo-image-picker';
+import { router } from "expo-router";
 
-const index = () => {
+const DiagnosisScreen = () => {
+  const { theme } = useTheme();
+  const buttonScale = useSharedValue(1);
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [camera, setCamera] = useState<any>(null);
+
+  const [imageUri, setImageUri] = useState<any>(null);
+
+  const handleImagePicker = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission needed', 'Permission to access media library is needed!');
+      return;
+    }
+
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: ['Cancel', 'Choose from Gallery', 'Take Photo'],
+          cancelButtonIndex: 0,
+        },
+        async (buttonIndex) => {
+          if (buttonIndex === 1) {
+            pickImageFromGallery();
+          } else if (buttonIndex === 2) {
+            takePhoto();
+          }
+        }
+      );
+    } else {
+      Alert.alert(
+        'Choose an option',
+        '',
+        [
+          { text: 'Choose from Gallery', onPress: pickImageFromGallery },
+          { text: 'Take Photo', onPress: takePhoto },
+          { text: 'Cancel', style: 'cancel' },
+        ],
+        { cancelable: true }
+      );
+    }
+  };
+
+  const pickImageFromGallery = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 4],
+        quality: 0.1,
+        base64: true,
+      });
+
+      if (!result.canceled && result.assets[0].base64) {
+        const base64 = result.assets[0].base64;
+        const mimeType = result.assets[0].mimeType;
+
+        const image = `data:${mimeType};base64,${base64}`;
+        setImageUri(result.assets[0].uri);
+      }
+    } catch (err: any) {
+      alert(err.errors[0].message);
+    }
+  };
+
+  const takePhoto = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission needed', 'Permission to access camera is needed!');
+      return;
+    }
+
+    try {
+      const result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [4, 4],
+        quality: 0.1,
+        base64: true,
+      });
+
+      if (!result.canceled && result.assets[0].base64) {
+        const base64 = result.assets[0].base64;
+        const mimeType = result.assets[0].mimeType;
+
+        const image = `data:${mimeType};base64,${base64}`;
+        setImageUri(result.assets[0].uri);
+
+        router.push('/(authenticated)/(tabs)/diagnosis/result')
+      }
+    } catch (err: any) {
+      alert(err.errors[0].message);
+    }
+  };
+
+  useEffect(() => {
+    // Request camera permission using Expo's Camera API
+    const requestPermissions = async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === "granted");
+    };
+
+    requestPermissions();
+  }, []);
+
+  const takePicture = async () => {
+    if (camera) {
+      const options = { quality: 0.5, base64: true };
+      const data = await camera.takePictureAsync(options);
+      console.log(data.uri); // Log the photo URI
+      Alert.alert("Photo Taken", "Your picture has been captured!");
+    } else {
+      Alert.alert("Camera Error", "Could not access the camera.");
+    }
+  };
+
+  const steps = [
+    {
+      title: "Take or Upload a Photo",
+      description: "The main screen presents two clear options: 'Take Photo' or 'Upload Photo.'",
+      icon: "camera",
+      bgColor: "#E3F2FD",
+    },
+    {
+      title: "Crop Detection",
+      description: "After taking or uploading the photo, the app automatically processes the image.",
+      icon: "image-search",
+      bgColor: "#FFF3E0",
+    },
+    {
+      title: "Instant Diagnosis",
+      description: "Once the image is processed, the app shows a diagnosis result.",
+      icon: "clipboard-check",
+      bgColor: "#E8F5E9",
+    },
+    {
+      title: "Treatment Suggestions",
+      description: "Present a short list of remedies with checkboxes or steps.",
+      icon: "medical-bag",
+      bgColor: "#F3E5F5",
+    },
+  ];
+
+  const buttonAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: buttonScale.value }],
+    };
+  });
+
   return (
-    <View>
-      <Text>index</Text>
-    </View>
-  )
-}
+    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+      <View
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          backgroundColor: theme.colors.background,
+          paddingVertical: 15,
+          paddingHorizontal: 20,
+          zIndex: 10,
+          elevation: 4,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "bold",
+            textAlign: "center",
+            color: theme.colors.text,
+          }}
+        >
+          🌱 Crop Diagnosis & Treatment Guide
+        </Text>
+      </View>
 
-export default index
+      <ScrollView
+        contentContainerStyle={{ paddingTop: 110, paddingHorizontal: 20 }}
+        showsVerticalScrollIndicator={false}
+      >
+        {steps.map((step, index) => (
+          <Pressable
+            key={index}
+            onPress={() => console.log(`${step.title} clicked!`)}
+            android_ripple={{ color: "#ccc", borderless: false }}
+            style={{ borderRadius: 12, overflow: "hidden", marginBottom: 15 }}
+          >
+            <Animated.View
+              entering={FadeInUp.delay(index * 200).springify()}
+              style={{
+                backgroundColor: step.bgColor,
+                padding: 15,
+                borderRadius: 12,
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <MaterialCommunityIcons name={step.icon as any} size={26} color="#333" style={{ marginRight: 12 }} />
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 17, fontWeight: "bold", color: "#333" }}>{step.title}</Text>
+                <Text style={{ marginTop: 4, fontSize: 14, color: "#666" }}>{step.description}</Text>
+              </View>
+            </Animated.View>
+          </Pressable>
+        ))}
+
+        
+
+        <Animated.View entering={FadeIn.delay(500).springify()} style={[buttonAnimatedStyle]}>
+          <TouchableOpacity
+            onPressIn={() => (buttonScale.value = withSpring(0.95))}
+            onPressOut={() => (buttonScale.value = withSpring(1))}
+            style={{
+              backgroundColor: "#2E7D32",
+              padding: 15,
+              borderRadius: 10,
+              alignItems: "center",
+              flexDirection: "row",
+              justifyContent: "center",
+              marginTop: 10,
+            }}
+            activeOpacity={0.8}
+            onPress={handleImagePicker}
+          >
+            <MaterialCommunityIcons name="camera" size={22} color="#fff" style={{ marginRight: 10 }} />
+            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 17 }}>Take A Picture</Text>
+          </TouchableOpacity>
+        </Animated.View>
+      </ScrollView>
+    </View>
+  );
+};
+
+export default DiagnosisScreen;
