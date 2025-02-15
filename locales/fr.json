@@ -16,7 +16,7 @@
     },
     "signup": {
       "create_account": "Créer un compte",
-      "names_label": "Noms",
+      "names_label": "Nom d'utilisateur",
       "names_placeholder": "Entrez vos noms",
       "email_label": "E-mail",
       "email_placeholder": "Entrez votre e-mail",
@@ -61,7 +61,7 @@
     },
     "success": {
       "title": "Réussi",
-      "description": "Félicitations ! Votre mot de passe a été modifié.",
+      "description": "Votre compte a été mis à jour avec succès. Vous pouvez maintenant vous connecter.",
       "continue": "Continuer"
     }
   },

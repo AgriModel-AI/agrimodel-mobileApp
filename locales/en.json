@@ -16,8 +16,8 @@
     },
     "signup": {
       "create_account": "Create an account",
-      "names_label": "Names",
-      "names_placeholder": "Enter your names",
+      "names_label": "Username",
+      "names_placeholder": "Enter your Username",
       "email_label": "Email",
       "email_placeholder": "Enter your email",
       "phone_label": "Phone",
@@ -61,7 +61,7 @@
     },
     "success": {
       "title": "Successful",
-      "description": "Congratulations! Your password has been changed.",
+      "description": "Your account has been successfully updated. You can now proceed with logging in.",
       "continue": "Continue"
     }
   },

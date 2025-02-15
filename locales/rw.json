@@ -16,8 +16,8 @@
     },
     "signup": {
       "create_account": "Fungura Konti",
-      "names_label": "Amazina",
-      "names_placeholder": "Injiza amazina yawe",
+      "names_label": "Izina",
+      "names_placeholder": "Injiza Izina",
       "email_label": "Imeyili",
       "email_placeholder": "Injiza imeyili yawe",
       "phone_label": "Telefone",
@@ -61,7 +61,7 @@
     },
     "success": {
       "title": "Byakozwe Neza",
-      "description": "Mwakoze neza! Ijambo ry'ibanga ryanyu ryahinduwe.",
+      "description": "Mwakoze neza! Konti yawe yashyizwe mu buryo neza. Urashobora kwinjira ubu.",
       "continue": "Komeza"
     }
   },

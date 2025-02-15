@@ -1,12 +1,12 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
+import { Stack, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { ThemeProvider as PaperProvider, useTheme } from '@/hooks/ThemeProvider';
 import { Provider } from 'react-redux';
 import { store } from '@/redux/store';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@/i18n';
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import * as NavigationBar from 'expo-navigation-bar';
@@ -14,8 +14,8 @@ import { useFonts, Poppins_100Thin, Poppins_200ExtraLight, Poppins_300Light,
          Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold, 
          Poppins_700Bold, Poppins_800ExtraBold, Poppins_900Black } from '@expo-google-fonts/poppins';
 import { Platform, StatusBar, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { CommunityProvider } from '@/contexts/CommunityContext';
+import Toast from 'react-native-toast-message';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -49,6 +49,7 @@ export default function RootLayout() {
           <CommunityProvider>
             <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
               <ThemedRootLayout />
+              <Toast />
             </GestureHandlerRootView>
             </CommunityProvider>
         </I18nextProvider>
@@ -60,60 +61,61 @@ export default function RootLayout() {
 function ThemedRootLayout() {
   const { theme } = useTheme();
 
+  const segments = useSegments(); 
+  const [isIndexScreen, setIsIndexScreen] = useState(false);
+
+  useEffect(() => {
+    // Whenever segments change, update isIndexScreen
+    const checkIsIndexScreen = Number(segments.length) === 0;
+    setIsIndexScreen(checkIsIndexScreen);
+  }, [segments]); // This hook will re-run whenever `segments` changes
+  
   useEffect(() => {
     const customizeSystemBars = async () => {
+      console.log(segments)
+      // Always set the status bar to light on the index screen
+      if (isIndexScreen) {
+        StatusBar.setBarStyle('light-content', true);  // Force light status bar
+      } else {
+        StatusBar.setBarStyle(theme.dark ? 'light-content' : 'dark-content', true);
+      }
+
       if (Platform.OS === 'android') {
         // Configure Android navigation bar
         await NavigationBar.setPositionAsync('absolute');
         await NavigationBar.setBackgroundColorAsync(theme.colors.background);
-        await NavigationBar.setButtonStyleAsync(theme.dark ? 'light' : 'dark');
-      } else if (Platform.OS === 'ios') {
-        // For iOS, we can only control the status bar style
-        // The home indicator will automatically adapt to light/dark based on background
-        StatusBar.setBarStyle(theme.dark ? 'light-content' : 'dark-content', true);
+
+        if(isIndexScreen) {
+          await NavigationBar.setButtonStyleAsync('light');
+        }else{
+          await NavigationBar.setButtonStyleAsync(theme.dark ? 'light' : 'dark');
+        }
       }
     };
 
     customizeSystemBars();
-  }, [theme]);
+  }, [theme, isIndexScreen]);
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: theme.colors.background }}
-    >
-      <StatusBar 
-        translucent 
-        backgroundColor="transparent" 
-        barStyle={theme.dark ? 'light-content' : 'dark-content'} 
-      />
-      <Stack screenOptions={{
-        headerShown: false,
-        contentStyle: { backgroundColor: theme.colors.background }
-      }}>
-        <Stack.Screen name="index" 
-          options={{
+      <View style={{flex: 1}}>
+        <Stack
+          screenOptions={{
             headerShown: false,
-            contentStyle: { flex: 1 }, // No SafeAreaView effect
+            contentStyle: { backgroundColor: theme.colors.background, flex: 1 },
           }}
-        />
-        <Stack.Screen name="login" />
-        <Stack.Screen name="signup" />
-        <Stack.Screen name="terms" />
-        <Stack.Screen name="forget" />
-        <Stack.Screen name="verify" />
-        <Stack.Screen name="reset" />
-        <Stack.Screen name="success" />
-        <Stack.Screen name="(authenticated)/notification" />
-        <Stack.Screen name="(authenticated)/(tabs)" />
-        <Stack.Screen name="(authenticated)/(modals)/community" 
-          options={{
-            presentation: 'modal',
-            animation: 'fade_from_bottom',
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </SafeAreaView>
+        >
+          <Stack.Screen 
+            name="index" 
+            options={{
+              headerShown: false,
+              contentStyle: { flex: 1 },
+            }}
+          />
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="(authenticated)" />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </View>
   );
+  
 }

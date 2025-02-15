@@ -157,7 +157,7 @@ const ProfileScreen = () => {
             <Feather name="chevron-right" size={24} color={theme.colors.text} />
           </TouchableOpacity>
           <View style={[styles.divider]} />
-          <TouchableOpacity style={styles.actionItem}>
+          <TouchableOpacity style={styles.actionItem} onPress={()=> router.replace('/(auth)/login')}>
             <View style={styles.preferenceContent}>
               <Feather name="log-out" size={24} color="red" />
               <Text style={[styles.preferenceText, { color: 'red' }]}>

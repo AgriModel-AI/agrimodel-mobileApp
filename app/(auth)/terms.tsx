@@ -29,7 +29,7 @@ const TermsScreen = () => {
       {/* Header */}
       <View style={styles.header}>
         <Text style={[styles.title, { color: theme.colors.text }]}>{t('terms.title')}</Text>
-        <TouchableOpacity onPress={() => router.replace('/signup')}>
+        <TouchableOpacity onPress={() => router.back()}>
           <MaterialCommunityIcons name="close" size={24} color={theme.colors.text} />
         </TouchableOpacity>
       </View>

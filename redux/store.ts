@@ -1,12 +1,30 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { useDispatch } from 'react-redux';
+import rootReducer from './reducer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Create store
 export const store = configureStore({
-  reducer: {
-  },
+  reducer: rootReducer,
 });
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+// Function to load tokens and dispatch them
+const loadTokens = async () => {
+  try {
+    const jwtToken = await AsyncStorage.getItem('jwtToken');
+    const refreshToken = await AsyncStorage.getItem('refreshToken');
 
-export const useAppDispatch: () => AppDispatch = () => useDispatch<AppDispatch>();
+    if (jwtToken && refreshToken) {
+      store.dispatch({
+        type: 'user/login',
+        payload: { access_token: jwtToken, refresh_token: refreshToken },
+      });
+    }
+  } catch (error) {
+    console.error('Error loading tokens:', error);
+  }
+};
+
+// Call function after store is created
+loadTokens();
+
+export default store;

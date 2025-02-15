@@ -48,7 +48,7 @@ const LandingPage = ({ navigation }: { navigation: any }) => {
 
         {/* Get Started Button */}
         <View style={[styles.buttonContainer, { paddingBottom: Math.max(insets.bottom, 20) }]}>
-          <Link href="/login" replace asChild>
+          <Link href="/(auth)/login" replace asChild>
             <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonText}>Get Started</Text>
             </TouchableOpacity>

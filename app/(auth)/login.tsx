@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,9 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
+  ToastAndroid,
+  Alert,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +18,15 @@ import { useTheme } from '@/hooks/ThemeProvider';
 import { Link, useRouter } from 'expo-router';
 import { globalStyles as styles } from '@/styles/auth/globalStyles';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import * as WebBrowser from 'expo-web-browser';
+import * as AuthSession from 'expo-auth-session';
+import * as SecureStore from 'expo-secure-store';
+import axiosInstance from '@/utils/axiosInstance';
+import { login, logout } from '@/redux/slices/userSlice';
+import { useDispatch } from 'react-redux';
+import showToast from '@/component/showToast';
+
+WebBrowser.maybeCompleteAuthSession();
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
@@ -23,20 +34,77 @@ const SignInScreen = () => {
   const [passwordHidden, setPasswordHidden] = useState(true);
   const [loading, setLoading] = useState(false);
   const { theme } = useTheme();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const router = useRouter();
+  const [loadingGAuth, setLoadingGAuth] = useState(false);
+  const dispatch = useDispatch();
 
-  const buttonScale = useSharedValue(1);
+  useEffect(() => {
+    dispatch(logout());
+  }, [dispatch]);
 
-  const handleLogin = async () => {
+  const validateInputs = () => {
+    if (!email) {
+      showToast('Email is required.', 'info');
+      return false;
+    }
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      showToast('Please enter a valid email address.', 'info');
+      return false;
+    }
+    if (!password) {
+      showToast('Password is required.', 'info');
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async () => {
+    if (!validateInputs()) return;
+
     setLoading(true);
     buttonScale.value = withTiming(0.95, { duration: 200 });
-    setTimeout(() => {
-      setLoading(false);
+
+    try {
+      const response = await axiosInstance.post(`${process.env.EXPO_PUBLIC_BACKEND_URL}/api/v1/auth/client/login`, {
+        email,
+        password,
+      });
+      const { access_token, refresh_token } = response.data;
+
+      dispatch(login({ access_token, refresh_token }));
+      showToast('Login successful!', 'success');
       router.replace('/(authenticated)/(tabs)');
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || 'An error occurred. Please try again.';
+      if (error.response?.data?.verification_required) {
+        showToast(errorMessage, 'info');
+        router.push(`/(auth)/verify?email=${encodeURIComponent(email)}`); // Redirect to verification screen
+      } else {
+        showToast(errorMessage, 'error');
+      }
+    } finally {
+      setLoading(false);
       buttonScale.value = withTiming(1, { duration: 200 });
-    }, 1500);
+    }
   };
+
+  const googleAuth = async () => {
+    try {
+      setLoadingGAuth(true);
+
+      const authUrl = `${process.env.EXPO_PUBLIC_BACKEND_URL}/api/v1/auth/google-auth`;
+      await axiosInstance.get(authUrl);
+
+      // Handle successful authentication logic here
+    } catch (error) {
+      console.error('Google Login Error:', error);
+    } finally {
+      setLoadingGAuth(false);
+    }
+  };
+
+  const buttonScale = useSharedValue(1);
 
   const animatedButtonStyle = useAnimatedStyle(() => ({
     transform: [{ scale: buttonScale.value }],
@@ -44,17 +112,17 @@ const SignInScreen = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={[styles.container, { backgroundColor: theme.colors.background }]}> 
+      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
         <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
-        
+
         {/* Logo and Title */}
         <View style={styles.logoContainer}>
           <Text style={[styles.appName, { color: theme.colors.primary }]}>🌿 AgriModel</Text>
           <Text style={[styles.tagline, { color: theme.colors.text }]}>{t('auth.login.welcome')}</Text>
         </View>
 
-       {/* Input Fields with Icons */}
-       <View style={styles.inputGroup}>
+        {/* Input Fields */}
+        <View style={styles.inputGroup}>
           <Text style={[styles.label, { color: theme.colors.text }]}>{t('auth.login.email_label')}</Text>
           <View style={[styles.inputContainer, { backgroundColor: theme.colors.inputBackground }]}>
             <MaterialCommunityIcons name="email-outline" size={20} color="#888" style={styles.icon} />
@@ -63,7 +131,7 @@ const SignInScreen = () => {
               placeholder={t('auth.login.email_placeholder')}
               placeholderTextColor={theme.colors.placeholder}
               value={email}
-              onChangeText={(text) => setEmail(text)}
+              onChangeText={setEmail}
             />
           </View>
         </View>
@@ -78,14 +146,10 @@ const SignInScreen = () => {
               placeholderTextColor={theme.colors.placeholder}
               secureTextEntry={passwordHidden}
               value={password}
-              onChangeText={(text) => setPassword(text)}
+              onChangeText={setPassword}
             />
             <TouchableOpacity onPress={() => setPasswordHidden(!passwordHidden)} style={styles.visibilityIcon}>
-              <MaterialCommunityIcons
-                name={passwordHidden ? 'eye-off-outline' : 'eye-outline'}
-                size={20}
-                color="#888"
-              />
+              <MaterialCommunityIcons name={passwordHidden ? 'eye-off-outline' : 'eye-outline'} size={20} color="#888" />
             </TouchableOpacity>
           </View>
         </View>
@@ -99,18 +163,10 @@ const SignInScreen = () => {
           </TouchableOpacity>
         </Link>
 
-        {/* Login Button with Animation */}
+        {/* Login Button */}
         <Animated.View style={animatedButtonStyle}>
-          <TouchableOpacity
-            onPress={handleLogin}
-            disabled={loading}
-            style={[styles.button, { backgroundColor: theme.colors.primary }]}
-          >
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.buttonText}>{t('auth.login.login')}</Text>
-            )}
+          <TouchableOpacity onPress={handleSubmit} disabled={loading} style={[styles.button, { backgroundColor: theme.colors.primary }]}>
+            {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>{t('auth.login.login')}</Text>}
           </TouchableOpacity>
         </Animated.View>
 
@@ -125,7 +181,7 @@ const SignInScreen = () => {
         </View>
 
         {/* Google Login Button */}
-        <TouchableOpacity style={[styles.outlinedButton, { borderColor: theme.colors.accent }]}>
+        <TouchableOpacity style={[styles.outlinedButton, { borderColor: theme.colors.accent }]} onPress={googleAuth}>
           <MaterialCommunityIcons name="google" size={24} color={theme.colors.text} />
           <Text style={[styles.outlinedButtonText, { color: theme.colors.text }]}>{t('auth.login.google_login')}</Text>
         </TouchableOpacity>
