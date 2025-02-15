@@ -163,7 +163,8 @@ const SignupScreen = () => {
                 placeholder={t('auth.signup.email_placeholder')}
                 placeholderTextColor={theme.colors.placeholder}
                 value={email}
-                onChangeText={handleInputChange(setEmail)} // Removed spaces here
+                onChangeText={handleInputChange(setEmail)} 
+                keyboardType="email-address"
               />
             </View>
           </View>

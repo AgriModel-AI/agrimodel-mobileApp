@@ -47,7 +47,9 @@
       "verify": "Verify",
       "resend_prompt": "Didn't receive code?",
       "resend_code": "Resend Code",
-      "back_to_login": "Back to Login"
+      "back_to_login": "Back to Login",
+      "back": "Back",
+      "next": "Next"
     },
     "reset_password": {
       "title": "Reset Your Password",
@@ -56,7 +58,7 @@
       "password_placeholder": "Enter new password",
       "confirm_password_label": "Confirm Password",
       "confirm_password_placeholder": "Confirm password",
-      "continue": "Continue",
+      "continue": "Reset",
       "cancel": "Cancel"
     },
     "success": {

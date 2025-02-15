@@ -132,6 +132,7 @@ const SignInScreen = () => {
               placeholderTextColor={theme.colors.placeholder}
               value={email}
               onChangeText={setEmail}
+              keyboardType="email-address"
             />
           </View>
         </View>

@@ -47,7 +47,10 @@
       "verify": "Emeza",
       "resend_prompt": "Ntabwo wakiriye umubare?",
       "resend_code": "Ohereza nanone",
-      "back_to_login": "Subira kwinjira"
+      "back_to_login": "Subira kwinjira",
+      "back": "Garuka",
+      "next": "Komeza"
+
     },
     "reset_password": {
       "title": "Shyiramo Ijambo Ry'ibanga Rishya",
@@ -56,7 +59,7 @@
       "password_placeholder": "Injiza ijambo ry'ibanga rishya",
       "confirm_password_label": "Emeza ijambo ry'ibanga",
       "confirm_password_placeholder": "Emeza ijambo ry'ibanga",
-      "continue": "Komeza",
+      "continue": "Emeza",
       "cancel": "Hagarika"
     },
     "success": {

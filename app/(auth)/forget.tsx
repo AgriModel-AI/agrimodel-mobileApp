@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Keyboard,
   TouchableWithoutFeedback,
+  Animated,
+  ActivityIndicator,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/ThemeProvider';
@@ -14,12 +16,55 @@ import { useTranslation } from 'react-i18next';
 import { globalStyles } from '@/styles/auth/globalStyles';
 import { useRouter } from 'expo-router';
 import { StyleSheet } from 'react-native';
+import showToast from '@/component/showToast';
+import axiosInstance from '@/utils/axiosInstance';
+import { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 const ForgotPasswordScreen = () => {
   const [email, setEmail] = useState('');
   const { theme } = useTheme();
   const { t } = useTranslation();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  const validateInputs = () => {
+    if (!email) {
+      showToast('Email is required.', 'info');
+      return false;
+    }
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      showToast('Please enter a valid email address.', 'info');
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async () => {
+    if (!validateInputs()) return;
+
+    setLoading(true);
+    buttonScale.value = withTiming(0.95, { duration: 200 });
+
+    try {
+      const response = await axiosInstance.post(`${process.env.EXPO_PUBLIC_BACKEND_URL}/api/v1/auth/password-reset`, {
+        email,
+      });
+      showToast(response.data.message, 'success');
+      router.push(`/(auth)/code?email=${encodeURIComponent(email)}`); // Redirect to verification screen
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || 'An error occurred. Please try again.';
+        showToast(errorMessage, 'error');
+    } finally {
+      setLoading(false);
+      buttonScale.value = withTiming(1, { duration: 200 });
+    }
+  };
+
+  const buttonScale = useSharedValue(1);
+  
+    const animatedButtonStyle = useAnimatedStyle(() => ({
+      transform: [{ scale: buttonScale.value }],
+    }));
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -68,12 +113,15 @@ const ForgotPasswordScreen = () => {
         </View>
 
         {/* Continue Button */}
-        <TouchableOpacity
-          onPress={() => router.replace('/verify')}
-          style={[globalStyles.button, { backgroundColor: theme.colors.primary }]}
-        >
-            <Text style={globalStyles.buttonText}>{t('auth.forgot_password.continue')}</Text>
-        </TouchableOpacity>
+        <Animated.View style={animatedButtonStyle}>
+          <TouchableOpacity
+            onPress={handleSubmit}
+            disabled={loading}
+            style={[globalStyles.button, { backgroundColor: theme.colors.primary }]}
+          >
+             {loading ? <ActivityIndicator color="#fff" /> : <Text style={globalStyles.buttonText}>{t('auth.forgot_password.continue')}</Text> }
+          </TouchableOpacity>
+        </Animated.View>
       </View>
     </TouchableWithoutFeedback>
   );
