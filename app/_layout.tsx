@@ -72,7 +72,6 @@ function ThemedRootLayout() {
   
   useEffect(() => {
     const customizeSystemBars = async () => {
-      console.log(segments)
       // Always set the status bar to light on the index screen
       if (isIndexScreen) {
         StatusBar.setBarStyle('light-content', true);  // Force light status bar

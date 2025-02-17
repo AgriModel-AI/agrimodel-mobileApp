@@ -25,6 +25,7 @@ import axiosInstance from '@/utils/axiosInstance';
 import { login, logout } from '@/redux/slices/userSlice';
 import { useDispatch } from 'react-redux';
 import showToast from '@/component/showToast';
+import { fetchUserDetails } from '@/redux/slices/userDetailsSlice';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -37,7 +38,7 @@ const SignInScreen = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const [loadingGAuth, setLoadingGAuth] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
 
   useEffect(() => {
     dispatch(logout());
@@ -72,9 +73,13 @@ const SignInScreen = () => {
       });
       const { access_token, refresh_token } = response.data;
 
-      dispatch(login({ access_token, refresh_token }));
-      showToast('Login successful!', 'success');
-      router.replace('/(authenticated)/(tabs)');
+      dispatch(login({ access_token, refresh_token }))
+      dispatch(fetchUserDetails()).unwrap().then(() => {
+        showToast('Login successful!', 'success');
+        router.replace('/(authenticated)/(tabs)');
+      });
+
+      
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || 'An error occurred. Please try again.';
       if (error.response?.data?.verification_required) {

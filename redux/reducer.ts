@@ -1,14 +1,16 @@
 import { combineReducers, UnknownAction } from 'redux';
 import userReducer from './slices/userSlice';
 import userDetailsReducer from './slices/userDetailsSlice';
+import diseaseReducer from './slices/diseaseSlice';
 
 
 const appReducer = combineReducers({
   user: userReducer,
   userDetails: userDetailsReducer,
+  diseases: diseaseReducer,
 });
 
-const rootReducer = (state: Partial<{ user: { jwtToken: null; refreshToken: null; } | undefined; userDetails: { userDetails: {}; loading: boolean; error: null; hasFetched: boolean; } | undefined; }> | undefined, action: UnknownAction) => {
+const rootReducer = (state: any, action: any) => {
   if (action.type === 'user/logout') {
     state = undefined;
   }

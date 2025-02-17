@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './reducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchUserDetails } from './slices/userDetailsSlice';
 
 // Create store
 export const store = configureStore({
@@ -19,6 +20,9 @@ const loadTokens = async () => {
         payload: { access_token: jwtToken, refresh_token: refreshToken },
       });
     }
+
+    store.dispatch(fetchUserDetails());
+    
   } catch (error) {
     console.error('Error loading tokens:', error);
   }

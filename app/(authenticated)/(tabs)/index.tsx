@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -12,11 +12,24 @@ import { useTheme } from '@/hooks/ThemeProvider';
 import { useTranslation } from 'react-i18next';
 import { useHeaderHeight } from '@react-navigation/elements';
 import Animated, { FadeIn, FadeInUp, FadeOut, BounceIn } from 'react-native-reanimated';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchDiseases } from '@/redux/slices/diseaseSlice';
+import CustomSkeleton from '@/component/CustomSkeleton';
 
 const HomeScreen = () => {
   const { theme } = useTheme();
   const { t } = useTranslation();
   const headerHeight = useHeaderHeight();
+
+  const { diseases, loading, hasFetched, error } = useSelector((state: any) => state.diseases);
+
+  const dispatch = useDispatch<any>();
+
+  useEffect(() => {
+    if (!hasFetched) {
+      dispatch(fetchDiseases());
+    }
+  }, [hasFetched, dispatch]);
 
   return (
     <ScrollView
@@ -45,14 +58,21 @@ const HomeScreen = () => {
       <Animated.Text entering={FadeInUp.delay(200).duration(500)} style={[styles.sectionTitle, { color: theme.colors.text, marginTop: 10 }]}>
         {t('home.crops_detected')}
       </Animated.Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.cropsContainer}>
-        {[1, 2, 3].map((_, index) => (
-          <Animated.View key={index} entering={BounceIn.delay(300 * index).duration(700)} style={styles.cropItem}>
-            <Image source={require('@/assets/images/landing.jpg')} style={styles.cropImage} />
-            <Text style={[styles.cropName, { color: theme.colors.text }]}>Coffee</Text>
-          </Animated.View>
-        ))}
-      </ScrollView>
+      
+      {loading ? (
+        <CustomSkeleton count={3}/>
+      ) : (
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.cropsContainer}>
+          {diseases.map((disease: any, index: number) => (
+            <Animated.View key={disease.diseaseId} entering={BounceIn.delay(300 * index).duration(700)} style={styles.cropItem}>
+              <Image source={{ uri: disease.images[0] }} style={styles.cropImage} />
+              <Text style={[styles.cropName, { color: theme.colors.text }]}>
+                {disease.name}
+              </Text>
+            </Animated.View>
+          ))}
+        </ScrollView>
+      )} 
 
       {/* Community Section */}
       <Animated.Text entering={FadeInUp.delay(300).duration(500)} style={[styles.sectionTitle, { color: theme.colors.text, marginTop: 10 }]}>

@@ -1,14 +1,29 @@
-import { Link } from 'expo-router';
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, StatusBar, ActivityIndicator, Platform } from 'react-native';
+import { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, StatusBar, ActivityIndicator } from 'react-native';
+import { Link, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { useSharedValue, withTiming, useAnimatedStyle, Easing } from 'react-native-reanimated';
+import { useDispatch, useSelector } from 'react-redux';
 
-const LandingPage = ({ navigation }: { navigation: any }) => {
+const LandingPage = () => {
+  const [checkingAuth, setCheckingAuth] = useState(true); // Added to handle redirection logic
   const [loading, setLoading] = useState(true);
   const insets = useSafeAreaInsets();
+  const router = useRouter();
+
   const scaleAnim = useSharedValue(0.8);
   const opacityAnim = useSharedValue(0);
+
+  const { userDetails } = useSelector((state: any) => state.userDetails);
+
+  // Redirect if user details are available before showing content
+  useEffect(() => {
+    if (userDetails !== null) {
+      router.replace('/(authenticated)/(tabs)');
+    } else {
+      setCheckingAuth(false); // Show content only if user is not authenticated
+    }
+  }, [userDetails]);
 
   // Trigger animation once the image has loaded
   const handleImageLoad = () => {
@@ -23,8 +38,17 @@ const LandingPage = ({ navigation }: { navigation: any }) => {
     opacity: opacityAnim.value,
   }));
 
+  // Show a loading screen until authentication check is completed
+  if (checkingAuth) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#31A64C" />
+      </View>
+    );
+  }
+
   return (
-    <View style={[styles.container]}>
+    <View style={styles.container}>
       <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
       <ImageBackground
         source={require('@/assets/images/landing.jpg')}
@@ -38,7 +62,6 @@ const LandingPage = ({ navigation }: { navigation: any }) => {
           </View>
         )}
 
-        {/* Modern Design with Animation */}
         <Animated.View style={[styles.content, animatedStyle]}>
           <Text style={styles.title}>🌿 AgriModel</Text>
           <Text style={styles.description}>
@@ -73,7 +96,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
   content: {
     flex: 1,

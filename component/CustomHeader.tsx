@@ -1,15 +1,23 @@
-import { Feather, Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { BlurView } from 'expo-blur';
 import { Link } from 'expo-router';
 import { useTheme } from '@/hooks/ThemeProvider';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { use } from 'i18next';
+import { useEffect } from 'react';
 
 const CustomHeader = () => {
   const { theme } = useTheme();
   const { t } = useTranslation();
+
+  const { userDetails } = useSelector((state: any) => state.userDetails);
+
+  useEffect(() => {
+    console.log('userDetails', userDetails);
+  }, [userDetails]);
 
   return (
     <BlurView intensity={0} style={{backgroundColor: theme.colors.background, }}>
@@ -26,7 +34,7 @@ const CustomHeader = () => {
         <Link href={'/(authenticated)/(tabs)/profile'} asChild>
           <View style={styles.profileContainer}>
             <Image
-              source={require('@/assets/images/landing.jpg')}
+              source={{ uri: userDetails?.profilePicture }}
               style={styles.profileImage}
             />
             <View>
@@ -34,7 +42,7 @@ const CustomHeader = () => {
                 {t('home.greeting')}
               </Text>
               <Text style={[styles.userName, { color: theme.colors.text }]}>
-                Uwizeye Eddie
+                {userDetails?.names}
               </Text>
             </View>
           </View>
