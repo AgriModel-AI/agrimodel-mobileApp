@@ -14,7 +14,8 @@ import { useTheme } from '@/hooks/ThemeProvider';
 import { useTranslation } from 'react-i18next';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useHeaderHeight } from '@react-navigation/elements';
-import { Link, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
+import { useSelector } from 'react-redux';
 
 const ProfileScreen = () => {
   const { theme, toggleTheme } = useTheme();
@@ -22,6 +23,8 @@ const ProfileScreen = () => {
   const currentLanguage = i18n.language;
   const headerHeight = useHeaderHeight();
   const router = useRouter();
+
+  const { userDetails } = useSelector((state: any) => state.userDetails);
 
   const changeLanguage = (lang: string | undefined) => {
     i18n.changeLanguage(lang);
@@ -40,14 +43,14 @@ const ProfileScreen = () => {
         {/* Profile Section */}
         <View style={styles.profileSection}>
           <Image
-            source={{ uri: 'https://via.placeholder.com/100' }}
+            source={{ uri: userDetails?.profilePicture }}
             style={styles.profileImage}
           />
           <Text style={[styles.name, { color: theme.colors.text }]}>
-            Uwizeye Eddie
+            {userDetails?.names}
           </Text>
           <Text style={[styles.email, { color: theme.colors.text }]}>
-            uwizeyeeddie@gmail.com
+            {userDetails?.email}
           </Text>
             <TouchableOpacity
               style={[
@@ -137,7 +140,7 @@ const ProfileScreen = () => {
           {t('profile.actions')}
         </Text>
         <View style={[styles.card, { backgroundColor: theme.colors.inputBackground }]}>
-          <TouchableOpacity style={styles.actionItem}>
+          <TouchableOpacity style={styles.actionItem} onPress={()=> router.push('/(authenticated)/(tabs)/profile/changePassword')}>
             <View style={styles.preferenceContent}>
               <Feather name="lock" size={24} color={theme.colors.text} />
               <Text style={[styles.preferenceText, { color: theme.colors.text }]}>

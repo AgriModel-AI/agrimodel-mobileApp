@@ -124,6 +124,19 @@
     "cancel": "Cancel",
     "permission_denied": "Permission Denied",
     "enable_permissions_camera": "You need to enable permissions to use the camera."
-}
+  },
+  "profileChangePassword": {
+    "page_title": "Change Password",
+    "title": "Secure Your Account",
+    "description": "For security purposes, after changing your password, you will be logged out automatically. Please ensure your new password is different from your previous one. Both the new password and confirmation password must match to proceed.",
+    "current_password_label": "Current Password",
+    "current_password_placeholder": "Enter current password",
+    "password_label": "New Password",
+    "password_placeholder": "Enter new password",
+    "confirm_password_label": "Confirm Password",
+    "confirm_password_placeholder": "Confirm password",
+    "continue": "Change Password"
+  }
+
 
 }

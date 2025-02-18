@@ -125,6 +125,18 @@
     "cancel": "Hagarika",
     "permission_denied": "Uburenganzira Bwanze",
     "enable_permissions_camera": "Ugomba kwemerera gukoresha Camera."
-}
+  },
+  "profileChangePassword": {
+    "page_title": "Hindura Ijambo ry'Ibanga",
+    "title": "Bikira Konti Yawe",
+    "description": "Kubera umutekano, nyuma yo guhindura ijambo ry'ibanga, uzasohoka mu buryo bwikora. Nyamuneka, menya neza ko ijambo ry'ibanga rishya atari iryo wabanje gukoresha. Ijambo ry'ibanga rishya n'iryemezo bigomba guhura kugirango ukomeze.",
+    "current_password_label": "Ijambo ry'ibanga ry'ubu",
+    "current_password_placeholder": "Shyiramo ijambo ry'ibanga ry'ubu",
+    "password_label": "Ijambo ry'ibanga rishya",
+    "password_placeholder": "Shyiramo ijambo ry'ibanga rishya",
+    "confirm_password_label": "Emeza ijambo ry'ibanga",
+    "confirm_password_placeholder": "Emeza ijambo ry'ibanga",
+    "continue": "Hindura Ijambo ry'Ibanga"
+  }
 
 }

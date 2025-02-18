@@ -17,6 +17,12 @@ const _layout = () => {
           headerShown: false
         }}   
        />
+       <Stack.Screen
+        name='changePassword'
+        options={{
+          headerShown: false
+        }}   
+       />
     </Stack>
   )
 }

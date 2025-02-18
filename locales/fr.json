@@ -124,6 +124,19 @@
     "cancel": "Annuler",
     "permission_denied": "Permission refusée",
     "enable_permissions_camera": "Vous devez activer les autorisations pour utiliser l'appareil photo."
-}
+  },
+  "profileChangePassword": {
+    "page_title": "Changer le mot de passe",
+    "title": "Sécurisez votre compte",
+    "description": "Pour des raisons de sécurité, après avoir changé votre mot de passe, vous serez automatiquement déconnecté. Veuillez vous assurer que votre nouveau mot de passe est différent de l'ancien. Le mot de passe et la confirmation doivent être identiques pour continuer.",
+    "current_password_label": "Mot de passe actuel",
+    "current_password_placeholder": "Entrez le mot de passe actuel",
+    "password_label": "Nouveau mot de passe",
+    "password_placeholder": "Entrez le nouveau mot de passe",
+    "confirm_password_label": "Confirmer le mot de passe",
+    "confirm_password_placeholder": "Confirmer le mot de passe",
+    "continue": "Changer le mot de passe"
+  }
+
 
 }
