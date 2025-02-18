@@ -14,11 +14,7 @@ const CustomHeader = () => {
   const { t } = useTranslation();
 
   const { userDetails } = useSelector((state: any) => state.userDetails);
-
-  useEffect(() => {
-    console.log('userDetails', userDetails);
-  }, [userDetails]);
-
+  
   return (
     <BlurView intensity={0} style={{backgroundColor: theme.colors.background, }}>
       <View

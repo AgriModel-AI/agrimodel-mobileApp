@@ -12,7 +12,9 @@ export const CustomLightTheme = {
     text: 'rgba(0, 0, 0, 1)',                 // Dark text for readability
     placeholder: 'rgba(120, 120, 120, 1)',    // Mid-gray placeholder for contrast
     primaryTransparent: 'rgba(49, 123, 64, 0.2)',
-    textInverted: 'rgba(220, 230, 240, 1)',  
+    textInverted: 'rgba(220, 230, 240, 1)',
+    redTransparent: 'rgba(230, 72, 72, 0.2)', // Red background for the leave button
+    red: 'rgba(230, 72, 72, 1)',  
   },
 };
 
@@ -30,7 +32,9 @@ export const CustomDarkTheme = {
     text: 'rgba(220, 230, 240, 1)',           // Soft white text
     placeholder: 'rgba(150, 150, 150, 1)',    // Placeholder text for inputs
     primaryTransparent: 'rgba(49, 123, 64, 0.2)', // Transparent primary
-    textInverted: 'rgba(0, 0, 0, 1)', 
+    textInverted: 'rgba(0, 0, 0, 1)',
+    redTransparent: 'rgba(230, 72, 72, 0.2)', // Red background for the leave button
+    red: 'rgba(230, 72, 72, 1)', 
   },
 };
 

@@ -96,8 +96,9 @@
     "community": "Umuryango",
     "members": "Abanyamuryango",
     "join": "Injira",
-    "humidity": "Ubushuhe"
-  },
+    "humidity": "Ubushuhe",
+    "leave": "Sohoka"
+  }, 
   "profile": {
     "edit_profile": "Hindura Umwirondoro",
     "preferences": "Preferences",

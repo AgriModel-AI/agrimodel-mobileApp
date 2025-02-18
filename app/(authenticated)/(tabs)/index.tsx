@@ -15,13 +15,15 @@ import Animated, { FadeIn, FadeInUp, FadeOut, BounceIn } from 'react-native-rean
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDiseases } from '@/redux/slices/diseaseSlice';
 import CustomSkeleton from '@/component/CustomSkeleton';
+import { fetchCommunities } from '@/redux/slices/communitySlice';
 
 const HomeScreen = () => {
   const { theme } = useTheme();
   const { t } = useTranslation();
   const headerHeight = useHeaderHeight();
 
-  const { diseases, loading, hasFetched, error } = useSelector((state: any) => state.diseases);
+  const { diseases, loading, hasFetched } = useSelector((state: any) => state.diseases);
+  const { communities, loading: loadingCommunity , hasFetched: communitesHasFetched, joinLoading, leaveLoading } = useSelector((state: any) => state.communites);
 
   const dispatch = useDispatch<any>();
 
@@ -30,6 +32,13 @@ const HomeScreen = () => {
       dispatch(fetchDiseases());
     }
   }, [hasFetched, dispatch]);
+
+
+  useEffect(() => {
+    if (!communitesHasFetched) {
+      dispatch(fetchCommunities());
+    }
+  }, [communitesHasFetched, dispatch]);
 
   return (
     <ScrollView
@@ -78,16 +87,25 @@ const HomeScreen = () => {
       <Animated.Text entering={FadeInUp.delay(300).duration(500)} style={[styles.sectionTitle, { color: theme.colors.text, marginTop: 10 }]}>
         {t('home.community')}
       </Animated.Text>
-      {[1, 2, 3, 4, 5].map((_, index) => (
+      {communities.map((community:any, index: number) => (
         <Animated.View key={index} entering={FadeIn.delay(400 * index).duration(600)} exiting={FadeOut} style={[styles.communityItem, { backgroundColor: theme.colors.inputBackground }]}>
-          <Image source={require('@/assets/images/landing.jpg')} style={styles.communityImage} />
+          <Image source={{uri: community.image}} style={styles.communityImage} />
           <View style={styles.communityInfo}>
-            <Text style={[styles.communityTitle, { color: theme.colors.text }]}>Farming Community</Text>
-            <Text style={[styles.communityMembers, { color: theme.colors.text }]}>120 {t('home.members')}</Text>
+            <Text style={[styles.communityTitle, { color: theme.colors.text }]}>{ community.name }</Text>
+            <Text style={[styles.communityMembers, { color: theme.colors.text }]}>{community.users} {t('home.members')}</Text>
           </View>
-          <TouchableOpacity style={[styles.joinButton, { backgroundColor: theme.colors.primaryTransparent }]}>
-            <Text style={[styles.joinButtonText, { color: theme.colors.primary }]}>{t('home.join')}</Text>
-          </TouchableOpacity>
+          {
+            community.joined ? (
+              <TouchableOpacity style={[styles.joinButton, { backgroundColor: theme.colors.redTransparent }]}>
+                <Text style={[styles.joinButtonText, { color: theme.colors.red }]}>{t('home.leave')}</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity style={[styles.joinButton, { backgroundColor: theme.colors.primaryTransparent }]}>
+                <Text style={[styles.joinButtonText, { color: theme.colors.primary }]}>{t('home.join')}</Text>
+              </TouchableOpacity>
+            )
+          }
+          
         </Animated.View>
       ))}
     </ScrollView>

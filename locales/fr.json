@@ -95,7 +95,8 @@
     "community": "Communauté",
     "members": "Membres",
     "join": "Rejoindre",
-    "humidity": "Humidité"
+    "humidity": "Humidité",
+    "leave": "Quitter"
   },
   "profile": {
     "edit_profile": "Modifier le profil",

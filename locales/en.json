@@ -95,8 +95,9 @@
     "community": "Community",
     "members": "Members",
     "join": "Join",
-    "humidity": "Humidity"
-  },
+    "humidity": "Humidity",
+    "leave": "Leave"
+  }, 
   "profile": {
     "edit_profile": "Edit Profile",
     "preferences": "Preferences",
