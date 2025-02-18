@@ -3,7 +3,6 @@ import {
   View,
   Text,
   Image,
-  TouchableOpacity,
   StyleSheet,
   ScrollView,
 } from 'react-native';
@@ -18,6 +17,7 @@ import DiseaseSkeleton from '@/component/DiseaseSkeleton';
 import { fetchCommunities } from '@/redux/slices/communitySlice';
 import CommunityHomeActions from '@/component/CommunityHomeActions';
 import CommunitySkeleton from '@/component/CommunitySkeleton';
+import WeatherCard from '@/component/WeatherCard';
 
 const HomeScreen = () => {
   const { theme } = useTheme();
@@ -52,18 +52,7 @@ const HomeScreen = () => {
       <Animated.Text entering={FadeInUp.duration(500)} style={[styles.sectionTitle, { color: theme.colors.text }]}>
         {t('home.today_weather')}
       </Animated.Text>
-      <Animated.View entering={FadeInUp.delay(100).duration(600)} style={[styles.weatherCard, { backgroundColor: 'rgba(83, 158, 246, 1)' }]}>
-        <Text style={[styles.weatherLocation, { color: 'white' }]}>Kigali City, 10 Sept 2024</Text>
-        <View style={styles.weatherInfo}>
-          <Text style={[styles.temperature, { color: 'white' }]}>28°C</Text>
-          <View>
-            <Text style={[styles.humidityText, { color: 'white' }]}>{t('home.humidity')} 82%</Text>
-            <Text style={[styles.weatherCondition, { color: 'white' }]}>Cloudy</Text>
-          </View>
-          <MaterialCommunityIcons name="weather-cloudy" size={48} color="white" />
-        </View>
-        <Text style={[styles.weatherAdvice, { color: 'white' }]}>{t('home.good_weather_advice')}</Text>
-      </Animated.View>
+      <WeatherCard />
 
       {/* Crops Section */}
       <Animated.Text entering={FadeInUp.delay(200).duration(500)} style={[styles.sectionTitle, { color: theme.colors.text, marginTop: 10 }]}>

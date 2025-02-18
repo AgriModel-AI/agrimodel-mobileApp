@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Animated, { 
@@ -13,12 +13,16 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useTheme } from '@/hooks/ThemeProvider';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 
 const AnimatedIcon = Animated.createAnimatedComponent(MaterialCommunityIcons);
 
 const WeatherCard = () => {
   const { theme } = useTheme();
   const { t } = useTranslation();
+  
+  // State to store weather data
+  const [weatherData, setWeatherData] = useState<any>(null);
 
   // Animation values
   const cloudPosition = useSharedValue(0);
@@ -27,6 +31,19 @@ const WeatherCard = () => {
   const cardScale = useSharedValue(0.95);
 
   useEffect(() => {
+    // Fetch weather data from the API
+    const fetchWeatherData = async () => {
+      try {
+        const response = await axios.get(`https://api.weatherapi.com/v1/current.json?key=${process.env.EXPO_PUBLIC_WEATHER_API_KEY}&q=Kigali`);
+        
+        setWeatherData(response.data);
+      } catch (error) {
+        console.error('Error fetching weather data:', error);
+      }
+    };
+
+    fetchWeatherData();
+
     // Cloud floating animation
     cloudPosition.value = withRepeat(
       withSequence(
@@ -76,17 +93,18 @@ const WeatherCard = () => {
     transform: [{ scale: cardScale.value }],
   }));
 
+  if (!weatherData) {
+    return <Text>Loading...</Text>;
+  }
+
   return (
     <Animated.View style={[styles.container, cardStyle]}>
       <Animated.View 
-        style={[
-          styles.weatherCard, 
-          { backgroundColor: 'rgba(83, 158, 246, 1)' }
-        ]}
+        style={[styles.weatherCard, { backgroundColor: 'rgba(83, 158, 246, 1)' }]}
       >
         {/* Location and Date */}
         <Text style={[styles.weatherLocation, { color: 'white' }]}>
-          Kigali City, {new Date().toLocaleDateString('en-US', { 
+          {weatherData?.location.name}, {new Date().toLocaleDateString('en-US', { 
             day: 'numeric',
             month: 'short',
             year: 'numeric'
@@ -94,19 +112,15 @@ const WeatherCard = () => {
         </Text>
 
         {/* Weather Info */}
-        <View style={styles.weatherInfo}>
+        <Animated.View style={styles.weatherInfo}>
           <Animated.Text style={[styles.temperature, { color: 'white' }, temperatureStyle]}>
-            28°C
+            {weatherData?.current.temp_c}°C
           </Animated.Text>
-          
-          <Animated.View style={[styles.humidityContainer, humidityStyle]}>
-            <Text style={[styles.humidityText, { color: 'white' }]}>
-              {t('home.humidity')} 82%
-            </Text>
-            <Text style={[styles.weatherCondition, { color: 'white' }]}>
-              Cloudy
-            </Text>
-          </Animated.View>
+
+          <View style={styles.detailRow}>
+            <MaterialCommunityIcons name="water-percent" size={20} color="rgba(255,255,255,0.8)" />
+            <Text style={styles.detailText}>{weatherData?.current.humidity}% {t('home.humidity')}</Text>
+          </View>
 
           <AnimatedIcon 
             name="weather-cloudy" 
@@ -114,15 +128,11 @@ const WeatherCard = () => {
             color="white" 
             style={cloudStyle}
           />
-        </View>
+        </Animated.View>
 
         {/* Weather Advice */}
         <Animated.Text 
-          style={[
-            styles.weatherAdvice, 
-            { color: 'white' }, 
-            humidityStyle
-          ]}
+          style={[styles.weatherAdvice, { color: 'white' }, humidityStyle]}
         >
           {t('home.good_weather_advice')}
         </Animated.Text>
@@ -174,6 +184,16 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
   },
   weatherAdvice: {
+    fontSize: 14,
+    fontFamily: 'Poppins_400Regular',
+  },
+  detailRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+  },
+  detailText: {
+    color: 'rgba(255,255,255,0.8)',
     fontSize: 14,
     fontFamily: 'Poppins_400Regular',
   },
