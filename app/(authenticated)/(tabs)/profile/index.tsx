@@ -150,7 +150,7 @@ const ProfileScreen = () => {
             <Feather name="chevron-right" size={24} color={theme.colors.text} />
           </TouchableOpacity>
           <View style={[styles.divider]} />
-          <TouchableOpacity style={styles.actionItem}>
+          <TouchableOpacity style={styles.actionItem} onPress={()=> router.push('/(authenticated)/(tabs)/profile/terms')}>
             <View style={styles.preferenceContent}>
               <Feather name="file-text" size={24} color={theme.colors.text} />
               <Text style={[styles.preferenceText, { color: theme.colors.text }]}>
