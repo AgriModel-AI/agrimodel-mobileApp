@@ -17,7 +17,7 @@ export const fetchCommunities = createAsyncThunk(
 // Async thunk for joining a community
 export const joinCommunity = createAsyncThunk(
   'communities/joinCommunity',
-  async (communityId, { rejectWithValue }) => {
+  async (communityId: any, { rejectWithValue }) => {
     try {
       await axiosInstance.post(`/communities/user-community/${communityId}`);
       return communityId;
@@ -30,7 +30,7 @@ export const joinCommunity = createAsyncThunk(
 // Async thunk for leaving a community
 export const leaveCommunity = createAsyncThunk(
   'communities/leaveCommunity',
-  async (communityId, { rejectWithValue }) => {
+  async (communityId: any, { rejectWithValue }) => {
     try {
       await axiosInstance.delete(`/communities/user-community/${communityId}`);
       return communityId;
@@ -81,6 +81,7 @@ const communitySlice = createSlice({
         const community = state.communities.find((c: any) => c.communityId === action.payload);
         if (community) {
           community.joined = true;
+          community.users = community.users + 1;
         }
       })
       .addCase(joinCommunity.rejected, (state, action:any) => {
@@ -96,6 +97,7 @@ const communitySlice = createSlice({
         const community = state.communities.find((c: any) => c.communityId === action.payload);
         if (community) {
           community.joined = false;
+          community.users = community.users - 1;
         }
       })
       .addCase(leaveCommunity.rejected, (state, action:any) => {

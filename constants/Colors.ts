@@ -14,7 +14,8 @@ export const CustomLightTheme = {
     primaryTransparent: 'rgba(49, 123, 64, 0.2)',
     textInverted: 'rgba(220, 230, 240, 1)',
     redTransparent: 'rgba(230, 72, 72, 0.2)', // Red background for the leave button
-    red: 'rgba(230, 72, 72, 1)',  
+    red: 'rgba(230, 72, 72, 1)',
+    skeleton: '#E1E1E1',
   },
 };
 
@@ -35,6 +36,7 @@ export const CustomDarkTheme = {
     textInverted: 'rgba(0, 0, 0, 1)',
     redTransparent: 'rgba(230, 72, 72, 0.2)', // Red background for the leave button
     red: 'rgba(230, 72, 72, 1)', 
+    skeleton: '#2A2A2A'
   },
 };
 

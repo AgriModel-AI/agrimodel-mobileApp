@@ -96,7 +96,13 @@
     "members": "Membres",
     "join": "Rejoindre",
     "humidity": "Humidité",
-    "leave": "Quitter"
+    "leave": "Quitter",
+    "leave_confirmation_title": "Quitter la communauté",
+    "leave_confirmation_message": "Êtes-vous sûr(e) de vouloir quitter cette communauté ? Vous pourrez toujours la rejoindre plus tard.",
+    "confirm_leave": "Oui, quitter",
+    "cancel": "Annuler",
+    "joining": "Adhésion...",
+    "leaving": "Départ..."
   },
   "profile": {
     "edit_profile": "Modifier le profil",

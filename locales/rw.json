@@ -97,7 +97,13 @@
     "members": "Abanyamuryango",
     "join": "Injira",
     "humidity": "Ubushuhe",
-    "leave": "Sohoka"
+    "leave": "Sohoka",
+    "leave_confirmation_title": "Sohoka muri iyi group",
+    "leave_confirmation_message": "Uzi neza ko ushaka gusohoka muri iyi group? Ushobora kongera kuyinjiramo nyuma.",
+    "confirm_leave": "Yego, sohoka",
+    "cancel": "Reka",
+    "joining": "Kwinjira...",
+    "leaving": "Gusohoka..."
   }, 
   "profile": {
     "edit_profile": "Hindura Umwirondoro",
