@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,20 +9,22 @@ import {
   ScrollView,
   Modal,
   FlatList,
-  StatusBar,
-  Platform,
   Alert,
   Animated,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import { useTheme } from '@/hooks/ThemeProvider';
-import { Feather, FontAwesome } from '@expo/vector-icons';
+import { Feather, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { useHeaderHeight } from '@react-navigation/elements';
 import { router } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import showToast from '@/component/showToast';
+import { addUserDetail } from '@/redux/slices/userDetailsSlice';
+import { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 const rwandaDistricts = [
   'Gasabo',
@@ -61,21 +63,48 @@ const { width, height } = Dimensions.get('window');
 
 const EditProfileScreen = () => {
   const { theme } = useTheme();
-  const headerHeight = useHeaderHeight();
   const { t } = useTranslation();
   
-  const [dob, setDob] = useState(new Date());
+  const [names, setNames] = useState('');
+  const [address, setAddress] = useState('');
+  const [dob, setDob] = useState<any>(new Date());
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [nationalId, setNationalId] = useState('');
+  const [imageChanged, setImageChanged] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-  const [gender, setGender] = useState('Not Selected'); // `null` represents "Not Selected"
+  const [loading, setLoading] = useState(false);
+
+  const [gender, setGender] = useState('Not Selected');
   const [genderOpen, setGenderOpen] = useState(false);
 
   const [district, setDistrict] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
 
-  const [profileImage, setProfileImage] = useState('https://via.placeholder.com/100');
+  const [profileImage, setProfileImage] = useState('');
   const [isPhotoModalVisible, setPhotoModalVisible] = useState(false);
   const [scaleValue] = useState(new Animated.Value(0));
+
+  const { userDetails } = useSelector((state: any) => state.userDetails);
+
+  const dispatch = useDispatch<any>();
+
+  useEffect(()=> {
+
+    if (userDetails) {
+      setDob(new Date(userDetails.dob));
+      setGender(userDetails.gender);
+      setDistrict(userDetails.district?.name);
+      setProfileImage(userDetails.profilePicture);
+      setNames(userDetails.names);
+      setAddress(userDetails.address);
+      setPhoneNumber(userDetails.phone_number);
+      setNationalId(userDetails.national_id);
+    }
+
+  }, [userDetails])
+
+
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -115,6 +144,36 @@ const EditProfileScreen = () => {
     setModalVisible(false);
   };
 
+  const createFormDataWithImage = () => {
+    const data = new FormData();
+    
+    data.append("names", names);
+    data.append("national_id", nationalId);
+    data.append("phone_number", phoneNumber);
+    data.append("district", district);
+    data.append("address", address);
+    data.append("gender", gender);
+    data.append("dob", dob.toISOString().split('T')[0]);
+
+    // Handle image submission
+    if (imageChanged && profileImage) {
+      // Get the filename from the URI
+      const filename = profileImage.split('/').pop() || 'photo.jpg';
+      
+      // Infer the type from the extension
+      const match = /\.(\w+)$/.exec(filename);
+      const type = match ? `image/${match[1]}` : 'image/jpeg';
+      
+      data.append("profilePicture", {
+        uri: profileImage,
+        name: filename,
+        type: type,
+      } as any);
+    }
+
+    return data;
+  };
+
   const openImagePicker = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
@@ -124,9 +183,13 @@ const EditProfileScreen = () => {
     const pickerResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
+      allowsEditing: true,
+      aspect: [1, 1],
     });
     if (!pickerResult.canceled && pickerResult.assets) {
-      setProfileImage(pickerResult.assets[0].uri); // Access `uri` from the first asset
+      setProfileImage(pickerResult.assets[0].uri);
+      setImageChanged(true);
+      togglePhotoModal();
     }
   };
   
@@ -138,11 +201,55 @@ const EditProfileScreen = () => {
     }
     const cameraResult = await ImagePicker.launchCameraAsync({
       quality: 1,
+      allowsEditing: true,
+      aspect: [1, 1],
     });
     if (!cameraResult.canceled && cameraResult.assets) {
-      setProfileImage(cameraResult.assets[0].uri); // Access `uri` from the first asset
+      setProfileImage(cameraResult.assets[0].uri);
+      setImageChanged(true);
+      togglePhotoModal();
     }
   };
+
+  const handleSave = (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+
+    setLoading(true);
+    buttonScale.value = withTiming(0.95, { duration: 200 });
+
+    if (!names || !nationalId || !phoneNumber || !district || !address || !gender || !dob) {
+      showToast('Please fill out all required fields', 'info');
+      return;
+    }
+
+    const formData = createFormDataWithImage();
+
+    // Log FormData content for debugging
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+
+    dispatch(addUserDetail(formData))
+      .unwrap()
+      .then(() => {
+        console.log(userDetails);
+        showToast('Profile updated successfully', 'success');
+      })
+      .catch((error: any) => {
+        console.error('Update error:', error);
+        showToast(typeof error === 'string' ? error : 'Failed to update profile', 'error');
+      })
+      .finally(() => {
+        setLoading(false);
+        buttonScale.value = withTiming(1, { duration: 200 });
+      }); 
+  };
+
+  const buttonScale = useSharedValue(1);
+  
+  const animatedButtonStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: buttonScale.value }],
+  }));
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -166,10 +273,10 @@ const EditProfileScreen = () => {
             <FontAwesome name="pencil" size={16} color="white" />
           </TouchableOpacity>
           <Text style={[styles.profileName, { color: theme.colors.text }]}>
-            Uwizeye Eddie
+            {userDetails?.names}
           </Text>
           <Text style={[styles.profileEmail, { color: theme.colors.text }]}>
-            uwizeyeeddie@gmail.com
+            {userDetails?.email}
           </Text>
         </View>
 
@@ -181,6 +288,8 @@ const EditProfileScreen = () => {
               placeholder="Enter your name"
               placeholderTextColor="#aaa"
               style={[styles.textInput, { color: theme.colors.text }]}
+              value={names}
+              onChange={(e) => setNames(e.nativeEvent.text)}
             />
           </View>
 
@@ -275,6 +384,8 @@ const EditProfileScreen = () => {
               placeholder="Enter your address"
               placeholderTextColor="#aaa"
               style={[styles.textInput, { color: theme.colors.text }]}
+              value={address}
+              onChange={(e) => setAddress(e.nativeEvent.text)}
             />
           </View>
 
@@ -297,22 +408,43 @@ const EditProfileScreen = () => {
           />
 
           <View style={[styles.inputField, { backgroundColor: theme.colors.inputBackground }]}>
+          <MaterialCommunityIcons name="identifier" size={20} color={theme.colors.text} />
+            <TextInput
+              placeholder="Enter your National ID"
+              placeholderTextColor="#aaa"
+              style={[styles.textInput, { color: theme.colors.text }]}
+              keyboardType="phone-pad"
+              value={nationalId}
+              onChange={(e) => setNationalId(e.nativeEvent.text)}
+            />
+          </View>
+
+          <View style={[styles.inputField, { backgroundColor: theme.colors.inputBackground }]}>
             <Feather name="phone" size={20} color={theme.colors.text} />
             <TextInput
               placeholder="Enter your phone number"
               placeholderTextColor="#aaa"
               style={[styles.textInput, { color: theme.colors.text }]}
               keyboardType="phone-pad"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.nativeEvent.text)}
             />
           </View>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={[styles.saveButton, { backgroundColor: theme.colors.primary }]}
+            onPress={handleSave}
           >
             <Text style={[styles.saveButtonText, { color: theme.colors.background }]}>
               {t('profileEdit.save_changes')}
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+
+          <Animated.View style={animatedButtonStyle}>
+            <TouchableOpacity onPress={handleSave} disabled={loading} style={[styles.button, { backgroundColor: theme.colors.primary }]}>
+              {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>{t('profileEdit.save_changes')}</Text>}
+            </TouchableOpacity>
+          </Animated.View>
         </View>
         <Modal visible={isPhotoModalVisible} transparent>
           <View style={styles.modalOverlay}>
@@ -455,14 +587,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'Poppins_400Regular',
   },
-  saveButton: {
-    paddingVertical: 14,
-    borderRadius: 8,
+  button: {
+    borderRadius: 10,
+    paddingVertical: 12,
     alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 10,
   },
-  saveButtonText: {
+  buttonText: {
     fontSize: 16,
-    fontFamily: 'Poppins_600SemiBold',
+    fontWeight: 'bold',
+    fontFamily: 'Poppins_400Regular',
+    color: 'white',
   },
   modalOverlay: {
     flex: 1,
