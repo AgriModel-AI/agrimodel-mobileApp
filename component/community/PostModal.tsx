@@ -3,64 +3,14 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Text, Image, TouchableOpacity, Modal, TextInput, FlatList, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
+import ListEmptyComponent from './ListEmptyComponent';
+import useRelativeTime from '@/hooks/useRelativeTime';
 
-
-interface Comment {
-    id: number;
-    text: string;
-    userName: string;
-    date: string;
-  }
-
-const commentsData: Comment[] = [
-  {
-    id: 1,
-    text: "This is a great post! Really enjoyed reading it.",
-    userName: "John Doe",
-    date: "2025-01-07 10:30 AM",
-  },
-  {
-    id: 2,
-    text: "I agree! The description is spot on. Keep it up!",
-    userName: "Jane Smith",
-    date: "2025-01-07 11:00 AM",
-  },
-  {
-    id: 3,
-    text: "This post is very insightful, I learned a lot. Thanks for sharing!",
-    userName: "Alice Johnson",
-    date: "2025-01-07 12:15 PM",
-  },
-  {
-    id: 4,
-    text: "I had a similar experience, nice to see it discussed here.",
-    userName: "Bob Williams",
-    date: "2025-01-07 1:45 PM",
-  },
-  {
-    id: 5,
-    text: "Great post! Would love to see more content like this.",
-    userName: "Charlie Brown",
-    date: "2025-01-07 2:30 PM",
-  },
-  {
-    id: 6,
-    text: "Great post! Would love to see more content like this.",
-    userName: "Charlie Brown",
-    date: "2025-01-07 2:30 PM",
-  },
-  {
-    id: 7,
-    text: "Great post! Would love to see more content like this.",
-    userName: "Charlie Brown",
-    date: "2025-01-07 2:30 PM",
-  }];
-
-const PostModal = ({ selectedPost, modalVisible, handleCloseModal }: any) => {
+const PostModal = ({ comments, modalVisible, handleCloseModal }: any) => {
 
   const { theme } = useTheme();
-  const [comments, setComments] = useState<Comment[]>(commentsData);
   const { t } = useTranslation();
+  const getRelativeTime = useRelativeTime(); 
 
 
 
@@ -71,29 +21,29 @@ const PostModal = ({ selectedPost, modalVisible, handleCloseModal }: any) => {
                 <View style={[styles.modalContainer, { backgroundColor: theme.colors.background }]}>
                     {/* Close Button */}
                     <View style={styles.modalHeader}>
-                    <Text style={[styles.modalTitle, { color: theme.colors.text }]}>{t('community.comments')}</Text>
-                    <TouchableOpacity onPress={handleCloseModal} style={styles.closeButton}>
-                        <MaterialCommunityIcons name="close" size={24} color={ theme.colors.text } />
-                    </TouchableOpacity>
+                      <Text style={[styles.modalTitle, { color: theme.colors.text }]}>{t('community.comments')}</Text>
+                      <TouchableOpacity onPress={handleCloseModal} style={styles.closeButton}>
+                          <MaterialCommunityIcons name="close" size={24} color={ theme.colors.text } />
+                      </TouchableOpacity>
                     </View>
                     <FlatList
                         data={comments}
-                        keyExtractor={(item) => item.id.toString()}
+                        keyExtractor={(item) => item.commentId.toString()}
                         showsVerticalScrollIndicator={false}
                         renderItem={({ item }) => (
                             <View style={[styles.commentItem, { backgroundColor: theme.colors.inputBackground }]}>
-                            <Text style={[styles.commentUserName, { color: theme.colors.text }]}>{item.userName}</Text>
-                            <Text style={[styles.commentText, { color: theme.colors.text }]}>{item.text}</Text>
-                            <Text style={[styles.commentDate, { color: theme.colors.text }]}>{item.date}</Text>
+                              <Text style={[styles.commentUserName, { color: theme.colors.text }]}>{item.names}</Text>
+                              <Text style={[styles.commentText, { color: theme.colors.text }]}>{item.content}</Text>
+                              <Text style={[styles.commentDate, { color: theme.colors.text }]}>{getRelativeTime(item.createdAt)}</Text>
                             </View>
                         )}
-                        ListEmptyComponent={<Text style={styles.noComments}>No comments yet</Text>}
+                        ListEmptyComponent={<ListEmptyComponent />}
                         contentContainerStyle={styles.commentsList}  // Adjust the content container style
                         style={styles.commentsContainer}  // Adjust the FlatList styling
                     />
                     <View style={styles.commentInputContainer}>
                         <TextInput
-                            style={styles.commentInput}
+                            style={[styles.commentInput, {color: theme.colors.text}]}
                             placeholder={t('community.inputPlaceholder')}
                             placeholderTextColor="#aaa"
                         />

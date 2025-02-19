@@ -149,7 +149,28 @@
     "myPosts": "My Posts",
     "myPostsContent": "View and manage your community posts. Edit content, and see how your posts are helping other farmers. Share your agricultural journey and insights with the community.",
     "inputPlaceholder": "Add a comment",
-    "post": "Post"
+    "post": "Post",
+    "noCommentsYet": "No comments yet",
+    "beTheFirstToComment": "Be the first to comment!",
+    "emptyPosts": {
+        "title": "No Posts to Display",
+        "description": "Follow more communities to discover interesting posts and connect with others who share your interests."
+      }
+  },
+  "time": {
+    "justNow": "Just now",
+    "minute": "minute ago",
+    "minutes": "{{count}} minutes ago",
+    "hour": "hour ago",
+    "hours": "{{count}} hours ago",
+    "day": "day ago",
+    "days": "{{count}} days ago",
+    "week": "week ago",
+    "weeks": "{{count}} weeks ago",
+    "month": "month ago",
+    "months": "{{count}} months ago",
+    "year": "year ago",
+    "years": "{{count}} years ago"
   }
 
 

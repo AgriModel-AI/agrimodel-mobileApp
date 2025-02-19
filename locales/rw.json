@@ -149,8 +149,29 @@
     "manageCommunitiesContent": "Bungura imiryango yawe y'ubuhinzi. Injira mu miryango isanzweho, kandi uhuze n'abandi bashakashatsi. Sangiye ubumenyi, ubunararibonye n'imyitwarire myiza n'abandi banyamuryango b'umuryango.",
     "myPosts": "Imyandiko yanjye",
     "myPostsContent": "Reba kandi ukore ku myandiko yawe y'umuryango. Hindura ibikubiye, kandi urebe uko imyandiko yawe ifasha abandi bashakashatsi. Sangiye urugendo rwawe rw'ubuhinzi n'ibitekerezo n'umuryango.",
-    "inputPlaceholder": "Ongeramo igitekerezo",
-    "post": "ubutumwa"
-  }
+    "inputPlaceholder": "Tanga igitekerezo",
+    "post": "Ohereza",
+    "noCommentsYet": "Nta gitekerezo kiraboneka",
+    "beTheFirstToComment": "Ba uwa mbere utanga igitekerezo!",
+    "emptyPosts": {
+        "title": "Nta Byanditse Biriho",
+        "description": "Kurikira imiryango myinshi kugirango ubone ibyanditse bishimishije kandi wihuze n'abandi basangira inyungu nawe."
+      }
+  },
+    "time": {
+      "justNow": "Ubu nyine",
+      "minute": "iminota 1 ishize",
+      "minutes": "iminota {{count}} ishize",
+      "hour": "isaha 1 ishize",
+      "hours": "amasaha {{count}} ashize",
+      "day": "umunsi 1 ushize",
+      "days": "iminsi {{count}} ishize",
+      "week": "icyumweru 1 gishize",
+      "weeks": "ibyumweru {{count}} bishize",
+      "month": "ukwezi 1 gushize",
+      "months": "amezi {{count}} ashize",
+      "year": "umwaka 1 ushize",
+      "years": "imyaka {{count}} ishize"
+    } 
 
 }

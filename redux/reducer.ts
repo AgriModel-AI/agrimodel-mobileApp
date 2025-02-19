@@ -2,6 +2,7 @@ import userReducer from './slices/userSlice';
 import userDetailsReducer from './slices/userDetailsSlice';
 import diseaseReducer from './slices/diseaseSlice';
 import communitesReducer from './slices/communitySlice';
+import postsReducer from './slices/postsSlice';
 import { combineReducers } from '@reduxjs/toolkit';
 
 
@@ -9,7 +10,8 @@ const appReducer = combineReducers({
   user: userReducer,
   userDetails: userDetailsReducer,
   diseases: diseaseReducer,
-  communites: communitesReducer
+  communites: communitesReducer,
+  posts: postsReducer
 });
 
 const rootReducer = (state: any, action: any) => {

@@ -24,7 +24,7 @@ const HomeScreen = () => {
   const headerHeight = useHeaderHeight();
 
   const { diseases, loading, hasFetched } = useSelector((state: any) => state.diseases);
-  const { communities, loading: loadingCommunity , hasFetched: communitesHasFetched, joinLoading, leaveLoading } = useSelector((state: any) => state.communites);
+  const { communities, loading: loadingCommunity , hasFetched: communitesHasFetched} = useSelector((state: any) => state.communites);
 
   const dispatch = useDispatch<any>();
 

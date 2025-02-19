@@ -149,7 +149,27 @@
       "myPosts": "Mes Publications",
       "myPostsContent": "Consultez et gérez vos publications communautaires. Modifiez le contenu et voyez comment vos publications aident d'autres agriculteurs. Partagez votre parcours et vos idées agricoles avec la communauté.",
       "inputPlaceholder": "Ajouter un commentaire",
-      "post": "publication"
+      "post": "publication",
+      "noCommentsYet": "Pas encore de commentaires",
+      "beTheFirstToComment": "Soyez le premier à commenter!",
+      "emptyPosts": {
+        "title": "Aucune Publication à Afficher",
+        "description": "Suivez plus de communautés pour découvrir des publications intéressantes et vous connecter avec d'autres personnes qui partagent vos intérêts."
+      }
+    },
+    "time": {
+      "justNow": "À l'instant",
+      "minute": "il y a une minute",
+      "minutes": "il y a {{count}} minutes",
+      "hour": "il y a une heure",
+      "hours": "il y a {{count}} heures",
+      "day": "il y a un jour",
+      "days": "il y a {{count}} jours",
+      "week": "il y a une semaine",
+      "weeks": "il y a {{count}} semaines",
+      "month": "il y a un mois",
+      "months": "il y a {{count}} mois",
+      "year": "il y a un an",
+      "years": "il y a {{count}} ans"
     }
-  
 }

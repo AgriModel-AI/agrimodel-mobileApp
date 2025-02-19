@@ -1,5 +1,5 @@
 import { useTheme } from '@/hooks/ThemeProvider';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Text, Pressable } from 'react-native';
 import Animated, { 
   useSharedValue, 
@@ -13,19 +13,41 @@ import { Feather } from '@expo/vector-icons';
 import BottomModal, { BottomSheetModalRef } from '@/component/community/CommunityMenuModal';
 import { useCommunity } from '@/contexts/CommunityContext';
 import { useTranslation } from 'react-i18next';
+import PostHeaderSkeleton from '../PostHeaderSkeleton';
+import { fetchCommunities } from '@/redux/slices/communitySlice';
+import { useDispatch, useSelector } from 'react-redux';
 
-const Header = () => {
+
+const defaultCommunity = {
+  "communityId": 0,
+  "name": "All"
+};
+
+const Header = ({selectedCommunity, setSelectedCommunity, handleSearch}: any) => {
+
   const modalRef = useRef<BottomSheetModalRef>(null);
   const { theme } = useTheme();
-  const [selectedCommunity, setSelectedCommunity] = useState('Technology');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { scrollY, searchIconClicked } = useCommunity();
   const isHeaderCollapsed = useSharedValue(false);
+  const [search, setSearch] = useState<any>('');
+
+  const dispatch = useDispatch<any>();
+
+  const { communities, loading: loadingCommunity , hasFetched: communitesHasFetched} = useSelector((state: any) => state.communites);
 
   const { t } = useTranslation();
 
-  const communities = ['Technology', 'Sports', 'Music', 'Art', 'Gaming'];
+  
 
+  useEffect(() => {
+      if (!communitesHasFetched) {
+        dispatch(fetchCommunities());
+        console.log(communities)
+      }
+    }, [communitesHasFetched, dispatch]);
+
+    
   useAnimatedReaction(
     () => ({
       scrollingPosition: scrollY.value,
@@ -72,7 +94,7 @@ const Header = () => {
   }));
 
   const selectedCommStyle = useAnimatedStyle(() => ({
-    fontSize: withTiming(isHeaderCollapsed.value ? 18 : 24, {
+    fontSize: withTiming(isHeaderCollapsed.value ? 16 : 19, {
       duration: 300,
       easing: Easing.bezier(0.25, 0.1, 0.25, 1),
     }),
@@ -84,6 +106,7 @@ const Header = () => {
     alignItems: 'center',
     opacity: withTiming(isHeaderCollapsed.value ? 0 : 1, { duration: 200 }),
     height: withTiming(isHeaderCollapsed.value ? 0 : 40),
+    marginTop: withTiming(isHeaderCollapsed.value ? 0 : 10),
   }));
 
   const searchIconStyle = useAnimatedStyle(() => ({
@@ -115,15 +138,22 @@ const Header = () => {
 
         {/* Part 2: Dropdown and Menu */}
         <Animated.View style={[styles.row, mainContentStyle]}>
-          <Animated.View style={[styles.mainContent]}>
-            <Pressable 
-              style={styles.dropdown}
-              onPress={() => setIsDropdownOpen(!isDropdownOpen)}
-            >
-              <Animated.Text style={[styles.dropdownText, selectedCommStyle, { color: theme.colors.text }]}>{selectedCommunity}</Animated.Text>
-              <Feather name="chevron-down" size={20} color={theme.colors.text} />
-            </Pressable>
-          </Animated.View>
+
+          {
+            loadingCommunity ? 
+              <PostHeaderSkeleton />
+            :
+              <Animated.View style={[styles.mainContent]}>
+                <Pressable 
+                  style={styles.dropdown}
+                  onPress={() => setIsDropdownOpen(!isDropdownOpen)}
+                >
+                  <Animated.Text style={[styles.dropdownText, selectedCommStyle, { color: theme.colors.text }]}>{selectedCommunity.name}</Animated.Text>
+                  <Feather name="chevron-down" size={20} color={theme.colors.text} />
+                </Pressable>
+              </Animated.View>
+          }
+          
           {/* Menu icon in fixed position */}
           <View style={styles.iconGroup}>
             <Animated.View style={searchIconStyle}>
@@ -151,26 +181,38 @@ const Header = () => {
             <TextInput
               placeholder={t('community.search')}
               style={styles.searchInput}
+              value={search}
+              onChangeText={(text) => setSearch(text)}
             />
           </View>
-          <Pressable style={styles.searchButton}>
+          <Pressable style={styles.searchButton} onPress={()=> handleSearch(search)}>
             <Text style={[styles.searchButtonText, { color: theme.colors.text }]}>{t('community.search')}</Text>
           </Pressable>
         </Animated.View>
 
         {/* Dropdown Menu */}
-        {isDropdownOpen && (
+        {(isDropdownOpen && communities) && (
           <View style={[styles.dropdownMenu, { backgroundColor: theme.colors.background }]}>
-            {communities.map((community) => (
+            <Pressable
+                key={defaultCommunity?.communityId}
+                style={styles.dropdownItem}
+                onPress={() => {
+                  setSelectedCommunity(defaultCommunity);
+                  setIsDropdownOpen(false);
+                }}
+              >
+                <Text style={[styles.dropdownItemText, { color: theme.colors.text }]}>{defaultCommunity?.name}</Text>
+              </Pressable>
+            {communities.filter(((community: any) => community.joined)).map((community: any) => (
               <Pressable
-                key={community}
+                key={community?.communityId}
                 style={styles.dropdownItem}
                 onPress={() => {
                   setSelectedCommunity(community);
                   setIsDropdownOpen(false);
                 }}
               >
-                <Text style={[styles.dropdownItemText, { color: theme.colors.text }]}>{community}</Text>
+                <Text style={[styles.dropdownItemText, { color: theme.colors.text }]}>{community?.name}</Text>
               </Pressable>
             ))}
           </View>
@@ -208,7 +250,8 @@ const styles = StyleSheet.create({
   iconGroup: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 12,
+    marginLeft: 10,
+
   },
   menuContainer: {
     marginLeft: 12,
@@ -223,9 +266,11 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   dropdownText: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '700',
     color: '#333',
+    maxWidth: '100%',
+    marginRight: 0,
   },
   searchInputContainer: {
     flex: 1,
