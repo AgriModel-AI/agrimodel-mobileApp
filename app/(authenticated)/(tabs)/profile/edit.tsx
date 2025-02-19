@@ -265,7 +265,7 @@ const EditProfileScreen = () => {
       </View>
 
       {/* Scrollable Content */}
-      <ScrollView  showsVerticalScrollIndicator={false}>
+      <ScrollView  showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         {/* Profile Section */}
         <View style={styles.profileSection}>
           <Image source={{ uri: profileImage }} style={styles.profileImage} />
@@ -349,7 +349,7 @@ const EditProfileScreen = () => {
           <Modal
             visible={isModalVisible}
             transparent={true}
-            animationType="slide"
+            animationType="fade"
             onRequestClose={toggleModal}
           >
             <View style={styles.modalContainer}>
@@ -431,15 +431,6 @@ const EditProfileScreen = () => {
             />
           </View>
 
-          {/* <TouchableOpacity
-            style={[styles.saveButton, { backgroundColor: theme.colors.primary }]}
-            onPress={handleSave}
-          >
-            <Text style={[styles.saveButtonText, { color: theme.colors.background }]}>
-              {t('profileEdit.save_changes')}
-            </Text>
-          </TouchableOpacity> */}
-
           <Animated.View style={animatedButtonStyle}>
             <TouchableOpacity onPress={handleSave} disabled={loading} style={[styles.button, { backgroundColor: theme.colors.primary }]}>
               {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>{t('profileEdit.save_changes')}</Text>}
@@ -482,7 +473,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    paddingBottom: 0,
+    paddingBottom: 16,
   },
   header: {
     flexDirection: 'row',
@@ -548,7 +539,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 16,
   },
   modalTitle: {
     fontSize: 18,
@@ -626,3 +617,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+
+
