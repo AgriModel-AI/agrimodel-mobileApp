@@ -27,6 +27,18 @@ export const createPost = createAsyncThunk(
   }
 );
 
+export const likeAndUnlike = createAsyncThunk(
+    'posts/likeAndUnlike',
+    async (postId: number, { rejectWithValue }) => {
+      try {
+        await axiosInstance.post(`/communities/post/${postId}/like`);
+        return postId; // Return postId to identify which post to update
+      } catch (error: any) {
+        return rejectWithValue(error.response?.data || "Error liking/unliking post");
+      }
+    }
+  );
+
 // Post slice
 const postSlice = createSlice({
   name: 'posts',
@@ -34,13 +46,15 @@ const postSlice = createSlice({
     posts: [],
     loading: false,
     error: null,
-    hasFetched: false, // Tracks if data has been fetched
+    hasFetched: false, 
+    likeLoadingStates: {},
   },
   reducers: {
     resetPosts(state) {
       state.posts = [];
       state.error = null;
       state.hasFetched = false;
+      state.likeLoadingStates = {};
     },
   },
   extraReducers: (builder) => {
@@ -73,6 +87,27 @@ const postSlice = createSlice({
       .addCase(createPost.rejected, (state, action: any) => {
         state.loading = false;
         state.error = action.payload;
+      });
+    
+      builder
+      .addCase(likeAndUnlike.pending, (state: any, action: any) => {
+        state.error = null;
+        state.likeLoadingStates[action.meta.arg] = true;
+      })
+      .addCase(likeAndUnlike.fulfilled, (state: any, action) => {
+        const postId = action.payload;
+        const post = state.posts.find((p: any) => p.postId === postId);
+        
+        if (post) {
+          // Toggle isLiked and update likes count
+          post.isLiked = !post.isLiked;
+          post.likes += post.isLiked ? 1 : -1;
+        }
+        state.likeLoadingStates[postId] = false;
+      })
+      .addCase(likeAndUnlike.rejected, (state: any, action: any) => {
+        state.error = action.payload;
+        state.likeLoadingStates[action.meta.arg] = false;
       });
   },
 });

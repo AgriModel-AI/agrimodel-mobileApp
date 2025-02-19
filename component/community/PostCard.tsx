@@ -1,16 +1,64 @@
 import { useTheme } from '@/hooks/ThemeProvider';
 import React from 'react';
-import { View, StyleSheet, Text, Image, TouchableOpacity, Pressable } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import useRelativeTime from '@/hooks/useRelativeTime';
+import { useDispatch, useSelector } from 'react-redux';
+import { likeAndUnlike } from '@/redux/slices/postsSlice';
+import Animated, { withSpring, useAnimatedStyle, useSharedValue, withSequence } from 'react-native-reanimated';
+
+const AnimatedMaterialCommunityIcons = Animated.createAnimatedComponent(MaterialCommunityIcons);
 
 
-const PostCard = ({ post, onLikeClick, setSelectedPost }: any) => {
+
+const PostCard = ({ post, setSelectedPost }: any) => {
 
   const { theme } = useTheme();
   const { t } = useTranslation();
   const getRelativeTime = useRelativeTime(); 
+  const dispatch = useDispatch<any>();
+  
+  const scale = useSharedValue(1);
+  
+  // Get loading state for this post's like action
+  const isLikeLoading = useSelector((state: any) => 
+    state.posts.likeLoadingStates[post.postId]
+  );
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }]
+  }));
+
+  const handleLike = (postId: number) => {
+    // Trigger animation
+    scale.value = withSequence(
+      withSpring(1.2),
+      withSpring(1)
+    );
+    
+    dispatch(likeAndUnlike(postId));
+  };
+
+  const renderLikeButton = () => {
+    if (isLikeLoading) {
+      return (
+        <ActivityIndicator 
+          size="small" 
+          color={post.isLiked ? "red" : theme.colors.text} 
+        />
+      );
+    }
+
+    return (
+      <AnimatedMaterialCommunityIcons
+        style={animatedStyle}
+        name={post.isLiked ? "heart" : "heart-outline"}
+        size={20}
+        color={post.isLiked ? "red" : theme.colors.text}
+      />
+    );
+  };
 
   return (
     <TouchableOpacity key={post.postId} onPress={() => setSelectedPost(post)} style={[styles.postCard, {borderBottomColor: theme.colors.inputBackground}]}>
@@ -27,10 +75,22 @@ const PostCard = ({ post, onLikeClick, setSelectedPost }: any) => {
 
             <View style={styles.postActions}>
 
-            <Pressable onPress={() => onLikeClick(post.postId)} >
+            <Pressable 
+                onPress={() => handleLike(post.postId)}
+                disabled={isLikeLoading}
+                style={({ pressed }) => [
+                    styles.actionItem,
+                    pressed && styles.actionPressed
+                ]}
+                >
                 <View style={styles.actionItem}>
-                    <MaterialCommunityIcons name="heart-outline" size={20} color={theme.colors.text} />
-                    <Text style={[styles.actionText, { color: theme.colors.text }]}>{post.likes} {t('community.likes')}</Text>
+                    {renderLikeButton()}
+                    <Text style={[
+                    styles.actionText, 
+                    { color: post.isLiked ? "red" : theme.colors.text }
+                    ]}>
+                    {post.likes} {t('community.likes')}
+                    </Text>
                 </View>
             </Pressable>
 
@@ -103,4 +163,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
     marginLeft: 5,
   },
+  actionPressed: {
+    opacity: 0.7,
+  },
+
 });

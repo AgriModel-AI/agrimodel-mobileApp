@@ -114,8 +114,7 @@ const Community = () => {
           filteredPosts.map((post: any) => (
             <PostCard 
               key={post.postId} 
-              post={post} 
-              onLikeClick={() => {}} 
+              post={post}
               setSelectedPost={handleOpenModal} 
             />
           ))
