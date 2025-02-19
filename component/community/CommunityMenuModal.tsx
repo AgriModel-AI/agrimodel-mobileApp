@@ -18,6 +18,7 @@ import Animated, {
 import { useTheme } from '@/hooks/ThemeProvider';
 import { Feather } from '@expo/vector-icons';
 import { useRouter, usePathname } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 export interface BottomSheetModalRef {
     slideIn: () => void;
@@ -26,6 +27,8 @@ export interface BottomSheetModalRef {
 
 const BottomSheetModal = forwardRef<BottomSheetModalRef>((props, ref) => {
     const { theme } = useTheme();
+
+    const { t } = useTranslation();
 
     const [modalVisible, setModalVisible] = useState(false);
     const slideAnim = useSharedValue(Dimensions.get('window').height);
@@ -88,7 +91,7 @@ const BottomSheetModal = forwardRef<BottomSheetModalRef>((props, ref) => {
             >
 
                 <View style={styles.header}>
-                    <Text style={[styles.title, { color: theme.colors.text }]}>MENU</Text>
+                    <Text style={[styles.title, { color: theme.colors.text }]}>{t('community.menu')}</Text>
                     <TouchableOpacity style={styles.closeButton} onPress={slideOut}>
                         <Text style={styles.closeButtonText}>✕</Text>
                     </TouchableOpacity>
@@ -99,8 +102,8 @@ const BottomSheetModal = forwardRef<BottomSheetModalRef>((props, ref) => {
                 <TouchableOpacity style={[styles.cardOption]} onPress={() => handleNavigation('/(authenticated)/(tabs)/community/list')}>
                     <View style={styles.cardInfo}>
                         <View style={{ flex: 1 }}>
-                            <Text style={[styles.cardName, { color: theme.colors.text }]}>Manage Communities</Text>
-                            <Text style={styles.cardDesc}>Manage your farming communities. Join existing communities, and connect with other farmers. Share knowledge, experiences and best practices with fellow community members.</Text>
+                            <Text style={[styles.cardName, { color: theme.colors.text }]}>{t('community.manageCommunities')}</Text>
+                            <Text style={styles.cardDesc}>{t('community.manageCommunitiesContent')}</Text>
                         </View>
                         <Feather name="chevron-right" size={24} color={theme.colors.primary} />
                     </View>
@@ -110,8 +113,8 @@ const BottomSheetModal = forwardRef<BottomSheetModalRef>((props, ref) => {
                 <TouchableOpacity style={[styles.cardOption]} onPress={() => handleNavigation('/(authenticated)/(tabs)/community/post')}>
                     <View style={styles.cardInfo}>
                         <View style={{ flex: 1 }}>
-                            <Text style={[styles.cardName, { color: theme.colors.text }]}>My Posts</Text>
-                            <Text style={styles.cardDesc}>View and manage your community posts. Edit content, and see how your posts are helping other farmers. Share your agricultural journey and insights with the community.</Text>
+                            <Text style={[styles.cardName, { color: theme.colors.text }]}>{t('community.myPosts')}</Text>
+                            <Text style={styles.cardDesc}>{t('community.myPostsContent')}</Text>
                         </View>
                         <Feather name="chevron-right" size={24} color={theme.colors.primary} />
                     </View>

@@ -136,7 +136,20 @@
     "confirm_password_label": "Confirmer le mot de passe",
     "confirm_password_placeholder": "Confirmer le mot de passe",
     "continue": "Changer le mot de passe"
-  }
-
-
+  },
+    "community": {
+      "community": "Communauté",
+      "search": "Rechercher",
+      "askCommunity": "Poser à la Communauté",
+      "likes": "J'aime",
+      "comments": "Commentaires",
+      "menu": "Menu",
+      "manageCommunities": "Gérer les Communautés",
+      "manageCommunitiesContent": "Gérez vos communautés agricoles. Rejoignez des communautés existantes et connectez-vous avec d'autres agriculteurs. Partagez des connaissances, des expériences et des bonnes pratiques avec d'autres membres de la communauté.",
+      "myPosts": "Mes Publications",
+      "myPostsContent": "Consultez et gérez vos publications communautaires. Modifiez le contenu et voyez comment vos publications aident d'autres agriculteurs. Partagez votre parcours et vos idées agricoles avec la communauté.",
+      "inputPlaceholder": "Ajouter un commentaire",
+      "post": "publication"
+    }
+  
 }

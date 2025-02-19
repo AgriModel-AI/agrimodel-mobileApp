@@ -136,6 +136,20 @@
     "confirm_password_label": "Confirm Password",
     "confirm_password_placeholder": "Confirm password",
     "continue": "Change Password"
+  },
+  "community": {
+    "community": "Community",
+    "search": "Search",
+    "askCommunity": "AskCommunity",
+    "likes": "Likes",
+    "comments": "Comments",
+    "menu": "Menu",
+    "manageCommunities": "Manage Communities",
+    "manageCommunitiesContent": "Manage your farming communities. Join existing communities, and connect with other farmers. Share knowledge, experiences and best practices with fellow community members.",
+    "myPosts": "My Posts",
+    "myPostsContent": "View and manage your community posts. Edit content, and see how your posts are helping other farmers. Share your agricultural journey and insights with the community.",
+    "inputPlaceholder": "Add a comment",
+    "post": "Post"
   }
 
 

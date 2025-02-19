@@ -137,6 +137,20 @@
     "confirm_password_label": "Emeza ijambo ry'ibanga",
     "confirm_password_placeholder": "Emeza ijambo ry'ibanga",
     "continue": "Hindura Ijambo ry'Ibanga"
+  },
+  "community": {
+    "community": "Umuryango",
+    "search": "Shakisha",
+    "askCommunity": "Baza Umuryango",
+    "likes": "Ishyigikiye",
+    "comments": "Ibitekerezo",
+    "menu": "Ibirimo",
+    "manageCommunities": "Bungura Imiryango",
+    "manageCommunitiesContent": "Bungura imiryango yawe y'ubuhinzi. Injira mu miryango isanzweho, kandi uhuze n'abandi bashakashatsi. Sangiye ubumenyi, ubunararibonye n'imyitwarire myiza n'abandi banyamuryango b'umuryango.",
+    "myPosts": "Imyandiko yanjye",
+    "myPostsContent": "Reba kandi ukore ku myandiko yawe y'umuryango. Hindura ibikubiye, kandi urebe uko imyandiko yawe ifasha abandi bashakashatsi. Sangiye urugendo rwawe rw'ubuhinzi n'ibitekerezo n'umuryango.",
+    "inputPlaceholder": "Ongeramo igitekerezo",
+    "post": "ubutumwa"
   }
 
 }

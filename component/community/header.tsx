@@ -12,6 +12,7 @@ import Animated, {
 import { Feather } from '@expo/vector-icons';
 import BottomModal, { BottomSheetModalRef } from '@/component/community/CommunityMenuModal';
 import { useCommunity } from '@/contexts/CommunityContext';
+import { useTranslation } from 'react-i18next';
 
 const Header = () => {
   const modalRef = useRef<BottomSheetModalRef>(null);
@@ -20,6 +21,8 @@ const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { scrollY, searchIconClicked } = useCommunity();
   const isHeaderCollapsed = useSharedValue(false);
+
+  const { t } = useTranslation();
 
   const communities = ['Technology', 'Sports', 'Music', 'Art', 'Gaming'];
 
@@ -107,7 +110,7 @@ const Header = () => {
       <Animated.View style={[styles.header, headerStyle]}>
         {/* Part 1: Title */}
         <Animated.Text style={[ titleStyle, { color: theme.colors.text }]}>
-          Community
+          {t('community.community')}
         </Animated.Text>
 
         {/* Part 2: Dropdown and Menu */}
@@ -146,12 +149,12 @@ const Header = () => {
           <View style={styles.searchInputContainer}>
             <Feather name="search" size={20} color="#666" style={styles.searchInputIcon} />
             <TextInput
-              placeholder="Search communities..."
+              placeholder={t('community.search')}
               style={styles.searchInput}
             />
           </View>
           <Pressable style={styles.searchButton}>
-            <Text style={[styles.searchButtonText, { color: theme.colors.text }]}>Search</Text>
+            <Text style={[styles.searchButtonText, { color: theme.colors.text }]}>{t('community.search')}</Text>
           </Pressable>
         </Animated.View>
 
