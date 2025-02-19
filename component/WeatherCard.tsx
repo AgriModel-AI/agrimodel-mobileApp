@@ -14,6 +14,7 @@ import Animated, {
 import { useTheme } from '@/hooks/ThemeProvider';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
+import WeatherSkeleton from './WeatherSkeleton';
 
 const AnimatedIcon = Animated.createAnimatedComponent(MaterialCommunityIcons);
 
@@ -94,7 +95,7 @@ const WeatherCard = () => {
   }));
 
   if (!weatherData) {
-    return <Text>Loading...</Text>;
+    return <WeatherSkeleton />;
   }
 
   return (
