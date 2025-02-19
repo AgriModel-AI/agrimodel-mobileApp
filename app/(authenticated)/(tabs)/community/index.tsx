@@ -65,6 +65,12 @@ const Community = () => {
     filterPosts();
   }, [posts, selectedCommunity, search]);
 
+  useEffect(()=> {
+    if(selectedPost) {
+      setSelectedPost(posts.find((post: any) => post.postId === selectedPost.postId))
+    }
+  }, [posts])
+
 
   useEffect(() => {
       if (!hasFetched) {
@@ -128,7 +134,7 @@ const Community = () => {
 
       {
         selectedPost &&
-          <PostModal visible={modalVisible} comments={selectedPost.comments} handleCloseModal={handleCloseModal} />
+          <PostModal postId={selectedPost.postId} visible={modalVisible} comments={selectedPost.comments} handleCloseModal={handleCloseModal} />
       }
       
     </View>

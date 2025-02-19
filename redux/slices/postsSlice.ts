@@ -39,6 +39,18 @@ export const likeAndUnlike = createAsyncThunk(
     }
   );
 
+export const createComment = createAsyncThunk(
+'posts/createComment',
+async ({ postId, comment }: { postId: number; comment: any }, { rejectWithValue }) => {
+    try {
+    const response = await axiosInstance.post(`/communities/post/${postId}/comment`, {"content": comment});
+    return response.data.data;
+    } catch (error: any) {
+    return rejectWithValue(error.response?.data || "Error creating comment");
+    }
+}
+);
+
 // Post slice
 const postSlice = createSlice({
   name: 'posts',
@@ -48,6 +60,7 @@ const postSlice = createSlice({
     error: null,
     hasFetched: false, 
     likeLoadingStates: {},
+    creatingComment: false,
   },
   reducers: {
     resetPosts(state) {
@@ -108,6 +121,27 @@ const postSlice = createSlice({
       .addCase(likeAndUnlike.rejected, (state: any, action: any) => {
         state.error = action.payload;
         state.likeLoadingStates[action.meta.arg] = false;
+      });
+
+      builder
+      .addCase(createComment.pending, (state) => {
+        state.creatingComment = true;
+        state.error = null;
+      })
+      .addCase(createComment.fulfilled, (state: any, action: any) => {
+        state.creatingComment = false;
+        const data = action.payload;
+        const post = state.posts.find((p: any) => p.postId === data.postId);
+        if (post) {
+          if (!post.comments) {
+            post.comments = [];
+          }
+          post.comments.push(data); // Add latest comment to the top
+        }
+      })
+      .addCase(createComment.rejected, (state, action: any) => {
+        state.creatingComment = false;
+        state.error = action.payload;
       });
   },
 });

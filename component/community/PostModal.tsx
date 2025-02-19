@@ -1,16 +1,46 @@
 import { useTheme } from '@/hooks/ThemeProvider';
-import React, { useState } from 'react';
-import { View, StyleSheet, Text, Image, TouchableOpacity, Modal, TextInput, FlatList, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Text, Image, TouchableOpacity, Modal, TextInput, FlatList, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import ListEmptyComponent from './ListEmptyComponent';
 import useRelativeTime from '@/hooks/useRelativeTime';
+import { useDispatch, useSelector } from 'react-redux';
+import { createComment } from '@/redux/slices/postsSlice';
 
-const PostModal = ({ comments, modalVisible, handleCloseModal }: any) => {
+const PostModal = ({ postId, comments, modalVisible, handleCloseModal }: any) => {
 
   const { theme } = useTheme();
   const { t } = useTranslation();
   const getRelativeTime = useRelativeTime(); 
+  const dispatch = useDispatch<any>();
+  const [comment, setComment] = useState<any>();
+
+  const isCreatingComment = useSelector((state: any) => 
+    state.posts.creatingComment
+  );
+
+  const [localComments, setLocalComments] = useState(comments);
+
+  useEffect(() => {
+    setLocalComments(comments);
+    console.log('again fetching --------------------')
+  }, [comments]);
+
+  
+
+  const handleComment = () => {
+    if(comment === ''){
+      return;
+    }
+    dispatch(createComment({postId, "comment": comment}));
+    setComment('');
+
+  }
+
+  useEffect(()=> {
+    console.log(comments)
+  }, [comments])
 
 
 
@@ -27,7 +57,7 @@ const PostModal = ({ comments, modalVisible, handleCloseModal }: any) => {
                       </TouchableOpacity>
                     </View>
                     <FlatList
-                        data={comments}
+                        data={localComments}
                         keyExtractor={(item) => item.commentId.toString()}
                         showsVerticalScrollIndicator={false}
                         renderItem={({ item }) => (
@@ -46,9 +76,21 @@ const PostModal = ({ comments, modalVisible, handleCloseModal }: any) => {
                             style={[styles.commentInput, {color: theme.colors.text}]}
                             placeholder={t('community.inputPlaceholder')}
                             placeholderTextColor="#aaa"
+                            value={comment}
+                            onChangeText={(text)=> setComment(text)}
                         />
-                        <TouchableOpacity onPress={()=>{}} style={styles.addCommentButton}>
-                            <Text style={styles.addCommentButtonText}>{t('community.post')}</Text>
+                        <TouchableOpacity disabled={isCreatingComment} onPress={handleComment} style={styles.addCommentButton}>
+                            
+                            {
+                              isCreatingComment ?
+                              <ActivityIndicator 
+                                size="small" 
+                                color={theme.colors.text} 
+                              />
+                              :
+                              <Text style={styles.addCommentButtonText}>{t('community.post')}</Text>
+                            }
+                                    
                         </TouchableOpacity>
                     </View>                
                 </View>
