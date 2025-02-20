@@ -17,11 +17,19 @@ export const fetchPosts = createAsyncThunk(
 // Async thunk for creating a post
 export const createPost = createAsyncThunk(
   'posts/createPost',
-  async (postData: any, { rejectWithValue }) => {
+  async ({communityId, postData}: any, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post('/communities/3/post', postData);
+        console.log(communityId)
+        console.log(postData)
+      const response = await axiosInstance.post(`/communities/${communityId}/post`, postData,{
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+        });
+        console.log(response.data)
       return response.data.data; // Assuming the response contains the created post data
     } catch (error: any) {
+        console.log(error.message)
       return rejectWithValue(error.response?.data || "Error creating post");
     }
   }

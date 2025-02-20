@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useTheme } from '@/hooks/ThemeProvider';
@@ -7,19 +7,18 @@ import { router } from 'expo-router'; // Import the router
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCommunities } from '@/redux/slices/communitySlice';
-
-interface Community {
-  id: string;
-  name: string;
-}
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import showToast from '@/component/showToast';
+import { createPost } from '@/redux/slices/postsSlice';
 
 const CreatePost: React.FC = () => {
   const { theme } = useTheme();
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<any>(null);
   const [description, setDescription] = useState<string>('');
   const [selectedCommunity, setSelectedCommunity] = useState<string>('');
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
 
   const { t } = useTranslation();
@@ -32,6 +31,78 @@ const CreatePost: React.FC = () => {
       dispatch(fetchCommunities());
     }
   }, [communitesHasFetched, dispatch]);
+
+
+  const createFormDataWithImage = () => {
+    const data = new FormData();
+    
+    data.append("content", description);
+
+    const filename = image.split('/').pop() || 'photo.jpg';
+    
+    // Infer the type from the extension
+    const match = /\.(\w+)$/.exec(filename);
+    const type = match ? `image/${match[1]}` : 'image/jpeg';
+    
+    data.append("image", {
+      uri: image,
+      name: filename,
+      type: type,
+    } as any);
+  
+    return data;
+  };
+
+
+  const validateInputs = () => {
+    if (!image) {
+      Alert.alert(t('createPost.pleaseUploadImage'));
+      return false;
+    }
+    if (!selectedCommunity) {
+      Alert.alert(t('createPost.pleaseSelectCommunity'));
+      return false;
+    }
+    if (!description.trim()) {
+      Alert.alert(t('createPost.pleaseEnterDescription'));
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async () => {
+    if (!validateInputs()) return;
+  
+    setLoading(true);
+    buttonScale.value = withTiming(0.95, { duration: 200 });
+  
+    const formData = createFormDataWithImage();
+  
+    dispatch(createPost({ "communityId": selectedCommunity, "postData": formData }))
+      .unwrap()
+      .then(() => {
+        Alert.alert(t('createPost.postSuccess'));
+        setImage(null);
+        setDescription('');
+        setSelectedCommunity('');
+      })
+      .catch((error: any) => {
+        const errorMessage = error.response?.data?.message || 'An error occurred. Please try again.';
+        Alert.alert(errorMessage);
+      })
+      .finally(() => {
+        setLoading(false);
+        buttonScale.value = withTiming(1, { duration: 200 });
+      });
+  };
+  
+
+
+  const buttonScale = useSharedValue(1);
+  
+  const animatedButtonStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: buttonScale.value }],
+  }));
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -46,79 +117,66 @@ const CreatePost: React.FC = () => {
     }
   };
 
-  const handlePost = () => {
-    if (!selectedCommunity) {
-      Alert.alert('Error', 'Please select a community to post in.');
-      return;
-    }
-
-    if (!description.trim()) {
-      Alert.alert('Error', 'Please enter a description.');
-      return;
-    }
-
-    // Handle the post creation logic here
-    Alert.alert('Success', 'Your post has been created successfully!');
-    setImage(null);
-    setDescription('');
-    setSelectedCommunity('');
-  };
-
   const closeModal = () => {
     router.back(); // This will close the modal screen by navigating back
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background, paddingBottom: 20 }]}>
-      <View style={styles.headerContainer}>
-        <Text style={[styles.title, { color: theme.colors.text }]}>{ t('createPost.title') }</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={[styles.container, { backgroundColor: theme.colors.background, paddingBottom: 20 }]}>
+        <View style={styles.headerContainer}>
+          <Text style={[styles.title, { color: theme.colors.text }]}>{ t('createPost.title') }</Text>
 
-        {/* Close Modal Button */}
-        <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
-          <Text style={styles.closeButtonText}>{ t('createPost.close') }</Text>
+          {/* Close Modal Button */}
+          <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
+            <Text style={styles.closeButtonText}>{ t('createPost.close') }</Text>
+          </TouchableOpacity>
+        </View>
+        {/* Image Picker */}
+        <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
+          {image ? (
+            <Image source={{ uri: image }} style={styles.image} />
+          ) : (
+            <Text style={styles.imagePickerText}>{ t('createPost.uploadImage') }</Text>
+          )}
         </TouchableOpacity>
+
+        {/* Description Input */}
+        <TextInput
+          style={[styles.input, { color: 'black' }]}
+          placeholder={ t('createPost.description') }
+          value={description}
+          onChangeText={setDescription}
+          multiline
+          numberOfLines={4}
+          textAlignVertical="top"
+          placeholderTextColor="black"
+        />
+
+        {/* Community Picker (Using Dropdown Picker) */}
+        <DropDownPicker
+          open={open}
+          value={value}
+          items={communities.map((community: any) => ({ label: community.name, value: community.communityId }))}
+          setOpen={setOpen}
+          setValue={setValue}
+          placeholder={ t('createPost.selectCommunity') }
+          containerStyle={styles.dropdownContainer}
+          style={[styles.dropdownStyle]} // Customize dropdown styling
+          onChangeValue={val => {
+            setSelectedCommunity(val || '');
+          }}
+        />
+
+        {/* Submit Button */}
+        <Animated.View style={animatedButtonStyle}>
+          <TouchableOpacity disabled={loading} style={[styles.button, { backgroundColor: theme.colors.primary }]} onPress={handleSubmit}>
+            {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>{ t('createPost.post') }</Text> }
+          </TouchableOpacity>
+        </Animated.View>
+        
       </View>
-      {/* Image Picker */}
-      <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
-        {image ? (
-          <Image source={{ uri: image }} style={styles.image} />
-        ) : (
-          <Text style={styles.imagePickerText}>{ t('createPost.uploadImage') }</Text>
-        )}
-      </TouchableOpacity>
-
-      {/* Description Input */}
-      <TextInput
-        style={[styles.input, { color: 'black' }]}
-        placeholder={ t('createPost.description') }
-        value={description}
-        onChangeText={setDescription}
-        multiline
-        numberOfLines={4}
-        textAlignVertical="top"
-        placeholderTextColor="black"
-      />
-
-      {/* Community Picker (Using Dropdown Picker) */}
-      <DropDownPicker
-        open={open}
-        value={value}
-        items={communities.map((community: any) => ({ label: community.name, value: community.communityId }))}
-        setOpen={setOpen}
-        setValue={setValue}
-        placeholder={ t('createPost.selectCommunity') }
-        containerStyle={styles.dropdownContainer}
-        style={[styles.dropdownStyle]} // Customize dropdown styling
-        onChangeValue={val => {
-          setSelectedCommunity(val || '');
-        }}
-      />
-
-      {/* Submit Button */}
-      <TouchableOpacity style={[styles.button, { backgroundColor: theme.colors.primary }]} onPress={handlePost}>
-        <Text style={styles.buttonText}>{ t('createPost.post') }</Text>
-      </TouchableOpacity>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

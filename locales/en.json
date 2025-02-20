@@ -178,6 +178,10 @@
     "uploadImage": "Upload Image",
     "description": "Enter a post content",
     "selectCommunity": "Select a community",
-    "post": "Post"
+    "post": "Post",
+    "pleaseUploadImage": "Please upload an image.",
+    "pleaseSelectCommunity": "Please select a community to post in.",
+    "pleaseEnterDescription": "Please enter a description.",
+    "postSuccess": "Your post has been created successfully!"
   }
 }

@@ -177,9 +177,13 @@
       "title": "Shyiraho ubutumwa bushya mu muryango",
       "close": "Funga",
       "uploadImage": "Shyiraho ifoto",
-      "description": "Andika ibirimo ubutumwa",
+      "description": "Andika ubusobanuro",
       "selectCommunity": "Hitamo umuryango",
-      "post": "Ohereza"
+      "post": "Ohereza",
+      "pleaseUploadImage": "Nyamuneka hitamo ifoto.",
+      "pleaseSelectCommunity": "Nyamuneka hitamo umuryango wo gutangamo ubutumwa.",
+      "pleaseEnterDescription": "Nyamuneka andika ibisobanuro.",
+      "postSuccess": "Ibyo watangaje byoherejwe neza!"
     }
 
 

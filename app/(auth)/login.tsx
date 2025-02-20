@@ -118,7 +118,6 @@ const SignInScreen = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-        <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
 
         {/* Logo and Title */}
         <View style={styles.logoContainer}>

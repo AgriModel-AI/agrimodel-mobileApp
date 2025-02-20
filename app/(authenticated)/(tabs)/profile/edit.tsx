@@ -224,11 +224,6 @@ const EditProfileScreen = () => {
 
     const formData = createFormDataWithImage();
 
-    // Log FormData content for debugging
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
-    }
-
     dispatch(addUserDetail(formData))
       .unwrap()
       .then(() => {

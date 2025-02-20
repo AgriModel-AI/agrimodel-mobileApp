@@ -178,7 +178,11 @@
       "uploadImage": "Télécharger une image",
       "description": "Entrez le contenu du post",
       "selectCommunity": "Sélectionnez une communauté",
-      "post": "Publier"
+      "post": "Publier",
+      "pleaseUploadImage": "Veuillez télécharger une image.",
+      "pleaseSelectCommunity": "Veuillez sélectionner une communauté pour publier.",
+      "pleaseEnterDescription": "Veuillez entrer une description.",
+      "postSuccess": "Votre publication a été créée avec succès !"
     }
 
 }
