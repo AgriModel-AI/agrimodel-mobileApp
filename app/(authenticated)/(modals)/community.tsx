@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useTheme } from '@/hooks/ThemeProvider';
 import { router } from 'expo-router'; // Import the router
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCommunities } from '@/redux/slices/communitySlice';
 
 interface Community {
   id: string;
@@ -18,11 +21,17 @@ const CreatePost: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string | null>(null);
 
-  const communities: Community[] = [
-    { id: '1', name: 'Tech Innovators' },
-    { id: '2', name: 'Health & Wellness' },
-    { id: '3', name: 'Nature Lovers' },
-  ];
+
+  const { t } = useTranslation();
+  const dispatch = useDispatch<any>();
+
+  const { communities, loading: loadingCommunity , hasFetched: communitesHasFetched} = useSelector((state: any) => state.communites);
+
+  useEffect(() => {
+    if (!communitesHasFetched) {
+      dispatch(fetchCommunities());
+    }
+  }, [communitesHasFetched, dispatch]);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -62,26 +71,26 @@ const CreatePost: React.FC = () => {
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background, paddingBottom: 20 }]}>
       <View style={styles.headerContainer}>
-      <Text style={[styles.title, { color: theme.colors.text }]}>Create a new post in the community</Text>
+        <Text style={[styles.title, { color: theme.colors.text }]}>{ t('createPost.title') }</Text>
 
-      {/* Close Modal Button */}
-      <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
-        <Text style={styles.closeButtonText}>Close</Text>
-      </TouchableOpacity>
-    </View>
+        {/* Close Modal Button */}
+        <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
+          <Text style={styles.closeButtonText}>{ t('createPost.close') }</Text>
+        </TouchableOpacity>
+      </View>
       {/* Image Picker */}
       <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
         {image ? (
           <Image source={{ uri: image }} style={styles.image} />
         ) : (
-          <Text style={styles.imagePickerText}>Upload image</Text>
+          <Text style={styles.imagePickerText}>{ t('createPost.uploadImage') }</Text>
         )}
       </TouchableOpacity>
 
       {/* Description Input */}
       <TextInput
         style={[styles.input, { color: 'black' }]}
-        placeholder="Enter group description..."
+        placeholder={ t('createPost.description') }
         value={description}
         onChangeText={setDescription}
         multiline
@@ -94,10 +103,10 @@ const CreatePost: React.FC = () => {
       <DropDownPicker
         open={open}
         value={value}
-        items={communities.map(community => ({ label: community.name, value: community.id }))}
+        items={communities.map((community: any) => ({ label: community.name, value: community.communityId }))}
         setOpen={setOpen}
         setValue={setValue}
-        placeholder="Select a community"
+        placeholder={ t('createPost.selectCommunity') }
         containerStyle={styles.dropdownContainer}
         style={[styles.dropdownStyle]} // Customize dropdown styling
         onChangeValue={val => {
@@ -107,7 +116,7 @@ const CreatePost: React.FC = () => {
 
       {/* Submit Button */}
       <TouchableOpacity style={[styles.button, { backgroundColor: theme.colors.primary }]} onPress={handlePost}>
-        <Text style={styles.buttonText}>Post</Text>
+        <Text style={styles.buttonText}>{ t('createPost.post') }</Text>
       </TouchableOpacity>
     </View>
   );
@@ -130,6 +139,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
+    paddingRight: 5,
+    marginRight: 6
   },
   closeButton: {
     position: 'absolute', // Position the button absolutely
@@ -137,7 +148,8 @@ const styles = StyleSheet.create({
     top: 0, // Align it to the top
     padding: 10,
     alignItems: 'center',
-    zIndex: 1, // Make sure the button stays on top
+    zIndex: 1,
+    marginLeft: 5
   },
   closeButtonText: {
     color: '#007bff',

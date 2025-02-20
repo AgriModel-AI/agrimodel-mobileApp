@@ -172,6 +172,15 @@
       "months": "amezi {{count}} ashize",
       "year": "umwaka 1 ushize",
       "years": "imyaka {{count}} ishize"
-    } 
+    },
+    "createPost": {
+      "title": "Shyiraho ubutumwa bushya mu muryango",
+      "close": "Funga",
+      "uploadImage": "Shyiraho ifoto",
+      "description": "Andika ibirimo ubutumwa",
+      "selectCommunity": "Hitamo umuryango",
+      "post": "Ohereza"
+    }
+
 
 }

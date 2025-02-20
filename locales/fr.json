@@ -171,5 +171,14 @@
       "months": "il y a {{count}} mois",
       "year": "il y a un an",
       "years": "il y a {{count}} ans"
+    },
+    "createPost": {
+      "title": "Créer un nouveau post dans la communauté",
+      "close": "Fermer",
+      "uploadImage": "Télécharger une image",
+      "description": "Entrez le contenu du post",
+      "selectCommunity": "Sélectionnez une communauté",
+      "post": "Publier"
     }
+
 }

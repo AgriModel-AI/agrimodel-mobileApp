@@ -171,7 +171,13 @@
     "months": "{{count}} months ago",
     "year": "year ago",
     "years": "{{count}} years ago"
+  },
+  "createPost": {
+    "title": "Create a new post in the community",
+    "close": "Close",
+    "uploadImage": "Upload Image",
+    "description": "Enter a post content",
+    "selectCommunity": "Select a community",
+    "post": "Post"
   }
-
-
 }

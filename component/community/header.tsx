@@ -43,7 +43,6 @@ const Header = ({selectedCommunity, setSelectedCommunity, handleSearch}: any) =>
   useEffect(() => {
       if (!communitesHasFetched) {
         dispatch(fetchCommunities());
-        console.log(communities)
       }
     }, [communitesHasFetched, dispatch]);
 
