@@ -58,6 +58,8 @@ const Community = () => {
           post.content.toLowerCase().includes(searchTerm)
         );
       }
+
+      filtered.sort((a, b) => b.postId - a.postId);
   
       setFilteredPosts(filtered);
     };
