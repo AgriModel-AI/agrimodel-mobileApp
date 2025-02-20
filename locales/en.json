@@ -102,7 +102,8 @@
     "confirm_leave": "Yes, Leave",
     "cancel": "Cancel",
     "joining": "Joining...",
-    "leaving": "Leaving..."
+    "leaving": "Leaving...",
+    "viewAll": "View All"
   }, 
   "profile": {
     "edit_profile": "Edit Profile",

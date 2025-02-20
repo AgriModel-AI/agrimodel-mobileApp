@@ -5,6 +5,7 @@ import {
   Image,
   StyleSheet,
   ScrollView,
+  Pressable,
 } from 'react-native';
 import { useTheme } from '@/hooks/ThemeProvider';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +18,7 @@ import { fetchCommunities } from '@/redux/slices/communitySlice';
 import CommunityHomeActions from '@/component/CommunityHomeActions';
 import CommunitySkeleton from '@/component/CommunitySkeleton';
 import WeatherCard from '@/component/WeatherCard';
+import { router } from 'expo-router';
 
 const HomeScreen = () => {
   const { theme } = useTheme();
@@ -74,9 +76,15 @@ const HomeScreen = () => {
       )} 
 
       {/* Community Section */}
-      <Animated.Text entering={FadeInUp.delay(300).duration(500)} style={[styles.sectionTitle, { color: theme.colors.text, marginTop: 10 }]}>
-        {t('home.community')}
-      </Animated.Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+        <Animated.Text entering={FadeInUp.delay(300).duration(500)} style={[styles.sectionTitle, { color: theme.colors.text }]}>
+          {t('home.community')}
+        </Animated.Text>
+        <Pressable onPress={()=> router.push('/(authenticated)/(tabs)/community/list')}>
+          <Text style={{ color: theme.colors.primary, padding:2 }}>{t('home.viewAll')}</Text>
+        </Pressable>
+    </View>
+
       {loadingCommunity ? (
         <CommunitySkeleton count={3} />
       ) : (

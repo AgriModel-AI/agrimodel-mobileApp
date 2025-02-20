@@ -102,7 +102,8 @@
     "confirm_leave": "Oui, quitter",
     "cancel": "Annuler",
     "joining": "Adhésion...",
-    "leaving": "Départ..."
+    "leaving": "Départ...",
+    "viewAll": "Voir tout"
   },
   "profile": {
     "edit_profile": "Modifier le profil",
