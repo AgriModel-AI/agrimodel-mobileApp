@@ -4,9 +4,13 @@ import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 const Header = () => {
   const { theme } = useTheme();
+
+  const { t } = useTranslation();
+  
 
   return (
     <View style={[styles.header, { backgroundColor: theme.colors.background }]}>
@@ -14,7 +18,7 @@ const Header = () => {
           <Feather name="arrow-left" onPress={()=>router.back()} size={24} color={theme.colors.text} />
         </TouchableOpacity>
         <Text style={[styles.headerTitle, { color: theme.colors.text }]}>
-          Communities
+        {t('home.community')}
         </Text>
         <View style={{ width: 24 }} />
       </View>

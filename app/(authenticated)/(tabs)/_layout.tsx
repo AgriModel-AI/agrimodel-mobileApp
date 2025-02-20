@@ -131,6 +131,7 @@ export default function TabLayout() {
             return <TabIcon name="users" color={color} focused={focused} scale={animatedScale} />;
           },
         }}
+        
       />
 
       {/* Profile Tab */}

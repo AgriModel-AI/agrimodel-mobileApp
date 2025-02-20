@@ -15,6 +15,7 @@ export default function Layout() {
             contentStyle: { backgroundColor: theme.colors.background },
           }}
         >
+          <Stack.Screen name="(page)" />
           <Stack.Screen name="notification" />
           <Stack.Screen name="(tabs)" />
           <Stack.Screen 

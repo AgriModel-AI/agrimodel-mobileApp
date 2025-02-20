@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { useCommunity } from '@/contexts/CommunityContext';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import PostCard from '@/component/community/PostCard';
 import PostModal from '@/component/community/PostModal';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +19,10 @@ const defaultCommunity = {
 };
 
 const Community = () => {
+
+  const router = useRouter();
+
+  
   const { theme } = useTheme();
   const { scrollY, searchIconClicked } = useCommunity();
 

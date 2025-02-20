@@ -47,6 +47,18 @@ export const likeAndUnlike = createAsyncThunk(
     }
   );
 
+export const deletePost = createAsyncThunk(
+    'posts/deletePost',
+    async (postId: number, { rejectWithValue }) => {
+      try {
+        await axiosInstance.delete(`communities/post/${postId}`);
+        return postId;
+      } catch (error: any) {
+        return rejectWithValue(error.response?.data || "Error deleting post");
+      }
+    }
+  );
+
 export const createComment = createAsyncThunk(
 'posts/createComment',
 async ({ postId, comment }: { postId: number; comment: any }, { rejectWithValue }) => {
@@ -69,6 +81,7 @@ const postSlice = createSlice({
     hasFetched: false, 
     likeLoadingStates: {},
     creatingComment: false,
+    deleteLoadingStates: {}
   },
   reducers: {
     resetPosts(state) {
@@ -76,6 +89,7 @@ const postSlice = createSlice({
       state.error = null;
       state.hasFetched = false;
       state.likeLoadingStates = {};
+      state.deleteLoadingStates = {};
     },
   },
   extraReducers: (builder) => {
@@ -150,6 +164,21 @@ const postSlice = createSlice({
       .addCase(createComment.rejected, (state, action: any) => {
         state.creatingComment = false;
         state.error = action.payload;
+      });
+
+      builder
+      .addCase(deletePost.pending, (state: any, action: any) => {
+        state.error = null;
+        state.deleteLoadingStates[action.meta.arg] = true;
+      })
+      .addCase(deletePost.fulfilled, (state: any, action: any) => {
+        const postId = action.payload;
+        state.posts = state.posts.filter((post: any) => post.postId !== postId);
+        state.deleteLoadingStates[postId] = false;
+      })
+      .addCase(deletePost.rejected, (state: any, action: any) => {
+        state.error = action.payload;
+        state.deleteLoadingStates[action.meta.arg] = false;
       });
   },
 });

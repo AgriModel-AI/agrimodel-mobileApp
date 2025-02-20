@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
+  TouchableOpacity,
 } from 'react-native';
 import { useTheme } from '@/hooks/ThemeProvider';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +19,8 @@ import { fetchCommunities } from '@/redux/slices/communitySlice';
 import CommunityHomeActions from '@/component/CommunityHomeActions';
 import CommunitySkeleton from '@/component/CommunitySkeleton';
 import WeatherCard from '@/component/WeatherCard';
-import { router } from 'expo-router';
+import { Link, router } from 'expo-router';
+import CommunityItem from '@/component/community/CommunityItem';
 
 const HomeScreen = () => {
   const { theme } = useTheme();
@@ -89,23 +91,7 @@ const HomeScreen = () => {
         <CommunitySkeleton count={3} />
       ) : (
         communities.slice(0, 3).map((community:any, index: number) => (
-          <Animated.View 
-            key={index} 
-            entering={FadeIn.delay(400 * index).duration(600)} 
-            exiting={FadeOut} 
-            style={[styles.communityItem, { backgroundColor: theme.colors.inputBackground }]}
-          >
-            <Image source={{uri: community.image}} style={styles.communityImage} />
-            <View style={styles.communityInfo}>
-              <Text style={[styles.communityTitle, { color: theme.colors.text }]}>
-                {community.name}
-              </Text>
-              <Text style={[styles.communityMembers, { color: theme.colors.text }]}>
-                {community.users} {t('home.members')}
-              </Text>
-            </View>
-            <CommunityHomeActions community={community} />
-          </Animated.View>
+          <CommunityItem community={community} index={index} key={community.communityId}/>
         ))
       )}
     </ScrollView>
@@ -197,15 +183,5 @@ const styles = StyleSheet.create({
   communityMembers: {
     fontSize: 14,
     fontFamily: 'Poppins_400Regular',
-  },
-  joinButton: {
-    borderWidth: 0,
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-  },
-  joinButtonText: {
-    fontSize: 16,
-    fontFamily: 'Poppins_500Medium',
   },
 });

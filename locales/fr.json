@@ -156,7 +156,11 @@
       "emptyPosts": {
         "title": "Aucune Publication à Afficher",
         "description": "Suivez plus de communautés pour découvrir des publications intéressantes et vous connecter avec d'autres personnes qui partagent vos intérêts."
-      }
+      },
+      "deleteConfirm": "Confirmer la suppression",
+      "deleteDescription": "Êtes-vous sûr de vouloir supprimer ce post ?",
+      "cancel": "Annuler",
+      "delete": "Supprimer"
     },
     "time": {
       "justNow": "À l'instant",

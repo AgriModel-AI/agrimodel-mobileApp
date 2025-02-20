@@ -156,7 +156,11 @@
     "emptyPosts": {
         "title": "No Posts to Display",
         "description": "Follow more communities to discover interesting posts and connect with others who share your interests."
-      }
+      },
+    "deleteConfirm": "Confirm Deletion",
+    "deleteDescription": "Are you sure you want to delete this post?",
+    "cancel": "Cancel",
+    "delete": "Delete"
   },
   "time": {
     "justNow": "Just now",

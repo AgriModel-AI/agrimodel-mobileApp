@@ -1,18 +1,18 @@
 import { useTheme } from '@/hooks/ThemeProvider';
 import React from 'react';
-import { View, StyleSheet, Text, Image, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableOpacity, Pressable, ActivityIndicator, Alert } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import useRelativeTime from '@/hooks/useRelativeTime';
 import { useDispatch, useSelector } from 'react-redux';
-import { likeAndUnlike } from '@/redux/slices/postsSlice';
+import { deletePost, likeAndUnlike } from '@/redux/slices/postsSlice';
 import Animated, { withSpring, useAnimatedStyle, useSharedValue, withSequence } from 'react-native-reanimated';
 
 const AnimatedMaterialCommunityIcons = Animated.createAnimatedComponent(MaterialCommunityIcons);
 
 
 
-const PostCard = ({ post, setSelectedPost }: any) => {
+const PostCard = ({ post, setSelectedPost, isOwner = false }: any) => {
 
   const { theme } = useTheme();
   const { t } = useTranslation();
@@ -24,6 +24,10 @@ const PostCard = ({ post, setSelectedPost }: any) => {
   // Get loading state for this post's like action
   const isLikeLoading = useSelector((state: any) => 
     state.posts.likeLoadingStates[post.postId]
+  );
+
+  const isDeleteLoading = useSelector((state: any) => 
+    state.posts.deleteLoadingStates[post.postId]
   );
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -49,7 +53,7 @@ const PostCard = ({ post, setSelectedPost }: any) => {
         />
       );
     }
-
+  
     return (
       <AnimatedMaterialCommunityIcons
         style={animatedStyle}
@@ -60,15 +64,57 @@ const PostCard = ({ post, setSelectedPost }: any) => {
     );
   };
 
+  const renderDeleteButton = () => {
+    if (isDeleteLoading) {
+      return (
+        <ActivityIndicator 
+          size="small" 
+          color={post.isLiked ? "red" : theme.colors.text} 
+        />
+      );
+    }
+
+    return (
+      <AnimatedMaterialCommunityIcons
+        style={animatedStyle}
+        name="delete"
+        size={20}
+        color="red"
+      />
+    );
+  };
+
+  const handleRemovePost = (postId: number) => {
+      Alert.alert(
+        t('community.deleteConfirm'),
+        t('community.deleteDescription'),
+        [
+          { text: t('community.cancel'), style: "cancel" },
+          { text: t('community.delete'), onPress: () => dispatch(deletePost(postId)), style: "destructive" }
+        ]
+      );
+    };
+
   return (
     <TouchableOpacity key={post.postId} onPress={() => setSelectedPost(post)} style={[styles.postCard, {borderBottomColor: theme.colors.inputBackground}]}>
         <View style={styles.userInfo}>
-            <Image source={{uri: post.user.profilePicture}} style={styles.userAvatar} />
-            <View>
-                <Text style={[styles.userName, { color: theme.colors.text }]}>{post.user.names}</Text>
-                <Text style={[styles.postTime, { color: theme.colors.text }]}>{getRelativeTime(post.createdAt)}</Text>
-            </View>
-            </View>
+          <Image source={{uri: post.user.profilePicture}} style={styles.userAvatar} />
+          <View>
+              <Text style={[styles.userName, { color: theme.colors.text }]}>{post.user.names}</Text>
+              <Text style={[styles.postTime, { color: theme.colors.text }]}>{getRelativeTime(post.createdAt)}</Text>
+          </View>
+
+          {
+            isOwner &&
+            (
+              <TouchableOpacity onPress={() => handleRemovePost(post.postId)} style={styles.removeButton}>
+                {
+                  renderDeleteButton()
+                }
+              </TouchableOpacity>
+            )
+          }
+        </View>
 
             <Text style={[styles.postDescription, { color: theme.colors.text }]}>{post.content}</Text>
             <Image source={{uri: post.imageUrl}} style={styles.postImage} />
@@ -165,6 +211,14 @@ const styles = StyleSheet.create({
   },
   actionPressed: {
     opacity: 0.7,
+  },
+  removeButton: {
+    position: 'absolute',
+    top: 2,
+    right: 10,
+    padding: 5,
+    backgroundColor: 'rgba(255, 0, 0, 0.1)',
+    borderRadius: 20,
   },
 
 });

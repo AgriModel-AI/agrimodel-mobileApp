@@ -155,9 +155,13 @@
     "noCommentsYet": "Nta gitekerezo kiraboneka",
     "beTheFirstToComment": "Ba uwa mbere utanga igitekerezo!",
     "emptyPosts": {
-        "title": "Nta Byanditse Biriho",
-        "description": "Kurikira imiryango myinshi kugirango ubone ibyanditse bishimishije kandi wihuze n'abandi basangira inyungu nawe."
-      }
+      "title": "Nta Byanditse Biriho",
+      "description": "Kurikira imiryango myinshi kugirango ubone ibyanditse bishimishije kandi wihuze n'abandi basangira inyungu nawe."
+    },
+    "deleteConfirm": "Emeza gusiba",
+    "deleteDescription": "Wizeye ko ushaka gusiba iyi post?",
+    "cancel": "Hagarika",
+    "delete": "Siba"
   },
     "time": {
       "justNow": "Ubu nyine",

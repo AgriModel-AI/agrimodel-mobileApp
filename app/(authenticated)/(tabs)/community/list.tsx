@@ -1,81 +1,43 @@
 import { useTheme } from '@/hooks/ThemeProvider';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, Image, TouchableOpacity, Alert } from 'react-native';
 import Animated, { FadeInUp, FadeOut } from 'react-native-reanimated';
 import HeaderList from '@/component/community/headerList';
-
-interface CommunityItem {
-  id: string;
-  title: string;
-  desc: string;
-  image: any;
-}
-
-const communities: CommunityItem[] = [
-  { id: '1', title: 'Tech Innovators', desc: 'A place for tech enthusiasts.', image: require('@/assets/images/landing.jpg')},
-  { id: '2', title: 'Health & Wellness', desc: 'Healthy mind, healthy life.', image: require('@/assets/images/landing.jpg')},
-  { id: '3', title: 'Nature Lovers', desc: 'Exploring the beauty of nature.', image: require('@/assets/images/landing.jpg')},
-];
+import CommunityItem from '@/component/community/CommunityItem';
+import CommunitySkeleton from '@/component/CommunitySkeleton';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCommunities } from '@/redux/slices/communitySlice';
 
 const Community: React.FC = () => {
   const { theme } = useTheme();
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [joinedCommunities, setJoinedCommunities] = useState<string[]>([]);
+  
+  const { communities, loading: loadingCommunity , hasFetched: communitesHasFetched} = useSelector((state: any) => state.communites);
 
-  const toggleExpand = (id: string) => {
-    setExpandedId(expandedId === id ? null : id);
-  };
+  const dispatch = useDispatch<any>();
 
-  const handleJoin = (id: string) => {
-    setJoinedCommunities([...joinedCommunities, id]);
-  };
 
-  const handleRemove = (id: string) => {
-    Alert.alert('Confirm', 'Are you sure you want to leave this community?', [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Remove', onPress: () => setJoinedCommunities(joinedCommunities.filter((c) => c !== id)) },
-    ]);
-  };
+  useEffect(() => {
+    if (!communitesHasFetched) {
+      dispatch(fetchCommunities());
+    }
+  }, [communitesHasFetched, dispatch]);
+
 
   return (
     <View style={styles.container}>
       <HeaderList />
       <Animated.ScrollView
-        style={[styles.container, { backgroundColor: theme.colors.background }]}
+        style={[styles.container, { backgroundColor: theme.colors.background, padding: 16 }]}
         contentContainerStyle={{ paddingTop: 100 }}
         showsVerticalScrollIndicator={false}
       >
-        {communities.map((community, index) => (
-          <Animated.View 
-            key={community.id} 
-            entering={FadeInUp.delay(index * 100)} 
-            exiting={FadeOut}
-            style={[styles.communityCard, { backgroundColor: theme.colors.surface, shadowColor: theme.colors.primary }]}
-          >
-            <Image source={community.image} style={styles.image} />
-            <View style={styles.infoContainer}>
-              <Text style={[styles.title, { color: theme.colors.text }]}>{community.title}</Text>
-              {expandedId === community.id && (
-                <Text style={[styles.desc, { color: theme.colors.text }]}>{community.desc}</Text>
-              )}
-              <TouchableOpacity onPress={() => toggleExpand(community.id)}>
-                <Text style={[styles.moreLess, { color: theme.colors.primary }]}>{expandedId === community.id ? 'Show Less' : 'Show More'}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.button, { backgroundColor: joinedCommunities.includes(community.id) ? 'red' : theme.colors.primary }]}
-                onPress={() => 
-                  joinedCommunities.includes(community.id) 
-                    ? handleRemove(community.id) 
-                    : handleJoin(community.id)
-                }
-              >
-                <Text style={styles.buttonText}>
-                  {joinedCommunities.includes(community.id) ? 'Leave' : 'Join'}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </Animated.View>
-        ))}
+        {loadingCommunity ? (
+        <CommunitySkeleton count={3} />
+      ) : (
+        communities.map((community:any, index: number) => (
+          <CommunityItem community={community} index={index} key={community.communityId}/>
+        ))
+      )}
       </Animated.ScrollView>
     </View>
   );
@@ -84,7 +46,6 @@ const Community: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   communityCard: {
     marginHorizontal: 20,

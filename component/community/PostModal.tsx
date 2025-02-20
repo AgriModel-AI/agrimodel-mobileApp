@@ -24,7 +24,6 @@ const PostModal = ({ postId, comments, modalVisible, handleCloseModal }: any) =>
 
   useEffect(() => {
     setLocalComments(comments);
-    console.log('again fetching --------------------')
   }, [comments]);
 
   
