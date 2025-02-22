@@ -113,7 +113,15 @@
     "actions": "Actions",
     "terms_and_conditions": "Termes et conditions",
     "logout": "Se déconnecter",
-    "change_password": "Changer le mot de passe"
+    "change_password": "Changer le mot de passe",
+    "block_account": "Bloquer le compte",
+    "help": "Aide",
+    "blockAccountConfirmation": {
+      "title": "Confirmer le blocage du compte",
+      "description": "Êtes-vous sûr de vouloir bloquer ce compte ? Cette action est irréversible.",
+      "cancel": "Annuler",
+      "confirm": "Confirmer"
+    }
   },
   "profileEdit": {
     "edit_profile": "Modifier le profil",
@@ -232,8 +240,17 @@
       "profile": "Profil",
       "diagnosis": "Diagnostic",
       "community": "Communauté"
+    },
+    "help": {
+      "title": "Aide",
+      "subject": "Sujet",
+      "description": "Description",
+      "type": "Type",
+      "send_request": "Envoyer la demande",
+      "request_sent": "Demande envoyée",
+      "request_sent_success": "Votre demande d'aide a été envoyée avec succès. Le reste sera mis à jour par email.",
+      "error": "Erreur",
+      "unexpected_error": "Une erreur inattendue s'est produite.",
+      "failed_to_send_request": "Échec de l'envoi de la demande d'aide."
     }
-    
-    
-
 }

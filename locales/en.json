@@ -113,7 +113,15 @@
     "actions": "Actions",
     "terms_and_conditions": "Terms & Conditions",
     "logout": "Logout",
-    "change_password": "Change Password"
+    "change_password": "Change Password",
+    "block_account": "Block Account",
+    "help": "Help",
+    "blockAccountConfirmation": {
+      "title": "Confirm Block Account",
+      "description": "Are you sure you want to block this account? This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    }
   },
   "profileEdit": {
     "edit_profile": "Edit Profile",
@@ -232,5 +240,17 @@
     "profile": "Profile",
     "diagnosis": "Diagnosis",
     "community": "Community"
+  },
+  "help": {
+    "title": "Help",
+    "subject": "Subject",
+    "description": "Description",
+    "type": "Type",
+    "send_request": "Send Request",
+    "request_sent": "Request Sent",
+    "request_sent_success": "Your help request has been sent successfully. The rest will be updated via email.",
+    "error": "Error",
+    "unexpected_error": "An unexpected error occurred.",
+    "failed_to_send_request": "Failed to send help request."
   }
 }

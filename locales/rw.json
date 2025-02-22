@@ -108,13 +108,21 @@
   }, 
   "profile": {
     "edit_profile": "Hindura Umwirondoro",
-    "preferences": "Preferences",
+    "preferences": "Ibyifuzo",
     "change_theme": "Hindura Insanganyamatsiko",
     "change_language": "Hindura Ururimi",
     "actions": "Ibikorwa",
     "terms_and_conditions": "Amategeko n'Amabwiriza",
     "logout": "Sohoka",
-    "change_password": "Hindura Ijambo ry’ibanga"
+    "change_password": "Hindura Ijambo ry’ibanga",
+    "block_account": "Funga konti",
+    "help": "Ubufasha",
+    "blockAccountConfirmation": {
+      "title": "Emeza gufunga konti",
+      "description": "Wizeye ko ushaka gufunga iyi konti? Iyi ngingo ntishobora gusubirwaho.",
+      "cancel": "Hagarika",
+      "confirm": "Emeza"
+    }
   },
   "profileEdit": {
     "edit_profile": "Hindura Umwirondoro",
@@ -233,5 +241,18 @@
     "profile": "Umwirondoro",
     "diagnosis": "Isuzuma",
     "community": "Umuryango"
+  },
+  "help": {
+    "title": "Ubufasha",
+    "subject": "Ingingo",
+    "description": "Ibisobanuro",
+    "type": "Ubwoko",
+    "send_request": "Ohereza Ibisabwa",
+    "request_sent": "Ibisabwa byoherejwe",
+    "request_sent_success": "Ibisabwa byoherejwe neza. Ibindi bizahuzwa binyuze kuri email.",
+    "error": "Ikosa",
+    "unexpected_error": "Habaye ikosa ritunguranye.",
+    "failed_to_send_request": "Ntibyashoboye kohereza ibisabwa."
   }
+    
 }

@@ -29,6 +29,12 @@ const _layout = () => {
           headerShown: false
         }}   
        />
+       <Stack.Screen
+        name='help'
+        options={{
+          headerShown: false
+        }}   
+       />
     </Stack>
   )
 }

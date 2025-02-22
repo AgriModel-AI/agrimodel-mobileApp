@@ -9,13 +9,15 @@ import {
   ScrollView,
   StatusBar,
   Platform,
+  Alert,
 } from 'react-native';
 import { useTheme } from '@/hooks/ThemeProvider';
 import { useTranslation } from 'react-i18next';
-import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Feather, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useRouter } from 'expo-router';
 import { useSelector } from 'react-redux';
+import axiosInstance from '@/utils/axiosInstance';
 
 const ProfileScreen = () => {
   const { theme, toggleTheme } = useTheme();
@@ -28,6 +30,41 @@ const ProfileScreen = () => {
 
   const changeLanguage = (lang: string | undefined) => {
     i18n.changeLanguage(lang);
+  };
+
+  const handleBlockAccount = () => {
+  
+    Alert.alert(
+      t('profile.blockAccountConfirmation.title'),
+      t('profile.blockAccountConfirmation.description'),
+      [
+        {
+          text: t('profile.blockAccountConfirmation.cancel'),
+          style: 'cancel'
+        },
+        {
+          text: t('profile.blockAccountConfirmation.confirm'),
+          onPress: async () => {
+            try {
+              const response = await axiosInstance.patch('/user-details/block-account',
+                {
+                  isBlocked: true
+                },
+              );
+              if (response.status === 200) {
+                // On success, route the user to the login screen.
+                router.replace('/(auth)/login');
+              }
+            } catch (error) {
+              console.error('Error blocking account:', error);
+              // Optionally, handle error feedback to the user here.
+            }
+          },
+          style: 'destructive'
+        }
+      ],
+      { cancelable: true }
+    );
   };
 
   return (
@@ -158,6 +195,25 @@ const ProfileScreen = () => {
               </Text>
             </View>
             <Feather name="chevron-right" size={24} color={theme.colors.text} />
+          </TouchableOpacity>
+          <View style={[styles.divider]} />
+          <TouchableOpacity style={styles.actionItem} onPress={() => router.push('/(authenticated)/(tabs)/profile/help')}>
+            <View style={styles.preferenceContent}>
+              <Feather name="help-circle" size={24} color={theme.colors.text} />
+              <Text style={[styles.preferenceText, { color: theme.colors.text }]}>
+                {t('profile.help')}
+              </Text>
+            </View>
+            <Feather name="chevron-right" size={24} color={theme.colors.text} />
+          </TouchableOpacity>
+          <View style={[styles.divider]} />
+          <TouchableOpacity style={styles.actionItem} onPress={handleBlockAccount}>
+            <View style={styles.preferenceContent}>
+              <MaterialIcons name="block" size={24} color="orange" />
+              <Text style={[styles.preferenceText, { color: 'orange' }]}>
+                {t('profile.block_account')}
+              </Text>
+            </View>
           </TouchableOpacity>
           <View style={[styles.divider]} />
           <TouchableOpacity style={styles.actionItem} onPress={()=> router.replace('/(auth)/login')}>
