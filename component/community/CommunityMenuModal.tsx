@@ -7,10 +7,7 @@ import {
     Pressable,
     View,
     TouchableOpacity,
-    Platform,
-    StyleProp,
-    ViewStyle,
-    TextStyle
+    Platform
 } from 'react-native';
 
 import Animated, { 
@@ -19,13 +16,11 @@ import Animated, {
     runOnJS,
     useAnimatedStyle,
     withSpring,
-    WithSpringConfig,
-    useAnimatedGestureHandler
+    WithSpringConfig
 } from 'react-native-reanimated';
 import {
     GestureDetector,
-    Gesture,
-    PanGestureHandler
+    Gesture
 } from 'react-native-gesture-handler';
 import { useTheme } from '@/hooks/ThemeProvider';
 import { Feather } from '@expo/vector-icons';
@@ -45,33 +40,6 @@ interface MenuOption {
     route: string;
 }
 
-interface ThemeColors {
-    background: string;
-    text: string;
-    card: string;
-    primary: string;
-}
-
-interface Theme {
-    colors: ThemeColors;
-    dark: boolean;
-}
-
-interface StylesProps {
-    overlay: ViewStyle;
-    overlayPressable: ViewStyle;
-    modalContent: ViewStyle;
-    handle: ViewStyle;
-    header: ViewStyle;
-    title: TextStyle;
-    closeButton: ViewStyle;
-    option: ViewStyle;
-    optionContent: ViewStyle;
-    optionTextContainer: ViewStyle;
-    optionTitle: TextStyle;
-    optionDescription: TextStyle;
-    iconContainer: ViewStyle;
-}
 const BottomSheetModal = forwardRef<BottomSheetModalRef>((_, ref) => {
     const { theme } = useTheme();
     const { t } = useTranslation();
@@ -123,7 +91,7 @@ const BottomSheetModal = forwardRef<BottomSheetModalRef>((_, ref) => {
         .onUpdate((event) => {
             translateY.value = Math.max(0, context.value.y + event.translationY);
             overlayOpacity.value = withTiming(
-                Math.max(0, Math.min(1, 1 - translateY.value / SCREEN_HEIGHT * 2))
+                Math.max(0, Math.min(1, 1 - (translateY.value / SCREEN_HEIGHT) * 2))
             );
         })
         .onEnd((event) => {
@@ -137,10 +105,16 @@ const BottomSheetModal = forwardRef<BottomSheetModalRef>((_, ref) => {
 
     const animatedStyle = useAnimatedStyle(() => ({
         transform: [{ translateY: translateY.value }],
+        // Ensuring this component sits above others with a high zIndex:
+        zIndex: 1000,
+        elevation: 1000,
     }));
 
     const overlayStyle = useAnimatedStyle(() => ({
         opacity: overlayOpacity.value,
+        // Higher stacking for overlay too
+        zIndex: 999,
+        elevation: 999,
     }));
 
     const renderOption = ({ title, description, route }: MenuOption): JSX.Element => (
@@ -189,7 +163,6 @@ const BottomSheetModal = forwardRef<BottomSheetModalRef>((_, ref) => {
         }
     ];
 
-
     const handleNavigation = (route: any): void => {
         slideOut();
         setTimeout(() => {
@@ -197,14 +170,13 @@ const BottomSheetModal = forwardRef<BottomSheetModalRef>((_, ref) => {
         }, 300);
     };
 
-    // ... (keep your existing renderOption and menuOptions)
-
     return (
         <Modal
             animationType="none"
             transparent={true}
             visible={modalVisible}
             onRequestClose={slideOut}
+            statusBarTranslucent={true} // Ensures full-screen coverage on Android
         >
             <Animated.View style={[styles.overlay, overlayStyle]}>
                 <Pressable style={styles.overlayPressable} onPress={slideOut} />
@@ -248,7 +220,6 @@ const BottomSheetModal = forwardRef<BottomSheetModalRef>((_, ref) => {
 });
 
 const styles = StyleSheet.create({
-    // ... (keep your existing styles)
     handleContainer: {
         paddingVertical: 12,
         alignItems: 'center',
@@ -271,7 +242,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 12,
         elevation: 20,
-    },overlay: {
+    },
+    overlay: {
         ...StyleSheet.absoluteFillObject,
         backgroundColor: 'rgba(0, 0, 0, 0.4)',
     },
@@ -326,7 +298,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-
 });
 
 export default BottomSheetModal;
