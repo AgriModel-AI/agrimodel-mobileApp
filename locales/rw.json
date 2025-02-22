@@ -163,33 +163,68 @@
     "cancel": "Hagarika",
     "delete": "Siba"
   },
-    "time": {
-      "justNow": "Ubu nyine",
-      "minute": "iminota 1 ishize",
-      "minutes": "iminota {{count}} ishize",
-      "hour": "isaha 1 ishize",
-      "hours": "amasaha {{count}} ashize",
-      "day": "umunsi 1 ushize",
-      "days": "iminsi {{count}} ishize",
-      "week": "icyumweru 1 gishize",
-      "weeks": "ibyumweru {{count}} bishize",
-      "month": "ukwezi 1 gushize",
-      "months": "amezi {{count}} ashize",
-      "year": "umwaka 1 ushize",
-      "years": "imyaka {{count}} ishize"
+  "time": {
+    "justNow": "Ubu nyine",
+    "minute": "iminota 1 ishize",
+    "minutes": "iminota {{count}} ishize",
+    "hour": "isaha 1 ishize",
+    "hours": "amasaha {{count}} ashize",
+    "day": "umunsi 1 ushize",
+    "days": "iminsi {{count}} ishize",
+    "week": "icyumweru 1 gishize",
+    "weeks": "ibyumweru {{count}} bishize",
+    "month": "ukwezi 1 gushize",
+    "months": "amezi {{count}} ashize",
+    "year": "umwaka 1 ushize",
+    "years": "imyaka {{count}} ishize"
+  },
+  "createPost": {
+    "title": "Shyiraho ubutumwa bushya mu muryango",
+    "close": "Funga",
+    "uploadImage": "Shyiraho ifoto",
+    "description": "Andika ubusobanuro",
+    "selectCommunity": "Hitamo umuryango",
+    "post": "Ohereza",
+    "pleaseUploadImage": "Nyamuneka hitamo ifoto.",
+    "pleaseSelectCommunity": "Nyamuneka hitamo umuryango wo gutangamo ubutumwa.",
+    "pleaseEnterDescription": "Nyamuneka andika ibisobanuro.",
+    "postSuccess": "Ibyo watangaje byoherejwe neza!"
+  },
+  "diagnosis": {
+    "title": "Isuzuma ry'Igihingwa & Inyoboranyobozi y'Ubuvuzi",
+    "take_photo": {
+      "title": "Fata cyangwa Ohereza Ifoto",
+      "description": "Urupapuro nyamukuru rwerekana amahitamo abiri: 'Fata Ifoto' cyangwa 'Ohereza Ifoto'."
     },
-    "createPost": {
-      "title": "Shyiraho ubutumwa bushya mu muryango",
-      "close": "Funga",
-      "uploadImage": "Shyiraho ifoto",
-      "description": "Andika ubusobanuro",
-      "selectCommunity": "Hitamo umuryango",
-      "post": "Ohereza",
-      "pleaseUploadImage": "Nyamuneka hitamo ifoto.",
-      "pleaseSelectCommunity": "Nyamuneka hitamo umuryango wo gutangamo ubutumwa.",
-      "pleaseEnterDescription": "Nyamuneka andika ibisobanuro.",
-      "postSuccess": "Ibyo watangaje byoherejwe neza!"
-    }
-
-
+    "crop_detection": {
+      "title": "Gusuzuma Igihingwa",
+      "description": "Nyuma yo gufata cyangwa kohereza ifoto, porogaramu ihita itunganya ishusho."
+    },
+    "instant_diagnosis": {
+      "title": "Isuzuma ako kanya",
+      "description": "Iyo ishusho imaze gutunganywa, porogaramu ihita itanga ibisubizo by’isuzuma."
+    },
+    "treatment_suggestions": {
+      "title": "Inama z’Ubuvuzi",
+      "description": "Tanga urutonde ruto rw’imiti cyangwa intambwe z’icyakorwa."
+    },
+    "option": "Hitamo imwe mu mahitamo",
+    "take_phone_btn": "Fata Ifoto",
+    "choose_from_gallery": "Hitamo Muri Album",
+    "take_phone_alert": "Fata Ifoto",
+    "cancel": "Hagarika",
+    "listen": "Umva ibimenyetso n'ubuvuzi",
+    "symptopms": "Ibimenyetso",
+    "treatment": "Ubuvuzi",
+    "picture_captured": "Ifoto yawe yafashwe!",
+    "camera_error": "Ntibishobotse kugera kuri kamera.",
+    "camera_permission": "Uburenganzira bwo gukoresha kamera burakenewe!",
+    "media_permission": "Uburenganzira bwo gukoresha ububiko bw'amashusho burakenewe!"
+  },
+  "menus": {
+    "home": "Ahabanza",
+    "profile": "Umwirondoro",
+    "diagnosis": "Isuzuma",
+    "community": "Umuryango"
+  }
 }

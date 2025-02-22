@@ -188,5 +188,42 @@
     "pleaseSelectCommunity": "Please select a community to post in.",
     "pleaseEnterDescription": "Please enter a description.",
     "postSuccess": "Your post has been created successfully!"
+  },
+  "diagnosis": {
+    "title" : "Crop Diagnosis & Treatment Guide",
+    "take_photo": {
+      "title": "Take or Upload a Photo",
+      "description": "The main screen presents two clear options: 'Take Photo' or 'Upload Photo'."
+    },
+    "crop_detection": {
+      "title": "Crop Detection",
+      "description": "After taking or uploading a photo, the app automatically processes the image."
+    },
+    "instant_diagnosis": {
+        "title": "Instant Diagnosis",
+        "description": "Once the image is processed, the app provides instant diagnosis results."
+    },
+    "treatment_suggestions": {
+        "title": "Treatment Suggestions",
+        "description": "Present a short list of remedies with checkboxes or steps."
+    },
+    "option": "Choose an option",
+    "take_phone_btn": "Take A Picture",
+    "choose_from_gallery": "Choose From Gallery",
+    "take_phone_alert": "Take Picture",
+    "cancel": "Cancel",
+    "listen": "Listen to the symptopms and treatment",
+    "symptopms": "Symptoms",
+    "treatment": "Treatment",
+    "picture_captured": "Your picture has been captured!",
+    "camera_error": "Could not access the camera.",
+    "camera_permission": "Permission to access camera is needed!",
+    "media_permission": "Permission to access media library is needed!"
+  },
+  "menus": {
+    "home": "Home",
+    "profile": "Profile",
+    "diagnosis": "Diagnosis",
+    "community": "Community"
   }
 }

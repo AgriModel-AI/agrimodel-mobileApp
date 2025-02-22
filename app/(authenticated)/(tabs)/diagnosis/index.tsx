@@ -7,6 +7,7 @@ import Animated, { FadeInUp, useSharedValue, useAnimatedStyle, withSpring, FadeI
 import { Pressable } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 const DiagnosisScreen = () => {
   const { theme } = useTheme();
@@ -14,19 +15,21 @@ const DiagnosisScreen = () => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [camera, setCamera] = useState<any>(null);
 
+  const { t } = useTranslation();
+
   const [imageUri, setImageUri] = useState<any>(null);
 
   const handleImagePicker = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permission needed', 'Permission to access media library is needed!');
+      Alert.alert('Permission needed', t('diagnosis.media_permission'));
       return;
     }
 
     if (Platform.OS === 'ios') {
       ActionSheetIOS.showActionSheetWithOptions(
         {
-          options: ['Cancel', 'Choose from Gallery', 'Take Photo'],
+          options: [t('diagnosis.cancel'), t('diagnosis.choose_from_gallery'), t('diagnosis.take_phone_alert')],
           cancelButtonIndex: 0,
         },
         async (buttonIndex) => {
@@ -39,12 +42,12 @@ const DiagnosisScreen = () => {
       );
     } else {
       Alert.alert(
-        'Choose an option',
+        t('diagnosis.option'),
         '',
         [
-          { text: 'Choose from Gallery', onPress: pickImageFromGallery },
-          { text: 'Take Photo', onPress: takePhoto },
-          { text: 'Cancel', style: 'cancel' },
+          { text: t('diagnosis.choose_from_gallery'), onPress: pickImageFromGallery },
+          { text: t('diagnosis.take_phone_alert'), onPress: takePhoto },
+          { text: t('diagnosis.cancel'), style: 'cancel' },
         ],
         { cancelable: true }
       );
@@ -76,7 +79,7 @@ const DiagnosisScreen = () => {
   const takePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permission needed', 'Permission to access camera is needed!');
+      Alert.alert('Permission needed', t('diagnosis.camera_permission'));
       return;
     }
 
@@ -117,34 +120,34 @@ const DiagnosisScreen = () => {
       const options = { quality: 0.5, base64: true };
       const data = await camera.takePictureAsync(options);
       console.log(data.uri); // Log the photo URI
-      Alert.alert("Photo Taken", "Your picture has been captured!");
+      Alert.alert("Photo Taken", t('diagnosis.picture_captured'));
     } else {
-      Alert.alert("Camera Error", "Could not access the camera.");
+      Alert.alert("Camera Error", t('diagnosis.camera_error'));
     }
   };
 
   const steps = [
     {
-      title: "Take or Upload a Photo",
-      description: "The main screen presents two clear options: 'Take Photo' or 'Upload Photo.'",
+      title: t('diagnosis.take_photo.title'),
+      description: t('diagnosis.take_photo.description'),
       icon: "camera",
       bgColor: "#E3F2FD",
     },
     {
-      title: "Crop Detection",
-      description: "After taking or uploading the photo, the app automatically processes the image.",
+      title: t('diagnosis.crop_detection.title'),
+      description: t('diagnosis.crop_detection.description'),
       icon: "image-search",
       bgColor: "#FFF3E0",
     },
     {
-      title: "Instant Diagnosis",
-      description: "Once the image is processed, the app shows a diagnosis result.",
+      title: t('diagnosis.instant_diagnosis.title'),
+      description: t('diagnosis.instant_diagnosis.description'),
       icon: "clipboard-check",
       bgColor: "#E8F5E9",
     },
     {
-      title: "Treatment Suggestions",
-      description: "Present a short list of remedies with checkboxes or steps.",
+      title: t('diagnosis.treatment_suggestions.title'),
+      description: t('diagnosis.treatment_suggestions.description'),
       icon: "medical-bag",
       bgColor: "#F3E5F5",
     },
@@ -183,7 +186,7 @@ const DiagnosisScreen = () => {
             color: theme.colors.text,
           }}
         >
-          🌱 Crop Diagnosis & Treatment Guide
+          🌱 {t('diagnosis.title')}
         </Text>
       </View>
 
@@ -236,7 +239,7 @@ const DiagnosisScreen = () => {
             onPress={handleImagePicker}
           >
             <MaterialCommunityIcons name="camera" size={22} color="#fff" style={{ marginRight: 10 }} />
-            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 17 }}>Take A Picture</Text>
+            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 17 }}>{t('diagnosis.take_phone_btn')}</Text>
           </TouchableOpacity>
         </Animated.View>
       </ScrollView>

@@ -188,6 +188,45 @@
       "pleaseSelectCommunity": "Veuillez sélectionner une communauté pour publier.",
       "pleaseEnterDescription": "Veuillez entrer une description.",
       "postSuccess": "Votre publication a été créée avec succès !"
+    },
+    "diagnosis": {
+      "title": "Diagnostic des Cultures & Guide de Traitement",
+      "take_photo": {
+        "title": "Prendre ou Télécharger une Photo",
+        "description": "L'écran principal présente deux options claires : 'Prendre une Photo' ou 'Télécharger une Photo'."
+      },
+      "crop_detection": {
+        "title": "Détection des Cultures",
+        "description": "Après avoir pris ou téléchargé une photo, l'application traite automatiquement l'image."
+      },
+      "instant_diagnosis": {
+        "title": "Diagnostic Instantané",
+        "description": "Une fois l'image traitée, l'application fournit instantanément les résultats du diagnostic."
+      },
+      "treatment_suggestions": {
+        "title": "Suggestions de Traitement",
+        "description": "Présentez une courte liste de remèdes avec des cases à cocher ou des étapes."
+      },
+      "option": "Choisissez une option",
+      "take_phone_btn": "Prendre une Photo",
+      "choose_from_gallery": "Choisir Depuis la Galerie",
+      "take_phone_alert": "Prendre une Photo",
+      "cancel": "Annuler",
+      "listen": "Écouter les symptômes et le traitement",
+      "symptopms": "Symptômes",
+      "treatment": "Traitement",
+      "picture_captured": "Votre photo a été capturée !",
+      "camera_error": "Impossible d'accéder à la caméra.",
+      "camera_permission": "L'autorisation d'accès à la caméra est requise !",
+      "media_permission": "L'autorisation d'accès à la bibliothèque multimédia est requise !"
+    },
+    "menus": {
+      "home": "Accueil",
+      "profile": "Profil",
+      "diagnosis": "Diagnostic",
+      "community": "Communauté"
     }
+    
+    
 
 }
