@@ -257,5 +257,7 @@
     "error": "Error",
     "unexpected_error": "An unexpected error occurred.",
     "failed_to_send_request": "Failed to send help request."
-  }
+  },
+  "notifications": "Notifications",
+  "no_notifications": "No notifications available"
 }

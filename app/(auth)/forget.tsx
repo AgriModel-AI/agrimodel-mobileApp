@@ -73,7 +73,7 @@ const ForgotPasswordScreen = () => {
         {/* Back to Login and Cancel */}
         <View style={styles.backContainer}>
           <TouchableOpacity
-            onPress={() => router.replace('/login')}
+            onPress={() => router.back()}
             style={styles.backButton}
           >
             <MaterialCommunityIcons name="arrow-left" size={24} color={theme.colors.primary} />

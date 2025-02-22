@@ -16,7 +16,6 @@ import { useTranslation } from 'react-i18next';
 import { globalStyles } from '@/styles/auth/globalStyles';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StyleSheet } from 'react-native';
-import { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import showToast from '@/component/showToast';
 import axiosInstance from '@/utils/axiosInstance';
 

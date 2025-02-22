@@ -257,5 +257,7 @@
       "error": "Erreur",
       "unexpected_error": "Une erreur inattendue s'est produite.",
       "failed_to_send_request": "Échec de l'envoi de la demande d'aide."
-    }
+    },
+    "notifications": "Notifications",
+    "no_notifications": "Aucune notification disponible"
 }

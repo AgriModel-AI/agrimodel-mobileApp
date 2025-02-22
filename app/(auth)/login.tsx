@@ -160,7 +160,7 @@ const SignInScreen = () => {
         </View>
 
         {/* Forgot Password Link */}
-        <Link href="/forget" replace asChild>
+        <Link href="/forget" push asChild>
           <TouchableOpacity>
             <Text style={[styles.forgotPasswordText, { color: theme.colors.primary }]}>
               {t('auth.login.forgot_password')}
@@ -178,7 +178,7 @@ const SignInScreen = () => {
         {/* Sign Up Link */}
         <View style={styles.signupContainer}>
           <Text style={[styles.signupText, { color: theme.colors.text }]}>{t('auth.login.signup_prompt')}</Text>
-          <Link href="/signup" replace asChild>
+          <Link href="/signup" push asChild>
             <TouchableOpacity>
               <Text style={[styles.signupLink, { color: theme.colors.primary }]}>{t('auth.login.signup_link')}</Text>
             </TouchableOpacity>

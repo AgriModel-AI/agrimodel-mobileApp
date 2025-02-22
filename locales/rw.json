@@ -258,6 +258,8 @@
     "error": "Ikosa",
     "unexpected_error": "Habaye ikosa ritunguranye.",
     "failed_to_send_request": "Ntibyashoboye kohereza ibisabwa."
-  }
+  },
+  "notifications": "Amatangazo",
+  "no_notifications": "Nta matangazo ahari"
     
 }

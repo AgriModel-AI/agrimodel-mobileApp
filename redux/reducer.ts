@@ -3,6 +3,7 @@ import userDetailsReducer from './slices/userDetailsSlice';
 import diseaseReducer from './slices/diseaseSlice';
 import communitesReducer from './slices/communitySlice';
 import postsReducer from './slices/postsSlice';
+import notificationsReducer from './slices/notificationSlice';
 import { combineReducers } from '@reduxjs/toolkit';
 
 
@@ -11,7 +12,8 @@ const appReducer = combineReducers({
   userDetails: userDetailsReducer,
   diseases: diseaseReducer,
   communites: communitesReducer,
-  posts: postsReducer
+  posts: postsReducer,
+  notifications: notificationsReducer
 });
 
 const rootReducer = (state: any, action: any) => {

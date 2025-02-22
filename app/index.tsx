@@ -19,6 +19,7 @@ import Animated, {
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LanguageDropdown from '@/component/LanguageDropdown';
+import { useSelector } from 'react-redux';
 
 const LandingPage = () => {
   const [checkingAuth, setCheckingAuth] = useState(true);
@@ -31,10 +32,21 @@ const LandingPage = () => {
   const opacityAnim = useSharedValue(0);
   const titleAnim = useSharedValue(20); // Initial position (y-axis)
 
+  const { userDetails } = useSelector((state: any) => state.userDetails);
+  
+
   // Check authentication
   useEffect(() => {
     setCheckingAuth(false);
   }, []);
+
+  useEffect(() => {
+    if (userDetails !== null) {
+      router.replace('/(authenticated)/(tabs)');
+    } else {
+      setCheckingAuth(false); // Show content only if user is not authenticated
+    }
+  }, [userDetails]);
 
   // Trigger animations once the image loads
   const handleImageLoad = () => {
