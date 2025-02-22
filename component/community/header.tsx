@@ -182,6 +182,7 @@ const Header = ({selectedCommunity, setSelectedCommunity, handleSearch}: any) =>
               style={styles.searchInput}
               value={search}
               onChangeText={(text) => setSearch(text)}
+              placeholderTextColor={theme.colors.placeholder}
             />
           </View>
           <Pressable style={styles.searchButton} onPress={()=> handleSearch(search)}>

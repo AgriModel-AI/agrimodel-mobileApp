@@ -137,6 +137,7 @@ const HelpPage = () => {
           value={subject}
           onChangeText={setSubject}
           placeholder={t('help.subject', 'Subject')}
+          placeholderTextColor={theme.colors.placeholder}
         />
 
         <Text style={[styles.label, { color: theme.colors.text }]}>{t('help.description', 'Description')}</Text>
@@ -154,6 +155,7 @@ const HelpPage = () => {
           onChangeText={setDescription}
           multiline
           placeholder={t('help.description', 'Description')}
+          placeholderTextColor={theme.colors.placeholder}
         />
 
         <Text style={[styles.label, { color: theme.colors.text }]}>{t('help.type', 'Type')}</Text>
