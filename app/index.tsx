@@ -1,44 +1,74 @@
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, StatusBar, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  TouchableOpacity,
+  StatusBar,
+  ActivityIndicator
+} from 'react-native';
 import { Link, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Animated, { useSharedValue, withTiming, useAnimatedStyle, Easing } from 'react-native-reanimated';
-import { useDispatch, useSelector } from 'react-redux';
+import Animated, {
+  useSharedValue,
+  withTiming,
+  useAnimatedStyle,
+  Easing
+} from 'react-native-reanimated';
+import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LanguageDropdown from '@/component/LanguageDropdown';
 
 const LandingPage = () => {
-  const [checkingAuth, setCheckingAuth] = useState(true); // Added to handle redirection logic
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [loading, setLoading] = useState(true);
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const { t, i18n } = useTranslation();
 
   const scaleAnim = useSharedValue(0.8);
   const opacityAnim = useSharedValue(0);
+  const titleAnim = useSharedValue(20); // Initial position (y-axis)
 
-  const { userDetails } = useSelector((state: any) => state.userDetails);
-
-  // Redirect if user details are available before showing content
+  // Check authentication
   useEffect(() => {
-    if (userDetails !== null) {
-      router.replace('/(authenticated)/(tabs)');
-    } else {
-      setCheckingAuth(false); // Show content only if user is not authenticated
-    }
-  }, [userDetails]);
+    setCheckingAuth(false);
+  }, []);
 
-  // Trigger animation once the image has loaded
+  // Trigger animations once the image loads
   const handleImageLoad = () => {
     setLoading(false);
-    scaleAnim.value = withTiming(1, { duration: 1000, easing: Easing.out(Easing.exp) });
+    scaleAnim.value = withTiming(1, {
+      duration: 1000,
+      easing: Easing.out(Easing.exp)
+    });
     opacityAnim.value = withTiming(1, { duration: 1000 });
+    titleAnim.value = withTiming(0, { duration: 800, easing: Easing.out(Easing.cubic) });
   };
 
-  // Animated styles for content box
+  // Animated styles for the content
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scaleAnim.value }],
-    opacity: opacityAnim.value,
+    opacity: opacityAnim.value
   }));
 
-  // Show a loading screen until authentication check is completed
+  // Animated styles for the title and description
+  const titleStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: titleAnim.value }],
+    opacity: opacityAnim.value
+  }));
+
+  // Handle language change
+  const handleLanguageChange = async (lang: string) => {
+    try {
+      await AsyncStorage.setItem('language', lang);
+      i18n.changeLanguage(lang);
+    } catch (error) {
+      console.error('Error saving language to AsyncStorage:', error);
+    }
+  };
+
   if (checkingAuth) {
     return (
       <View style={styles.loadingContainer}>
@@ -56,24 +86,35 @@ const LandingPage = () => {
         resizeMode="cover"
         onLoadEnd={handleImageLoad}
       >
+        {/* Overlay */}
+        <View style={styles.overlay} />
+
         {loading && (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#fff" />
           </View>
         )}
 
+        {/* Language Dropdown */}
+        <View style={styles.languageDropdownContainer}>
+          <LanguageDropdown
+            currentLanguage={i18n.language}
+            onSelectLanguage={handleLanguageChange}
+          />
+        </View>
+
         <Animated.View style={[styles.content, animatedStyle]}>
-          <Text style={styles.title}>🌿 AgriModel</Text>
-          <Text style={styles.description}>
-            Your solution for today and tomorrow.
-          </Text>
+          <Animated.Text style={[styles.title, titleStyle]}>🌿 AgriModel</Animated.Text>
+          <Animated.Text style={[styles.description, titleStyle]}>
+            {t('landing.description', 'Your solution for today and tomorrow.')}
+          </Animated.Text>
         </Animated.View>
 
         {/* Get Started Button */}
         <View style={[styles.buttonContainer, { paddingBottom: Math.max(insets.bottom, 20) }]}>
           <Link href="/(auth)/login" replace asChild>
             <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Get Started</Text>
+              <Text style={styles.buttonText}>{t('landing.getStarted')}</Text>
             </TouchableOpacity>
           </Link>
         </View>
@@ -85,48 +126,55 @@ const LandingPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: '#000'
   },
   background: {
     flex: 1,
     width: '100%',
-    height: '100%',
+    height: '100%'
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)', // Dark overlay with 80% opacity
   },
   loadingContainer: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)'
   },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 20
   },
   title: {
-    fontSize: 48,
+    fontSize: 50,
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center',
     fontFamily: 'Poppins_900Black',
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowColor: 'rgba(0, 0, 0, 0.6)',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 10,
-    marginBottom: 10,
+    marginBottom: 15,
+    letterSpacing: 1.5,
   },
   description: {
-    fontSize: 20,
-    color: '#fff',
+    fontSize: 22,
+    color: '#EAEAEA',
     textAlign: 'center',
     fontFamily: 'Poppins_400Regular',
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
     fontStyle: 'italic',
+    lineHeight: 28,
+    opacity: 0.9,
   },
   buttonContainer: {
     width: '100%',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 20
   },
   button: {
     width: '80%',
@@ -138,14 +186,20 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.3,
     shadowRadius: 10,
-    elevation: 5,
+    elevation: 5
   },
   buttonText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
-    fontFamily: 'Poppins_400Regular',
+    fontFamily: 'Poppins_400Regular'
   },
+  languageDropdownContainer: {
+    position: 'absolute',
+    top: 70,
+    right: 20,
+    zIndex: 10
+  }
 });
 
 export default LandingPage;

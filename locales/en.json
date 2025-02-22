@@ -1,4 +1,8 @@
 {
+  "landing": {
+    "description": "Your solution for today and tomorrow.",
+    "getStarted": "Get Started"
+  },
   "auth": {
     "login": {
       "welcome": "Welcome to AgriModel",

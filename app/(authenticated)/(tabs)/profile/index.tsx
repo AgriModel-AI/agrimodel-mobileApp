@@ -21,6 +21,8 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import { useRouter } from 'expo-router';
 import { useSelector } from 'react-redux';
 import axiosInstance from '@/utils/axiosInstance';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LanguageDropdown from '@/component/LanguageDropdown';
 
 interface ThemeType {
   dark: boolean;
@@ -37,134 +39,6 @@ interface UserDetails {
   names?: string;
   email?: string;
 }
-
-interface Language {
-  code: string;
-  name: string;
-  flag: ImageSourcePropType;
-}
-
-const languages: Language[] = [
-  {
-    code: 'en',
-    name: 'English',
-    flag: require('@/assets/flags/us.png'),
-  },
-  {
-    code: 'fr',
-    name: 'Français',
-    flag: require('@/assets/flags/fr.png'),
-  },
-  {
-    code: 'rw',
-    name: 'Kinyarwanda',
-    flag: require('@/assets/flags/rw.png'),
-  },
-];
-
-interface LanguageDropdownProps {
-  currentLanguage: string;
-  onSelectLanguage: (code: string) => void;
-  theme: ThemeType;
-  t: (key: string) => string;
-}
-
-const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
-  currentLanguage,
-  onSelectLanguage,
-  theme,
-  t,
-}) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const currentLang = languages.find((lang) => lang.code === currentLanguage);
-
-  const renderLanguageItem = ({ item }: { item: Language }) => (
-    <TouchableOpacity
-      style={[
-        styles.languageItem,
-        {
-          backgroundColor:
-            item.code === currentLanguage
-              ? `${theme.colors.primary}20`
-              : 'transparent',
-        },
-      ]}
-      onPress={() => {
-        onSelectLanguage(item.code);
-        setIsVisible(false);
-      }}
-    >
-      <Image source={item.flag} style={styles.flagIcon} />
-      <Text
-        style={[
-          styles.languageName,
-          {
-            color: theme.colors.text,
-            fontWeight: item.code === currentLanguage ? '600' : 'normal',
-          },
-        ]}
-      >
-        {item.name}
-      </Text>
-      {item.code === currentLanguage && (
-        <Feather name="check" size={20} color={theme.colors.primary} />
-      )}
-    </TouchableOpacity>
-  );
-
-  return (
-    <>
-      <TouchableOpacity
-        style={styles.languageSwitcher}
-        onPress={() => setIsVisible(true)}
-      >
-        <Text style={[styles.languageText, { color: theme.colors.text }]}>
-          {currentLang?.code.toUpperCase()}
-        </Text>
-        <Image source={currentLang?.flag} style={styles.flagIcon} />
-      </TouchableOpacity>
-
-      <Modal
-        visible={isVisible}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setIsVisible(false)}
-      >
-        <TouchableOpacity
-          style={styles.modalOverlay}
-          activeOpacity={1}
-          onPress={() => setIsVisible(false)}
-        >
-          <View
-            style={[
-              styles.modalContent,
-              {
-                backgroundColor: theme.colors.background,
-              },
-            ]}
-          >
-            <Text
-              style={[
-                styles.modalTitle,
-                {
-                  color: theme.colors.text,
-                },
-              ]}
-            >
-              {t('profile.select_language')}
-            </Text>
-            <FlatList
-              data={languages}
-              renderItem={renderLanguageItem}
-              keyExtractor={(item) => item.code}
-              style={styles.languageList}
-            />
-          </View>
-        </TouchableOpacity>
-      </Modal>
-    </>
-  );
-};
 
 interface ProfileSectionProps {
   userDetails: UserDetails;
@@ -275,6 +149,15 @@ const ProfileScreen: React.FC = () => {
     );
   };
 
+  const handleLanguageChange = async (lang: string) => {
+    try {
+      await AsyncStorage.setItem('language', lang);
+      i18n.changeLanguage(lang);
+    } catch (error) {
+      console.error('Error saving language to AsyncStorage:', error);
+    }
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView
@@ -314,9 +197,7 @@ const ProfileScreen: React.FC = () => {
               rightElement={
                 <LanguageDropdown
                   currentLanguage={currentLanguage}
-                  onSelectLanguage={(lang) => i18n.changeLanguage(lang)}
-                  theme={theme}
-                  t={t}
+                  onSelectLanguage={(lang) => handleLanguageChange(lang)}
                 />
               }
               theme={theme}

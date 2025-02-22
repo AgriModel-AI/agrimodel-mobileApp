@@ -16,6 +16,7 @@ import { useFonts, Poppins_100Thin, Poppins_200ExtraLight, Poppins_300Light,
 import { Platform, StatusBar, View } from 'react-native';
 import { CommunityProvider } from '@/contexts/CommunityContext';
 import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -31,6 +32,24 @@ export default function RootLayout() {
     Poppins_800ExtraBold,
     Poppins_900Black,
   });
+
+  useEffect(() => {
+    async function loadLanguage() {
+      try {
+        const storedLang = await AsyncStorage.getItem('language');
+        if (storedLang) {
+          i18n.changeLanguage(storedLang);
+        } else {
+          i18n.changeLanguage('en');
+        }
+      } catch (error) {
+        console.error('Error loading language from AsyncStorage:', error);
+        i18n.changeLanguage('en');
+      }
+    }
+    loadLanguage();
+  }, []);
+
 
   const onLayoutRootView = useCallback(async () => {
     if (loaded) {

@@ -1,4 +1,8 @@
 {
+  "landing": {
+    "description": "Igisubizo cyawe cy’uyu munsi n’ejo hazaza.",
+    "getStarted": "Tangira"
+  },
   "auth": {
     "login": {
       "welcome": "Murakaza neza kuri AgriModel",
