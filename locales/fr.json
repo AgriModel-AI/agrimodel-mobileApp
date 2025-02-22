@@ -121,7 +121,8 @@
       "description": "Êtes-vous sûr de vouloir bloquer ce compte ? Cette action est irréversible.",
       "cancel": "Annuler",
       "confirm": "Confirmer"
-    }
+    },
+    "select_language": "Sélectionner la langue"
   },
   "profileEdit": {
     "edit_profile": "Modifier le profil",

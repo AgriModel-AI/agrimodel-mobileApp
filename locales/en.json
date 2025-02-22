@@ -121,7 +121,8 @@
       "description": "Are you sure you want to block this account? This action cannot be undone.",
       "cancel": "Cancel",
       "confirm": "Confirm"
-    }
+    },
+    "select_language": "Select Language"
   },
   "profileEdit": {
     "edit_profile": "Edit Profile",

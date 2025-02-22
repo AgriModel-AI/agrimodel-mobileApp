@@ -122,7 +122,8 @@
       "description": "Wizeye ko ushaka gufunga iyi konti? Iyi ngingo ntishobora gusubirwaho.",
       "cancel": "Hagarika",
       "confirm": "Emeza"
-    }
+    },
+    "select_language": "Hitamo Ururimi"
   },
   "profileEdit": {
     "edit_profile": "Hindura Umwirondoro",

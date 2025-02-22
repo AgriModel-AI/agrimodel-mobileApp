@@ -87,8 +87,8 @@ const HelpPage = () => {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const [subject, setSubject] = useState();
-  const [description, setDescription] = useState();
+  const [subject, setSubject] = useState('');
+  const [description, setDescription] = useState('');
   const [type, setType] = useState(SupportRequestType.FEEDBACK);
   const [loading, setLoading] = useState(false);
 
