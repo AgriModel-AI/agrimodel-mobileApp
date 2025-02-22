@@ -163,6 +163,12 @@
     "cancel": "Hagarika",
     "delete": "Siba"
   },
+  "communityDetails": {
+    "about_community": "Ibyerekeye Umuryango.",
+    "members": "Abanyamuryango",
+    "posts": "Ibipositi",
+    "created_on": "Yaremewe kuri"
+  },
   "time": {
     "justNow": "Ubu nyine",
     "minute": "iminota 1 ishize",

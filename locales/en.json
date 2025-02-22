@@ -162,6 +162,12 @@
     "cancel": "Cancel",
     "delete": "Delete"
   },
+  "communityDetails": {
+    "about_community": "About Community.",
+    "members": "Members",
+    "posts": "Posts",
+    "created_on": "Created On"
+  },
   "time": {
     "justNow": "Just now",
     "minute": "minute ago",

@@ -130,7 +130,7 @@ const CommunityDetail = () => {
                 key={`members-${id}`}
               >
                 <MaterialCommunityIcons name="account-group" size={24} color={ theme.colors.placeholder} />
-                <Text style={[styles.statText, { color: theme.colors.placeholder }]}>{community.users} members</Text>
+                <Text style={[styles.statText, { color: theme.colors.placeholder }]}>{community.users} {t('communityDetails.members')}</Text>
               </Animated.View>
               <Animated.View 
                 entering={FadeInLeft.delay(600).duration(600)}
@@ -138,7 +138,7 @@ const CommunityDetail = () => {
                 key={`posts-${id}`}
               >
                 <FontAwesome5 name="newspaper" size={20} color={ theme.colors.placeholder} />
-                <Text style={[styles.statText, { color: theme.colors.placeholder }]}>{community.posts} posts</Text>
+                <Text style={[styles.statText, { color: theme.colors.placeholder }]}>{community.posts} {t('communityDetails.posts')}</Text>
               </Animated.View>
             </View>
           </View>
@@ -150,13 +150,13 @@ const CommunityDetail = () => {
           >
             <View style={styles.sectionHeader}>
               <MaterialCommunityIcons name="information" size={24} color={ theme.colors.text } />
-              <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>About Community</Text>
+              <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>{t('communityDetails.about_community')}</Text>
             </View>
             <Text style={[styles.description, { color: theme.colors.text }]}>{community.description}</Text>
             <View style={styles.dateContainer}>
               <Ionicons name="calendar-outline" size={20} color={ theme.colors.placeholder} />
               <Text style={[styles.dateText, { color: theme.colors.placeholder }]}>
-                Created on {new Date(community.createdAt).toLocaleDateString()}
+                {t('communityDetails.created_on')} {new Date(community.createdAt).toLocaleDateString()}
               </Text>
             </View>
           </Animated.View>
