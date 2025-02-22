@@ -4,9 +4,12 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTheme } from "@/hooks/ThemeProvider";
 import Animated, { FadeInUp, FadeIn } from "react-native-reanimated";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 const DiagnosisResultScreen = () => {
   const { theme } = useTheme();
+
+  const { t } = useTranslation();
   
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
@@ -51,8 +54,8 @@ const DiagnosisResultScreen = () => {
         }}>
           <MaterialCommunityIcons name="headphones" size={24} color="#333" style={{ marginRight: 10 }} />
           <View style={{ flex: 1 }}>
-            <Text style={{ fontWeight: "bold", color: "#333" }}>Listen to the symptoms and treatment</Text>
-            <Text style={{ fontSize: 14, color: "#666" }}>Hands full? Use the play button to listen</Text>
+            <Text style={{ fontWeight: "bold", color: "#333" }}>{t('diagnosis.listen')}</Text>
+            <Text style={{ fontSize: 14, color: "#666" }}>{t('diagnosis.hands_full')}</Text>
           </View>
           <TouchableOpacity>
             <MaterialCommunityIcons name="play-circle" size={32} color="#007AFF" />
@@ -62,7 +65,7 @@ const DiagnosisResultScreen = () => {
         {/* Symptoms Section */}
         <Animated.View entering={FadeIn.delay(400).springify()} style={{ paddingHorizontal: 20 }}>
           <Text style={{ fontSize: 18, fontWeight: "bold", color: theme.colors.text }}>
-            <MaterialCommunityIcons name="clipboard-text" size={20} /> Symptoms
+            <MaterialCommunityIcons name="clipboard-text" size={20} /> {t('diagnosis.symptopms')}
           </Text>
           <Text style={{ marginTop: 5, color: "#666" }}>
             • Symptom Checker helps you understand plant health.
@@ -74,7 +77,7 @@ const DiagnosisResultScreen = () => {
         {/* Treatment Section */}
         <Animated.View entering={FadeIn.delay(600).springify()} style={{ paddingHorizontal: 20, marginTop: 15 }}>
           <Text style={{ fontSize: 18, fontWeight: "bold", color: theme.colors.text }}>
-            <MaterialCommunityIcons name="leaf" size={20} /> Treatment
+            <MaterialCommunityIcons name="leaf" size={20} /> {t('diagnosis.treatment')}
           </Text>
           <Text style={{ marginTop: 5, color: "#666" }}>
             • Use resistant plant varieties.
