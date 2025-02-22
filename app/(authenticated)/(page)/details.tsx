@@ -40,7 +40,7 @@ const CommunityDetail = () => {
   const animationProgress = useSharedValue(0);
 
   const { theme } = useTheme();
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
   // Reset animations when screen is focused
   useFocusEffect(

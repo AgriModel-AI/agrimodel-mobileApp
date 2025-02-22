@@ -5,6 +5,7 @@ import { Feather } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/ThemeProvider';
 import { Text } from 'react-native';
 import CustomHeader from '@/component/CustomHeader';
+import { useTranslation } from 'react-i18next';
 
 interface TabLabelProps {
   title: string;
@@ -71,6 +72,8 @@ const TabIcon: React.FC<TabIconProps> = ({ name, color, focused, scale }) => {
 export default function TabLayout() {
   const { theme } = useTheme();
 
+  const { t } = useTranslation();
+
   // Fix: Create a separate animated value for each tab
   const createAnimatedScale = () => new Animated.Value(1);
 
@@ -97,7 +100,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          tabBarLabel: ({ focused, color }) => <TabLabel title="Home" color={color} focused={focused} />,
+          tabBarLabel: ({ focused, color }) => <TabLabel title={t('menus.home')} color={color} focused={focused} />,
           tabBarIcon: ({ color, focused }) => {
             const animatedScale = createAnimatedScale();
             return <TabIcon name="home" color={color} focused={focused} scale={animatedScale} />;
@@ -111,7 +114,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="diagnosis"
         options={{
-          tabBarLabel: ({ focused, color }) => <TabLabel title="Diagnosis" color={color} focused={focused} />,
+          tabBarLabel: ({ focused, color }) => <TabLabel title={t('menus.diagnosis')} color={color} focused={focused} />,
           headerShown: false,
           tabBarIcon: ({ color, focused }) => {
             const animatedScale = createAnimatedScale();
@@ -124,7 +127,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="community"
         options={{
-          tabBarLabel: ({ focused, color }) => <TabLabel title="Community" color={color} focused={focused} />,
+          tabBarLabel: ({ focused, color }) => <TabLabel title={t('menus.community')} color={color} focused={focused} />,
           headerShown: false,
           tabBarIcon: ({ color, focused }) => {
             const animatedScale = createAnimatedScale();
@@ -138,7 +141,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          tabBarLabel: ({ focused, color }) => <TabLabel title="Profile" color={color} focused={focused} />,
+          tabBarLabel: ({ focused, color }) => <TabLabel title={t('menus.profile')} color={color} focused={focused} />,
           headerShown: false,
           tabBarIcon: ({ color, focused }) => {
             const animatedScale = createAnimatedScale();
