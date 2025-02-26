@@ -32,8 +32,6 @@ const CreatePost: React.FC = () => {
     }
   }, [communitesHasFetched, dispatch]);
 
-  console.log(communities)
-
 
   const createFormDataWithImage = () => {
     const data = new FormData();

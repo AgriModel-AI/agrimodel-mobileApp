@@ -2,10 +2,12 @@ import { Stack } from 'expo-router';
 import { useTheme } from '@/hooks/ThemeProvider';
 import 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import useSocket from '@/hooks/useSocket';
 
 
 export default function Layout() {
   const { theme } = useTheme();
+  useSocket();
 
   return (
       <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>

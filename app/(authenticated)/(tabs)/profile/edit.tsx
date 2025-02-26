@@ -227,7 +227,6 @@ const EditProfileScreen = () => {
     dispatch(addUserDetail(formData))
       .unwrap()
       .then(() => {
-        console.log(userDetails);
         showToast('Profile updated successfully', 'success');
       })
       .catch((error: any) => {

@@ -119,7 +119,6 @@ const DiagnosisScreen = () => {
     if (camera) {
       const options = { quality: 0.5, base64: true };
       const data = await camera.takePictureAsync(options);
-      console.log(data.uri); // Log the photo URI
       Alert.alert("Photo Taken", t('diagnosis.picture_captured'));
     } else {
       Alert.alert("Camera Error", t('diagnosis.camera_error'));

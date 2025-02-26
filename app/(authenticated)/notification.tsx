@@ -8,6 +8,7 @@ import { router } from 'expo-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchNotifications } from '@/redux/slices/notificationSlice';
 import useRelativeTime from '@/hooks/useRelativeTime';
+import useSocket from '@/hooks/useSocket';
 
 const NotificationScreen = () => {
   const { theme } = useTheme();

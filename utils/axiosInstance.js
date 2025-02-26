@@ -22,9 +22,6 @@ const refreshAccessToken = async () => {
   try {
     const { refreshToken } = await getStoredTokens();
 
-    console.log('refresh Access Token FUnc')
-    console.log(refreshToken);
-
     if (!refreshToken) {
       throw new Error("No refresh token available.");
     }
@@ -71,7 +68,6 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true; // Mark the request as retried to prevent infinite loops
       
       const newAccessToken = await refreshAccessToken();
-      console.log(newAccessToken)
       if (newAccessToken) {
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return axiosInstance(originalRequest); // Retry the failed request with the new token

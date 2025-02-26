@@ -19,17 +19,13 @@ export const createPost = createAsyncThunk(
   'posts/createPost',
   async ({communityId, postData}: any, { rejectWithValue }) => {
     try {
-        console.log(communityId)
-        console.log(postData)
       const response = await axiosInstance.post(`/communities/${communityId}/post`, postData,{
         headers: {
             'Content-Type': 'multipart/form-data',
         },
         });
-        console.log(response.data)
       return response.data.data; // Assuming the response contains the created post data
     } catch (error: any) {
-        console.log(error.message)
       return rejectWithValue(error.response?.data || "Error creating post");
     }
   }
@@ -90,6 +86,14 @@ const postSlice = createSlice({
       state.hasFetched = false;
       state.likeLoadingStates = {};
       state.deleteLoadingStates = {};
+    },
+    updatePostLikes(state, action) {
+      const { postId, likes } = action.payload;
+      const post : any = state.posts.find((p: any) => p.postId === postId);
+
+      if (post) {
+        post.likes = likes;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -184,5 +188,5 @@ const postSlice = createSlice({
 });
 
 // Export actions and reducer
-export const { resetPosts } = postSlice.actions;
+export const { resetPosts, updatePostLikes } = postSlice.actions;
 export default postSlice.reducer;
