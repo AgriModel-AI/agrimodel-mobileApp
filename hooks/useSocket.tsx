@@ -3,7 +3,7 @@ import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { io, Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { updatePostLikes } from "@/redux/slices/postsSlice";
+import { updatePostComments, updatePostLikes } from "@/redux/slices/postsSlice";
 
 const SOCKET_URL = process.env.EXPO_PUBLIC_BACKEND_URL
 
@@ -44,6 +44,13 @@ const useSocket = (): Socket | null => {
         
             if(userDetails.userId !== data.data.userId) {
                 dispatch(updatePostLikes(data.data))
+            }
+        });
+
+        newSocket.on("new_post_comments", (data: { data: any }) => {
+        
+            if(userDetails.userId !== data.data.userId) {
+                dispatch(updatePostComments(data))
             }
         });
 

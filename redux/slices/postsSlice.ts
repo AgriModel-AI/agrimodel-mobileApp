@@ -95,6 +95,17 @@ const postSlice = createSlice({
         post.likes = likes;
       }
     },
+    updatePostComments(state, action) {
+      const { data } = action.payload;
+      const post : any = state.posts.find((p: any) => p.postId === data.postId);
+
+      if (post) {
+        if (!post.comments) {
+          post.comments = [];
+        }
+        post.comments.push(data); // Add latest comment to the top
+      }
+    },
   },
   extraReducers: (builder) => {
     // Handle fetch posts
@@ -188,5 +199,5 @@ const postSlice = createSlice({
 });
 
 // Export actions and reducer
-export const { resetPosts, updatePostLikes } = postSlice.actions;
+export const { resetPosts, updatePostLikes, updatePostComments } = postSlice.actions;
 export default postSlice.reducer;
