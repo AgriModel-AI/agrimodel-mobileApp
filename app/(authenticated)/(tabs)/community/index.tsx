@@ -40,6 +40,8 @@ const Community = () => {
   const { communities } = useSelector((state: any) => state.communites);
   const [search, setSearch] = useState<any>('');
 
+  console.log(posts)
+
   const handleSearch = (content: any) => {
     setSearch(content);
   }

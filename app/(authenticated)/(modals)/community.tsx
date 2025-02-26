@@ -32,6 +32,8 @@ const CreatePost: React.FC = () => {
     }
   }, [communitesHasFetched, dispatch]);
 
+  console.log(communities)
+
 
   const createFormDataWithImage = () => {
     const data = new FormData();
@@ -157,7 +159,7 @@ const CreatePost: React.FC = () => {
         <DropDownPicker
           open={open}
           value={value}
-          items={communities.map((community: any) => ({ label: community.name, value: community.communityId }))}
+          items={communities.filter((community: any) => community.joined === true).map((community: any) => ({ label: community.name, value: community.communityId }))}
           setOpen={setOpen}
           setValue={setValue}
           placeholder={ t('createPost.selectCommunity') }
