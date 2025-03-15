@@ -90,9 +90,17 @@ const Community = () => {
       }
     }, [communities]);
 
+  // const handleOpenModal = (post: any) => {
+  //   setSelectedPost(post);
+  //   setModalVisible(true);
+  // };
+
   const handleOpenModal = (post: any) => {
     setSelectedPost(post);
-    setModalVisible(true);
+    // Add a short delay to ensure state is updated before modal shows
+    setTimeout(() => {
+      setModalVisible(true);
+    }, 100);
   };
 
   const handleCloseModal = () => {
@@ -137,11 +145,25 @@ const Community = () => {
       <TouchableOpacity style={styles.askCommunityButton} onPress={() => router.push('/(authenticated)/(modals)/community')}>
         <Text style={styles.askCommunityButtonText}>{t('community.askCommunity')}</Text>
       </TouchableOpacity>
-
+{/* 
       {
         selectedPost &&
           <PostModal postId={selectedPost.postId} visible={modalVisible} comments={selectedPost.comments} handleCloseModal={handleCloseModal} />
-      }
+      } */}
+      {selectedPost ? (
+      <PostModal
+        postId={selectedPost.postId}
+        visible={modalVisible}
+        comments={selectedPost.comments}
+        handleCloseModal={() => {
+          setModalVisible(false);
+          // Add delay before clearing the post
+          setTimeout(() => {
+            setSelectedPost(null);
+          }, 300);
+        }}
+      />
+    ) : null}
       
     </View>
   );

@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     maxHeight: '90%',
     minHeight: '80%',
+    elevation: 20,
   },
   modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
   modalTitle: { fontSize: 18, fontFamily: 'Poppins_600SemiBold' },
