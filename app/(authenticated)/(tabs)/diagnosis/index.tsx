@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { addDistrict } from "@/redux/slices/userDetailsSlice";
 import showToast from "@/component/showToast";
+import { createPredict, setLocalImage } from "@/redux/slices/predictSlice";
 
 
 const rwandaDistricts = [
@@ -56,6 +57,85 @@ const DiagnosisScreen = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false);
   const [selectedDistrict, setSelectedDistrict] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [imageUri, setImageUri] = useState<any>(null);
+  
+
+  const createFormDataWithImage = () => {
+    const data = new FormData();
+    
+
+    const filename = imageUri.split('/').pop();
+    
+    // Infer the type from the extension
+    const match = /\.(\w+)$/.exec(filename);
+    const type = match ? `image/${match[1]}` : 'image/jpeg';
+    
+    data.append("image", {
+      uri: imageUri,
+      name: filename,
+      type: type,
+    } as any);
+  
+    return data;
+  };
+
+  const handleSubmit = async () => {
+    // try {
+    //   setLoading(true);
+    //   buttonScale.value = withTiming(0.95, { duration: 200 });
+      
+    //   const formData = createFormDataWithImage();
+      
+    //   // For debugging
+    //   console.log("Image URI:", imageUri);
+    //   console.log("Form data created:", formData);
+      
+    //   const result = await dispatch(createPredict(formData)).unwrap();
+    //   console.log("Prediction result:", result);
+      
+    //   // Make sure we have data before navigating
+    //   if (result) {
+    //     // Small delay to ensure Redux state is updated
+    //     setTimeout(() => {
+    //       router.push('/(authenticated)/(tabs)/diagnosis/result');
+    //     }, 300);
+    //   } else {
+    //     Alert.alert('Error', 'No prediction results received');
+    //   }
+    // } catch (error:any) {
+    //   console.error("Prediction error:", error);
+    //   Alert.alert(
+    //     'Error',
+    //     error?.message || 'An error occurred during prediction. Please try again.'
+    //   );
+    // } finally {
+    //   setLoading(false);
+    //   buttonScale.value = withTiming(1, { duration: 200 });
+    // }
+
+    setLoading(true);
+    buttonScale.value = withTiming(0.95, { duration: 200 });
+
+
+    const formData = createFormDataWithImage();
+
+      dispatch(createPredict(formData))
+        .unwrap()
+        .then(() => {
+          router.push('/(authenticated)/(tabs)/diagnosis/result')
+        })
+        .catch((error: any) => {
+          const errorMessage = error.response?.data || 'An error occurred. Please try again.';
+          showToast(errorMessage, 'error')
+        })
+        .finally(()=>{
+          setLoading(false);
+          buttonScale.value = withTiming(1, { duration: 200 });
+        });
+  
+  };
+
+  
 
   const dispatch = useDispatch<any>();
 
@@ -125,8 +205,6 @@ const DiagnosisScreen = () => {
 
   const { t } = useTranslation();
 
-  const [imageUri, setImageUri] = useState<any>(null);
-
   const handleImagePicker = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
@@ -178,6 +256,8 @@ const DiagnosisScreen = () => {
 
         const image = `data:${mimeType};base64,${base64}`;
         setImageUri(result.assets[0].uri);
+        dispatch(setLocalImage(result.assets[0].uri))
+        handleSubmit();
       }
     } catch (err: any) {
       alert(err.errors[0].message);
@@ -205,8 +285,9 @@ const DiagnosisScreen = () => {
 
         const image = `data:${mimeType};base64,${base64}`;
         setImageUri(result.assets[0].uri);
-
-        router.push('/(authenticated)/(tabs)/diagnosis/result')
+        dispatch(setLocalImage(result.assets[0].uri))
+        handleSubmit();
+        
       }
     } catch (err: any) {
       alert(err.errors[0].message);
@@ -344,9 +425,10 @@ const DiagnosisScreen = () => {
             }}
             activeOpacity={0.8}
             onPress={checkDistrictBeforeImagePicker}
+            disabled={loading}
           >
-            <MaterialCommunityIcons name="camera" size={22} color="#fff" style={{ marginRight: 10 }} />
-            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 17 }}>{t('diagnosis.take_phone_btn')}</Text>
+            {!loading && <MaterialCommunityIcons name="camera" size={22} color="#fff" style={{ marginRight: 10 }} />}
+            {loading ? <ActivityIndicator color="#fff" /> : <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 17 }}>{t('diagnosis.take_phone_btn')}</Text>}
           </TouchableOpacity>
         </Animated.View>
       </ScrollView>
