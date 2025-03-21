@@ -242,7 +242,8 @@
       "select_district": "Sélectionnez d'abord le district pour procéder au diagnostic",
       "confirm_district": "Êtes-vous sûr de vouloir confirmer le district ?",
       "change": "Changer",
-      "confirm": "Confirmer"
+      "confirm": "Confirmer",
+      "updatedSuccess": "District mis à jour avec succès. Vous pouvez maintenant procéder au diagnostic."
     },
     "menus": {
       "home": "Accueil",

@@ -243,7 +243,8 @@
     "select_district": "Hitamo akarere mbere yo gukomeza gukora isuzuma",
     "confirm_district": "Waba wizeye ko ushaka kwemeza akarere?",
     "change": "Hindura",
-    "confirm": "Emeza"
+    "confirm": "Emeza",
+    "updatedSuccess": "Akarere kemejwe neza. Ubu ushobora gukomeza isuzuma."
 
   },
   "menus": {

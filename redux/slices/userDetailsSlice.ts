@@ -54,6 +54,23 @@ export const addUserDetail = createAsyncThunk<UserDetails, FormData, { rejectVal
   }
 );
 
+
+export const addDistrict = createAsyncThunk<any, FormData, { rejectValue: string }>(
+  'userDetails/addDistrict',
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post<UserDetails>(`/user-details/district`, userData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to add user details');
+    }
+  }
+);
+
 // Create slice
 const userDetailsSlice = createSlice({
   name: 'userDetails',
@@ -89,6 +106,18 @@ const userDetailsSlice = createSlice({
         state.userDetails = action.payload;
       })
       .addCase(addUserDetail.rejected, (state, action: PayloadAction<string | undefined>) => {
+        state.loading = false;
+        state.error = action.payload ?? 'An error occurred';
+      })
+      .addCase(addDistrict.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addDistrict.fulfilled, (state, action: PayloadAction<UserDetails>) => {
+        state.loading = false;
+        state.userDetails = action.payload;
+      })
+      .addCase(addDistrict.rejected, (state, action: PayloadAction<string | undefined>) => {
         state.loading = false;
         state.error = action.payload ?? 'An error occurred';
       });

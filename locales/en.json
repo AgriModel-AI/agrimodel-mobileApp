@@ -242,7 +242,8 @@
     "select_district": "Select district first to proceed with diagnosis",
     "confirm_district": "Are you sure you want to confirm the district?",
     "change": "Change",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+     "updatedSuccess": "District updated successfully. You can now proceed with the diagnosis."
   },
   "menus": {
     "home": "Home",

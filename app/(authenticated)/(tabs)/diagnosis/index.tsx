@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Alert, ScrollView, Platform, ActionSheetIOS, Image, Modal, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, Alert, ScrollView, Platform, ActionSheetIOS, Image, Modal, FlatList, ActivityIndicator } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Camera, CameraView } from "expo-camera";
 import { useTheme } from "@/hooks/ThemeProvider";
-import Animated, { FadeInUp, useSharedValue, useAnimatedStyle, withSpring, FadeIn } from "react-native-reanimated";
+import Animated, { FadeInUp, useSharedValue, useAnimatedStyle, withSpring, FadeIn, withTiming } from "react-native-reanimated";
 import { Pressable } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
+import { addDistrict } from "@/redux/slices/userDetailsSlice";
+import showToast from "@/component/showToast";
 
 
 const rwandaDistricts = [
@@ -52,7 +54,8 @@ const DiagnosisScreen = () => {
   const [district, setDistrict] = useState<any>(null); 
   const [showDistrictModal, setShowDistrictModal] = useState<boolean>(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false);
-  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+  const [selectedDistrict, setSelectedDistrict] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch<any>();
 
@@ -84,17 +87,32 @@ const DiagnosisScreen = () => {
   const confirmDistrictSelection = () => {
     if (selectedDistrict) {
       // Create district object and update user details
-      const updatedUserDetails = {
-        ...userDetails,
-        district: { name: selectedDistrict }
+      const updatedUserDetails: any = {
+        district: selectedDistrict
       };
       
-      // dispatch(updateUserDetails(updatedUserDetails));
       setDistrict(selectedDistrict);
-      setShowConfirmationModal(false);
-      handleImagePicker();
+      setLoading(true);
+      dispatch(addDistrict(updatedUserDetails))
+      .unwrap()
+      .then(() => {
+        setShowConfirmationModal(false);
+        showToast(t('diagnosis.updatedSuccess'), 'info');
+      })
+      .catch((error: any) => {
+        console.error('Update error:', error);
+        showToast(typeof error === 'string' ? error : 'Failed to update district', 'error');
+      })
+      .finally(() => {
+        setLoading(false);
+        buttonScale.value = withTiming(1, { duration: 200 });
+      });
+      
     }
   };
+  const animatedButtonStyle = useAnimatedStyle(() => ({
+      transform: [{ scale: buttonScale.value }],
+    }));
 
 
    useEffect(()=> {
@@ -471,7 +489,7 @@ const DiagnosisScreen = () => {
                 </Text>
               </TouchableOpacity>
               
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={{
                   flex: 1,
                   padding: 12,
@@ -484,7 +502,22 @@ const DiagnosisScreen = () => {
                 <Text style={{ color: '#fff', fontWeight: 'bold' }}>
                   {t('diagnosis.confirm') || 'Confirm'}
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
+              <Animated.View style={animatedButtonStyle}>
+                <TouchableOpacity onPress={confirmDistrictSelection} disabled={loading} style={{
+                  flex: 1,
+                  padding: 12,
+                  backgroundColor: '#4CAF50',
+                  borderRadius: 8,
+                  alignItems: 'center',
+                }}>
+                  {loading ? <ActivityIndicator color="#fff" /> : 
+                    <Text style={{ color: '#fff', fontWeight: 'bold' }}>
+                      {t('diagnosis.confirm') || 'Confirm'}
+                    </Text>
+                  }
+                </TouchableOpacity>
+              </Animated.View>
             </View>
           </View>
         </View>
