@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { io, Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePostComments, updatePostLikes } from "@/redux/slices/postsSlice";
+import { fetchNotifications } from "@/redux/slices/notificationSlice";
 
 const SOCKET_URL = process.env.EXPO_PUBLIC_BACKEND_URL
 
@@ -38,6 +39,7 @@ const useSocket = (): Socket | null => {
 
         newSocket.on("new_notification", (data: { message: string }) => {
           Alert.alert("New Notification", data.message);
+          dispatch(fetchNotifications());
         });
 
         newSocket.on("new_post_like", (data: { data: any }) => {
