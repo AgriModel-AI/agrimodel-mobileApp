@@ -288,7 +288,7 @@ const EditProfileScreen = () => {
           </View>
 
           {/* Gender Dropdown */}
-          <View style={{ zIndex: 1000, marginBottom: 16 }}>
+          {/* <View style={{ zIndex: 1000, marginBottom: 16 }}>
             <DropDownPicker
               open={genderOpen}
               value={gender}
@@ -325,6 +325,56 @@ const EditProfileScreen = () => {
                 fontFamily: 'Poppins_400Regular',
               }}
               placeholderStyle={{ color: '#aaa' }}
+            />
+          </View> */}
+
+          
+
+          <View style={[styles.inputField, { backgroundColor: theme.colors.inputBackground, padding: 0, overflow: 'visible', zIndex: 1000, marginBottom: 16 }]}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 16, position: 'absolute', zIndex: 1001, height: '100%' }}>
+              <Feather name="users" size={20} color={theme.colors.text} />
+            </View>
+            <DropDownPicker
+              open={genderOpen}
+              value={gender}
+              items={[
+                {
+                  label: 'Male',
+                  value: 'male',
+                },
+                {
+                  label: 'Female',
+                  value: 'female',
+                },
+              ]}
+              setOpen={setGenderOpen}
+              setValue={setGender}
+              placeholder="Select Gender"
+              style={{
+                backgroundColor: 'transparent',
+                borderWidth: 0,
+                paddingLeft: 50,
+                minHeight: 48,
+              }}
+              dropDownContainerStyle={{
+                backgroundColor: theme.colors.inputBackground,
+                borderColor: theme.colors.background || '#ccc',
+                borderWidth: 1,
+                marginTop: 4,
+              }}
+              textStyle={{
+                color: theme.colors.text,
+                fontFamily: 'Poppins_400Regular',
+                fontSize: 14,
+              }}
+              placeholderStyle={{ 
+                color: '#aaa',
+                fontFamily: 'Poppins_400Regular',
+              }}
+              ArrowDownIconComponent={() => <Feather name="chevron-down" size={18} color={theme.colors.text} />}
+              ArrowUpIconComponent={() => <Feather name="chevron-up" size={18} color={theme.colors.text} />}
+              showArrowIcon={true}
+              showTickIcon={false}
             />
           </View>
 
@@ -609,6 +659,33 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Poppins_400Regular',
     textAlign: 'center',
+  },
+  dropdownMenu: {
+    position: 'absolute',
+    top: 60,
+    left: 0,
+    right: 0,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    zIndex: 1000,
+  },
+  // dropdownItem: {
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  //   padding: 12,
+  //   borderBottomWidth: 1,
+  //   borderBottomColor: '#eee',
+  // },
+  dropdownText: {
+    fontSize: 16,
+    marginLeft: 10,
+    fontFamily: 'Poppins_400Regular',
   },
 });
 

@@ -239,7 +239,12 @@
     "picture_captured": "Ifoto yawe yafashwe!",
     "camera_error": "Ntibishobotse kugera kuri kamera.",
     "camera_permission": "Uburenganzira bwo gukoresha kamera burakenewe!",
-    "media_permission": "Uburenganzira bwo gukoresha ububiko bw'amashusho burakenewe!"
+    "media_permission": "Uburenganzira bwo gukoresha ububiko bw'amashusho burakenewe!",
+    "select_district": "Hitamo akarere mbere yo gukomeza gukora isuzuma",
+    "confirm_district": "Waba wizeye ko ushaka kwemeza akarere?",
+    "change": "Hindura",
+    "confirm": "Emeza"
+
   },
   "menus": {
     "home": "Ahabanza",

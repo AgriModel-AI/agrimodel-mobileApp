@@ -154,7 +154,7 @@ const BottomSheetModal = forwardRef<BottomSheetModalRef>((_, ref) => {
         {
             title: t('community.manageCommunities'),
             description: t('community.manageCommunitiesContent'),
-            route: '/(authenticated)/(tabs)/community/list'
+            route: '/(authenticated)/(page)/list'
         },
         {
             title: t('community.myPosts'),

@@ -238,7 +238,11 @@
     "picture_captured": "Your picture has been captured!",
     "camera_error": "Could not access the camera.",
     "camera_permission": "Permission to access camera is needed!",
-    "media_permission": "Permission to access media library is needed!"
+    "media_permission": "Permission to access media library is needed!",
+    "select_district": "Select district first to proceed with diagnosis",
+    "confirm_district": "Are you sure you want to confirm the district?",
+    "change": "Change",
+    "confirm": "Confirm"
   },
   "menus": {
     "home": "Home",
@@ -259,5 +263,20 @@
     "failed_to_send_request": "Failed to send help request."
   },
   "notifications": "Notifications",
-  "no_notifications": "No notifications available"
+  "no_notifications": "No notifications available",
+  "cropDisease": {
+    "loading": "Loading disease information...",
+    "error_loading": "Error loading disease data",
+    "about": "About This Disease",
+    "symptoms": "Symptoms",
+    "treatment": "Treatment",
+    "prevention": "Prevention",
+    "related_diseases": "Related Diseases",
+    "view_all": "View All",
+    "diagnose": "Diagnose",
+    "diagnose_prompt": "Upload a photo to diagnose your crops",
+    "added_bookmark": "Disease added to bookmarks",
+    "removed_bookmark": "Disease removed from bookmarks",
+    "shared_disease": "Disease information copied to clipboard"
+  }
 }

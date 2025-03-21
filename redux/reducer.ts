@@ -1,6 +1,7 @@
 import userReducer from './slices/userSlice';
 import userDetailsReducer from './slices/userDetailsSlice';
 import diseaseReducer from './slices/diseaseSlice';
+import cropReducer from './slices/cropSlice';
 import communitesReducer from './slices/communitySlice';
 import postsReducer from './slices/postsSlice';
 import notificationsReducer from './slices/notificationSlice';
@@ -13,7 +14,8 @@ const appReducer = combineReducers({
   diseases: diseaseReducer,
   communites: communitesReducer,
   posts: postsReducer,
-  notifications: notificationsReducer
+  notifications: notificationsReducer,
+  crops: cropReducer
 });
 
 const rootReducer = (state: any, action: any) => {

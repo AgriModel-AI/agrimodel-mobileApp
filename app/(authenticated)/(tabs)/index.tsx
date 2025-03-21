@@ -11,15 +11,14 @@ import {
 import { useTheme } from '@/hooks/ThemeProvider';
 import { useTranslation } from 'react-i18next';
 import { useHeaderHeight } from '@react-navigation/elements';
-import Animated, { FadeIn, FadeInUp, FadeOut, BounceIn } from 'react-native-reanimated';
+import Animated, { FadeInUp, BounceIn } from 'react-native-reanimated';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDiseases } from '@/redux/slices/diseaseSlice';
+import { fetchCrops } from '@/redux/slices/cropSlice';
 import DiseaseSkeleton from '@/component/DiseaseSkeleton';
 import { fetchCommunities } from '@/redux/slices/communitySlice';
-import CommunityHomeActions from '@/component/CommunityHomeActions';
 import CommunitySkeleton from '@/component/CommunitySkeleton';
 import WeatherCard from '@/component/WeatherCard';
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
 import CommunityItem from '@/component/community/CommunityItem';
 
 const HomeScreen = () => {
@@ -27,14 +26,14 @@ const HomeScreen = () => {
   const { t } = useTranslation();
   const headerHeight = useHeaderHeight();
 
-  const { diseases, loading, hasFetched } = useSelector((state: any) => state.diseases);
+  const { crops, loading, hasFetched } = useSelector((state: any) => state.crops);
   const { communities, loading: loadingCommunity , hasFetched: communitesHasFetched} = useSelector((state: any) => state.communites);
 
   const dispatch = useDispatch<any>();
 
   useEffect(() => {
     if (!hasFetched) {
-      dispatch(fetchDiseases());
+      dispatch(fetchCrops());
     }
   }, [hasFetched, dispatch]);
 
@@ -66,7 +65,7 @@ const HomeScreen = () => {
         <DiseaseSkeleton count={3}/>
       ) : (
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.cropsContainer}>
-          {diseases.map((disease: any, index: number) => (
+          {crops.map((disease: any, index: number) => (
             <Animated.View key={disease.diseaseId} entering={BounceIn.delay(300 * index).duration(700)} style={styles.cropItem}>
               <Image source={{ uri: disease.images[0] }} style={styles.cropImage} />
               <Text style={[styles.cropName, { color: theme.colors.text }]}>
@@ -82,7 +81,7 @@ const HomeScreen = () => {
         <Animated.Text entering={FadeInUp.delay(300).duration(500)} style={[styles.sectionTitle, { color: theme.colors.text }]}>
           {t('home.community')}
         </Animated.Text>
-        <Pressable onPress={()=> router.push('/(authenticated)/(tabs)/community/list')}>
+        <Pressable onPress={()=> router.push('/(authenticated)/(page)/list')}>
           <Text style={{ color: theme.colors.primary, padding:2 }}>{t('home.viewAll')}</Text>
         </Pressable>
     </View>

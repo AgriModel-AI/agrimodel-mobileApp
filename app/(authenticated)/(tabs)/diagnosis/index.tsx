@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Alert, ScrollView, Platform, ActionSheetIOS, Image } from "react-native";
+import { View, Text, TouchableOpacity, Alert, ScrollView, Platform, ActionSheetIOS, Image, Modal, FlatList } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Camera, CameraView } from "expo-camera";
 import { useTheme } from "@/hooks/ThemeProvider";
@@ -8,12 +8,102 @@ import { Pressable } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+
+
+const rwandaDistricts = [
+  'Gasabo',
+  'Kicukiro',
+  'Nyarugenge',
+  'Bugesera',
+  'Gatsibo',
+  'Kayonza',
+  'Kirehe',
+  'Ngoma',
+  'Nyagatare',
+  'Rwamagana',
+  'Burera',
+  'Gakenke',
+  'Gicumbi',
+  'Musanze',
+  'Rulindo',
+  'Gisagara',
+  'Huye',
+  'Kamonyi',
+  'Muhanga',
+  'Nyamagabe',
+  'Nyanza',
+  'Nyaruguru',
+  'Ruhango',
+  'Karongi',
+  'Ngororero',
+  'Nyabihu',
+  'Nyamasheke',
+  'Rubavu',
+  'Rusizi',
+  'Rutsiro',
+];
 
 const DiagnosisScreen = () => {
   const { theme } = useTheme();
   const buttonScale = useSharedValue(1);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [camera, setCamera] = useState<any>(null);
+  const [district, setDistrict] = useState<any>(null); 
+  const [showDistrictModal, setShowDistrictModal] = useState<boolean>(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false);
+  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+
+  const dispatch = useDispatch<any>();
+
+  const { userDetails } = useSelector((state: any) => state.userDetails);
+
+  useEffect(() => {
+    if (userDetails && userDetails.district?.name) {
+      setDistrict(userDetails.district.name);
+    }
+  }, [userDetails]);
+
+  // Check if district is set before proceeding
+  const checkDistrictBeforeImagePicker = () => {
+    if (!district) {
+      setShowDistrictModal(true);
+    } else {
+      handleImagePicker();
+    }
+  };
+
+  // Handle district selection
+  const handleDistrictSelect = (district: string) => {
+    setSelectedDistrict(district);
+    setShowDistrictModal(false);
+    setShowConfirmationModal(true);
+  };
+
+  // Handle confirmation and update district
+  const confirmDistrictSelection = () => {
+    if (selectedDistrict) {
+      // Create district object and update user details
+      const updatedUserDetails = {
+        ...userDetails,
+        district: { name: selectedDistrict }
+      };
+      
+      // dispatch(updateUserDetails(updatedUserDetails));
+      setDistrict(selectedDistrict);
+      setShowConfirmationModal(false);
+      handleImagePicker();
+    }
+  };
+
+
+   useEffect(()=> {
+  
+      if (userDetails) {
+        setDistrict(userDetails.district?.name);
+      }
+  
+    }, [userDetails])
 
   const { t } = useTranslation();
 
@@ -235,13 +325,170 @@ const DiagnosisScreen = () => {
               marginTop: 10,
             }}
             activeOpacity={0.8}
-            onPress={handleImagePicker}
+            onPress={checkDistrictBeforeImagePicker}
           >
             <MaterialCommunityIcons name="camera" size={22} color="#fff" style={{ marginRight: 10 }} />
             <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 17 }}>{t('diagnosis.take_phone_btn')}</Text>
           </TouchableOpacity>
         </Animated.View>
       </ScrollView>
+
+      <Modal
+        visible={showDistrictModal}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => setShowDistrictModal(false)}
+      >
+        <View style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'rgba(0,0,0,0.5)'
+        }}>
+          <View style={{
+            width: '90%',
+            maxHeight: '80%',
+            backgroundColor: theme.colors.background,
+            borderRadius: 15,
+            padding: 20,
+            elevation: 5,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+          }}>
+            <Text style={{
+              fontSize: 18,
+              fontWeight: 'bold',
+              marginBottom: 15,
+              textAlign: 'center',
+              color: theme.colors.text
+            }}>
+              {t('diagnosis.select_district') || 'Select Your District'}
+            </Text>
+            
+            <FlatList
+              data={rwandaDistricts}
+              keyExtractor={(item) => item}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={{
+                    padding: 12,
+                    borderBottomWidth: 1,
+                    borderBottomColor: theme.dark ? '#333' : '#eee',
+                  }}
+                  onPress={() => handleDistrictSelect(item)}
+                >
+                  <Text style={{ 
+                    fontSize: 16, 
+                    color: theme.colors.text
+                  }}>
+                    {item}
+                  </Text>
+                </TouchableOpacity>
+              )}
+              style={{ maxHeight: 400 }}
+            />
+            
+            <TouchableOpacity
+              style={{
+                marginTop: 15,
+                padding: 12,
+                backgroundColor: '#f44336',
+                borderRadius: 8,
+                alignItems: 'center',
+              }}
+              onPress={() => setShowDistrictModal(false)}
+            >
+              <Text style={{ color: '#fff', fontWeight: 'bold' }}>
+                {t('diagnosis.cancel') || 'Cancel'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Confirmation Modal */}
+      <Modal
+        visible={showConfirmationModal}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => setShowConfirmationModal(false)}
+      >
+        <View style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'rgba(0,0,0,0.5)'
+        }}>
+          <View style={{
+            width: '80%',
+            backgroundColor: theme.colors.background,
+            borderRadius: 10,
+            padding: 20,
+            elevation: 5,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+          }}>
+            <Text style={{
+              fontSize: 18,
+              fontWeight: 'bold',
+              marginBottom: 15,
+              textAlign: 'center',
+              color: theme.colors.text
+            }}>
+              {t('diagnosis.confirm_district') || 'Confirm Your District'}
+            </Text>
+            
+            <Text style={{
+              fontSize: 16,
+              marginBottom: 20,
+              textAlign: 'center',
+              color: theme.colors.text
+            }}>
+              {selectedDistrict}
+            </Text>
+            
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  marginRight: 10,
+                  padding: 12,
+                  backgroundColor: '#f44336',
+                  borderRadius: 8,
+                  alignItems: 'center',
+                }}
+                onPress={() => {
+                  setShowConfirmationModal(false);
+                  setShowDistrictModal(true);
+                }}
+              >
+                <Text style={{ color: '#fff', fontWeight: 'bold' }}>
+                  {t('diagnosis.change') || 'Change'}
+                </Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  padding: 12,
+                  backgroundColor: '#4CAF50',
+                  borderRadius: 8,
+                  alignItems: 'center',
+                }}
+                onPress={confirmDistrictSelection}
+              >
+                <Text style={{ color: '#fff', fontWeight: 'bold' }}>
+                  {t('diagnosis.confirm') || 'Confirm'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };

@@ -15,8 +15,8 @@ import { useFonts, Poppins_100Thin, Poppins_200ExtraLight, Poppins_300Light,
          Poppins_700Bold, Poppins_800ExtraBold, Poppins_900Black } from '@expo-google-fonts/poppins';
 import { Platform, StatusBar, View } from 'react-native';
 import { CommunityProvider } from '@/contexts/CommunityContext';
-import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ToastProvider } from '@/component/showToast';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -67,8 +67,9 @@ export default function RootLayout() {
         <I18nextProvider i18n={i18n}>
           <CommunityProvider>
             <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
-              <ThemedRootLayout />
-              <Toast />
+              <ToastProvider>
+                <ThemedRootLayout />
+              </ToastProvider>
             </GestureHandlerRootView>
             </CommunityProvider>
         </I18nextProvider>

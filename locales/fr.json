@@ -238,7 +238,11 @@
       "picture_captured": "Votre photo a été capturée !",
       "camera_error": "Impossible d'accéder à la caméra.",
       "camera_permission": "L'autorisation d'accès à la caméra est requise !",
-      "media_permission": "L'autorisation d'accès à la bibliothèque multimédia est requise !"
+      "media_permission": "L'autorisation d'accès à la bibliothèque multimédia est requise !",
+      "select_district": "Sélectionnez d'abord le district pour procéder au diagnostic",
+      "confirm_district": "Êtes-vous sûr de vouloir confirmer le district ?",
+      "change": "Changer",
+      "confirm": "Confirmer"
     },
     "menus": {
       "home": "Accueil",

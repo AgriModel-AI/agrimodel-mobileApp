@@ -36,10 +36,11 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
-        }
+        }        
       ],
       "expo-localization",
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-av"
     ],
     "experiments": {
       "typedRoutes": true
