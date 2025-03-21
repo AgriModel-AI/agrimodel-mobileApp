@@ -6,6 +6,7 @@ export const createPredict = createAsyncThunk<any, FormData, { rejectValue: stri
   'predict/createPredict',
   async (predictData, { rejectWithValue }) => {
     try {
+      console.log("sending 5")
       const response = await axiosInstance.post('/predict', predictData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -27,11 +28,10 @@ const predictSlice = createSlice({
     data: null,
     loading: false,
     error: null,
-    localImage: '',
+    localImage: null,
   },
   reducers: {
     setLocalImage(state, action) {
-      console.log("Updating")
       state.localImage = action.payload;
     },
   },

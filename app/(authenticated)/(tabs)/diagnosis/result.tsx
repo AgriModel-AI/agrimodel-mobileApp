@@ -1,15 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTheme } from "@/hooks/ThemeProvider";
 import Animated, { FadeInUp, FadeIn } from "react-native-reanimated";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import * as FileSystem from 'expo-file-system';
 
 const DiagnosisResultScreen = () => {
   const { theme } = useTheme();
 
   const { t } = useTranslation();
+
+  const { data, localImage } = useSelector((state: any) => state.predict);
+  
+  useEffect(() => {
+    if (localImage) {
+      FileSystem.getInfoAsync(localImage)
+        .then(fileInfo => {
+          console.log('File exists:', fileInfo.exists);
+          console.log('File info:', fileInfo);
+        })
+        .catch(error => {
+          console.error('Error checking file:', error);
+        });
+    }
+  }, [localImage]);
   
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
@@ -35,13 +52,51 @@ const DiagnosisResultScreen = () => {
 
       <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
         {/* Image Section */}
-        <Animated.View entering={FadeInUp.springify()}>
-          <Image
-            source={require('@/assets/images/landing.jpg')}
-            style={{ width: "90%", height: 200, alignSelf: "center", borderRadius: 12 }}
-            resizeMode="cover"
-          />
-        </Animated.View>
+        {/* {localImage && 
+          <Animated.View entering={FadeInUp.springify()}>
+            {localImage ? (
+              <Animated.View 
+                entering={FadeInUp.springify()}
+                style={{
+                  width: "90%",
+                  height: 250,
+                  alignSelf: "center",
+                  borderRadius: 12,
+                  overflow: 'hidden',
+                  marginBottom: 15,
+                  backgroundColor: '#f0f0f0',
+                }}
+              >
+                <Image
+                  source={{ uri: localImage }}
+                  style={{ width: "100%", height: "100%" }}
+                  resizeMode="cover"
+                  key={`image-${new Date().getTime()}`}
+                  onError={(error) => {
+                    console.error('Image loading error:', error.nativeEvent.error);
+                  }}
+                  onLoad={() => {
+                    console.log('Image loaded successfully');
+                  }}
+                />
+              </Animated.View>
+            ) : (
+              <View style={{
+                width: "90%",
+                height: 250,
+                alignSelf: "center",
+                borderRadius: 12,
+                backgroundColor: '#e0e0e0',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+                <MaterialCommunityIcons name="image-off" size={50} color="#999" />
+                <Text style={{ color: '#999', marginTop: 10 }}>No image available</Text>
+              </View>
+            )}
+          </Animated.View>
+        } */}
+
 
         {/* Audio Section */}
         <Animated.View entering={FadeInUp.delay(200).springify()} style={{

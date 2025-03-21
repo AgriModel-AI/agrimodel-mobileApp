@@ -63,19 +63,19 @@ const DiagnosisScreen = () => {
   const createFormDataWithImage = () => {
     const data = new FormData();
     
-
+    console.log("inner 1")
     const filename = imageUri.split('/').pop();
     
     // Infer the type from the extension
     const match = /\.(\w+)$/.exec(filename);
     const type = match ? `image/${match[1]}` : 'image/jpeg';
-    
+    console.log("inner 2")
     data.append("image", {
       uri: imageUri,
       name: filename,
       type: type,
     } as any);
-  
+    console.log("inner 3")
     return data;
   };
 
@@ -114,6 +114,7 @@ const DiagnosisScreen = () => {
     // }
 
     setLoading(true);
+    console.log("sending 1")
     buttonScale.value = withTiming(0.95, { duration: 200 });
 
 
@@ -122,13 +123,16 @@ const DiagnosisScreen = () => {
       dispatch(createPredict(formData))
         .unwrap()
         .then(() => {
+          console.log("sending 2")
           router.push('/(authenticated)/(tabs)/diagnosis/result')
         })
         .catch((error: any) => {
+          console.log("sending 3")
           const errorMessage = error.response?.data || 'An error occurred. Please try again.';
           showToast(errorMessage, 'error')
         })
         .finally(()=>{
+          console.log("sending 4")
           setLoading(false);
           buttonScale.value = withTiming(1, { duration: 200 });
         });
