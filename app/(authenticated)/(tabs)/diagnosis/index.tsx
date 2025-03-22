@@ -58,92 +58,166 @@ const DiagnosisScreen = () => {
   const [selectedDistrict, setSelectedDistrict] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [imageUri, setImageUri] = useState<any>(null);
+  const [formData, setFormData] = useState<any>();
   
+  const dispatch = useDispatch<any>();
 
-  const createFormDataWithImage = () => {
+  const { userDetails } = useSelector((state: any) => state.userDetails);
+  const { t } = useTranslation();
+  
+  const createFormDataWithImage = (uri:any) => {
     const data = new FormData();
     
-    console.log("inner 1")
-    const filename = imageUri.split('/').pop();
+    const filename = uri.split('/').pop();
     
     // Infer the type from the extension
     const match = /\.(\w+)$/.exec(filename);
     const type = match ? `image/${match[1]}` : 'image/jpeg';
-    console.log("inner 2")
     data.append("image", {
-      uri: imageUri,
+      uri: uri,
       name: filename,
       type: type,
     } as any);
-    console.log("inner 3")
     return data;
   };
 
-  const handleSubmit = async () => {
-    // try {
-    //   setLoading(true);
-    //   buttonScale.value = withTiming(0.95, { duration: 200 });
-      
-    //   const formData = createFormDataWithImage();
-      
-    //   // For debugging
-    //   console.log("Image URI:", imageUri);
-    //   console.log("Form data created:", formData);
-      
-    //   const result = await dispatch(createPredict(formData)).unwrap();
-    //   console.log("Prediction result:", result);
-      
-    //   // Make sure we have data before navigating
-    //   if (result) {
-    //     // Small delay to ensure Redux state is updated
-    //     setTimeout(() => {
-    //       router.push('/(authenticated)/(tabs)/diagnosis/result');
-    //     }, 300);
-    //   } else {
-    //     Alert.alert('Error', 'No prediction results received');
-    //   }
-    // } catch (error:any) {
-    //   console.error("Prediction error:", error);
-    //   Alert.alert(
-    //     'Error',
-    //     error?.message || 'An error occurred during prediction. Please try again.'
-    //   );
-    // } finally {
-    //   setLoading(false);
-    //   buttonScale.value = withTiming(1, { duration: 200 });
-    // }
+  const handleSubmit = async (data = formData) => {
 
     setLoading(true);
-    console.log("sending 1")
     buttonScale.value = withTiming(0.95, { duration: 200 });
 
-
-    const formData = createFormDataWithImage();
-
-      dispatch(createPredict(formData))
-        .unwrap()
-        .then(() => {
-          console.log("sending 2")
-          router.push('/(authenticated)/(tabs)/diagnosis/result')
-        })
-        .catch((error: any) => {
-          console.log("sending 3")
-          const errorMessage = error.response?.data || 'An error occurred. Please try again.';
-          showToast(errorMessage, 'error')
-        })
-        .finally(()=>{
-          console.log("sending 4")
-          setLoading(false);
-          buttonScale.value = withTiming(1, { duration: 200 });
-        });
+    dispatch(createPredict(data))
+      .unwrap()
+      .then(() => {
+        console.log("sending 2")
+        router.push('/(authenticated)/(tabs)/diagnosis/result')
+      })
+      .catch((error: any) => {
+        console.log("sending 3")
+        const errorMessage = error.response?.data || 'An error occurred. Please try again.';
+        showToast(errorMessage, 'error')
+      })
+      .finally(()=>{
+        console.log("sending 4")
+        setLoading(false);
+        buttonScale.value = withTiming(1, { duration: 200 });
+      });
   
   };
 
-  
+  const handleImagePicker = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission needed', t('diagnosis.media_permission'));
+      return;
+    }
 
-  const dispatch = useDispatch<any>();
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: [t('diagnosis.cancel'), t('diagnosis.choose_from_gallery'), t('diagnosis.take_phone_alert')],
+          cancelButtonIndex: 0,
+        },
+        async (buttonIndex) => {
+          if (buttonIndex === 1) {
+            pickImageFromGallery();
+          } else if (buttonIndex === 2) {
+            takePhoto();
+          }
+        }
+      );
+    } else {
+      Alert.alert(
+        t('diagnosis.option'),
+        '',
+        [
+          { text: t('diagnosis.choose_from_gallery'), onPress: pickImageFromGallery },
+          { text: t('diagnosis.take_phone_alert'), onPress: takePhoto },
+          { text: t('diagnosis.cancel'), style: 'cancel' },
+        ],
+        { cancelable: true }
+      );
+    }
+  };
 
-  const { userDetails } = useSelector((state: any) => state.userDetails);
+  const pickImageFromGallery = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 4],
+        quality: 0.1,
+        base64: true,
+      });
+
+      if (!result.canceled && result.assets[0].base64) {
+        const uri = result.assets[0].uri;
+        setImageUri(uri);
+        dispatch(setLocalImage(uri));
+        
+        // Create form data directly here
+        const data = createFormDataWithImage(uri);
+        setFormData(data);
+        // Call handleSubmit with the data
+        handleSubmit(data);
+      }
+    } catch (err: any) {
+      alert(err.errors[0].message);
+    }
+  };
+
+  const takePhoto = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission needed', t('diagnosis.camera_permission'));
+      return;
+    }
+
+    try {
+      const result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [4, 4],
+        quality: 0.1,
+        base64: true,
+      });
+
+      if (!result.canceled && result.assets[0].base64) {
+        const uri = result.assets[0].uri;
+        setImageUri(uri);
+        dispatch(setLocalImage(uri));
+        
+        // Create form data directly here
+        const data = createFormDataWithImage(uri);
+        setFormData(data);
+        // Call handleSubmit with the data
+        handleSubmit(data);
+        
+      }
+    } catch (err: any) {
+      alert(err.errors[0].message);
+    }
+  };
+
+  useEffect(() => {
+    // Request camera permission using Expo's Camera API
+    const requestPermissions = async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === "granted");
+    };
+
+    requestPermissions();
+  }, []);
+
+  const takePicture = async () => {
+    if (camera) {
+      const options = { quality: 0.5, base64: true };
+      const data = await camera.takePictureAsync(options);
+      Alert.alert("Photo Taken", t('diagnosis.picture_captured'));
+    } else {
+      Alert.alert("Camera Error", t('diagnosis.camera_error'));
+    }
+  };
+
 
   useEffect(() => {
     if (userDetails && userDetails.district?.name) {
@@ -197,126 +271,6 @@ const DiagnosisScreen = () => {
   const animatedButtonStyle = useAnimatedStyle(() => ({
       transform: [{ scale: buttonScale.value }],
     }));
-
-
-   useEffect(()=> {
-  
-      if (userDetails) {
-        setDistrict(userDetails.district?.name);
-      }
-  
-    }, [userDetails])
-
-  const { t } = useTranslation();
-
-  const handleImagePicker = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Permission needed', t('diagnosis.media_permission'));
-      return;
-    }
-
-    if (Platform.OS === 'ios') {
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          options: [t('diagnosis.cancel'), t('diagnosis.choose_from_gallery'), t('diagnosis.take_phone_alert')],
-          cancelButtonIndex: 0,
-        },
-        async (buttonIndex) => {
-          if (buttonIndex === 1) {
-            pickImageFromGallery();
-          } else if (buttonIndex === 2) {
-            takePhoto();
-          }
-        }
-      );
-    } else {
-      Alert.alert(
-        t('diagnosis.option'),
-        '',
-        [
-          { text: t('diagnosis.choose_from_gallery'), onPress: pickImageFromGallery },
-          { text: t('diagnosis.take_phone_alert'), onPress: takePhoto },
-          { text: t('diagnosis.cancel'), style: 'cancel' },
-        ],
-        { cancelable: true }
-      );
-    }
-  };
-
-  const pickImageFromGallery = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 4],
-        quality: 0.1,
-        base64: true,
-      });
-
-      if (!result.canceled && result.assets[0].base64) {
-        const base64 = result.assets[0].base64;
-        const mimeType = result.assets[0].mimeType;
-
-        const image = `data:${mimeType};base64,${base64}`;
-        setImageUri(result.assets[0].uri);
-        dispatch(setLocalImage(result.assets[0].uri))
-        handleSubmit();
-      }
-    } catch (err: any) {
-      alert(err.errors[0].message);
-    }
-  };
-
-  const takePhoto = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Permission needed', t('diagnosis.camera_permission'));
-      return;
-    }
-
-    try {
-      const result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
-        aspect: [4, 4],
-        quality: 0.1,
-        base64: true,
-      });
-
-      if (!result.canceled && result.assets[0].base64) {
-        const base64 = result.assets[0].base64;
-        const mimeType = result.assets[0].mimeType;
-
-        const image = `data:${mimeType};base64,${base64}`;
-        setImageUri(result.assets[0].uri);
-        dispatch(setLocalImage(result.assets[0].uri))
-        handleSubmit();
-        
-      }
-    } catch (err: any) {
-      alert(err.errors[0].message);
-    }
-  };
-
-  useEffect(() => {
-    // Request camera permission using Expo's Camera API
-    const requestPermissions = async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === "granted");
-    };
-
-    requestPermissions();
-  }, []);
-
-  const takePicture = async () => {
-    if (camera) {
-      const options = { quality: 0.5, base64: true };
-      const data = await camera.takePictureAsync(options);
-      Alert.alert("Photo Taken", t('diagnosis.picture_captured'));
-    } else {
-      Alert.alert("Camera Error", t('diagnosis.camera_error'));
-    }
-  };
 
   const steps = [
     {
