@@ -243,7 +243,20 @@
       "confirm_district": "Êtes-vous sûr de vouloir confirmer le district ?",
       "change": "Changer",
       "confirm": "Confirmer",
-      "updatedSuccess": "District mis à jour avec succès. Vous pouvez maintenant procéder au diagnostic."
+      "updatedSuccess": "District mis à jour avec succès. Vous pouvez maintenant procéder au diagnostic.",
+      "prevention": "Prévention",
+      "unknown_disease": "Maladie Inconnue",
+      "unknown_title": "Nous n'avons pas pu identifier cette maladie",
+      "unknown_message": "L'image fournie ne correspond à aucune maladie dans notre base de données. Cela peut être dû à la qualité de l'image ou à une condition qui n'est pas encore dans notre système.",
+      "suggestions": "Que faire ensuite",
+      "try_another_image": "Essayez une autre image avec un meilleur éclairage",
+      "check_plant_health": "Vérifiez votre plante pour d'autres symptômes",
+      "consult_expert": "Consultez un expert local en plantes",
+      "try_again": "Prendre une autre photo",
+      "no_image_available": "Aucune image disponible",
+      "better_photo_tips": "Utilisez un meilleur éclairage et focalisez clairement sur les zones affectées",
+      "examine_plant_parts": "Examinez les feuilles, les tiges et le sol pour des indices supplémentaires",
+      "expert_specific_advice": "Les experts agricoles locaux peuvent fournir des conseils spécifiques"
     },
     "menus": {
       "home": "Accueil",

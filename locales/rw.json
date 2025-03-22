@@ -244,7 +244,20 @@
     "confirm_district": "Waba wizeye ko ushaka kwemeza akarere?",
     "change": "Hindura",
     "confirm": "Emeza",
-    "updatedSuccess": "Akarere kemejwe neza. Ubu ushobora gukomeza isuzuma."
+    "updatedSuccess": "Akarere kemejwe neza. Ubu ushobora gukomeza isuzuma.",
+    "prevention": "Gukumira",
+    "unknown_disease": "Indwara Itazwi",
+    "unknown_title": "Ntidushoboye kumenya iyi ndwara",
+    "unknown_message": "Ishusho watanze ntijyanye n'indwara iri mu bubiko bwacu. Ibi bishobora guterwa n'ubwiza bw'ishusho cyangwa ikibazo kitari mu buryo bwacu.",
+    "suggestions": "Ibyo wakora",
+    "try_another_image": "Gerageza indi shusho ifite urumuri rwiza",
+    "check_plant_health": "Reba ibindi bimenyetso kuri iyi gihingwa",
+    "consult_expert": "Baza inzobere mu bihingwa",
+    "try_again": "Fata indi foto",
+    "no_image_available": "Nta shusho ihari",
+    "better_photo_tips": "Koresha urumuri rwiza kandi werekeze neza ku bice byangiritse",
+    "examine_plant_parts": "Suzuma amababi, igiti n'ubutaka ku bindi bimenyetso",
+    "expert_specific_advice": "Inzobere z'ubuhinzi zo mu karere bashobora gutanga inama zihariye"
 
   },
   "menus": {

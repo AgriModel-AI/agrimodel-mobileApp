@@ -243,7 +243,20 @@
     "confirm_district": "Are you sure you want to confirm the district?",
     "change": "Change",
     "confirm": "Confirm",
-     "updatedSuccess": "District updated successfully. You can now proceed with the diagnosis."
+    "updatedSuccess": "District updated successfully. You can now proceed with the diagnosis.",
+    "prevention": "Prevention",
+    "unknown_disease": "Unknown Disease",
+    "unknown_title": "We couldn't identify this disease",
+    "unknown_message": "The image provided doesn't match any disease in our database. This might be due to image quality or a condition not yet in our system.",
+    "suggestions": "What to do next",
+    "try_another_image": "Try another image with better lighting",
+    "check_plant_health": "Check your plant for other symptoms",
+    "consult_expert": "Consult with a local plant expert",
+    "try_again": "Take another photo",
+    "no_image_available": "No image available",
+    "better_photo_tips": "Use better lighting and focus clearly on affected areas",
+    "examine_plant_parts": "Examine leaves, stems and soil for additional clues",
+    "expert_specific_advice": "Local agricultural experts can provide specific advice"
   },
   "menus": {
     "home": "Home",
