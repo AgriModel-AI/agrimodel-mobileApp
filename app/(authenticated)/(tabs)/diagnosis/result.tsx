@@ -38,11 +38,23 @@ const DiagnosisResultScreen = () => {
       padding: 20,
     }}
   >
-    <TouchableOpacity>
+    <TouchableOpacity style={{ position: 'absolute', left: 20, zIndex: 10 }}>
       <MaterialCommunityIcons onPress={()=>router.back()} name="arrow-left" size={24} color={theme.colors.text} />
     </TouchableOpacity>
-    <Text style={{ fontSize: 20, fontWeight: "bold", color: theme.colors.text, marginLeft:40 }}>
-      { data && data.disease_status !== "unknown" ? data.disease_status : t('diagnosis.unknown_disease') }
+    
+    <Text 
+      style={{ 
+        fontSize: 20, 
+        fontWeight: "bold", 
+        color: theme.colors.text,
+        flex: 1,
+        textAlign: 'center',
+        marginHorizontal: 40 // Give space for the back button
+      }}
+      numberOfLines={1}
+      ellipsizeMode="tail"
+    >
+      { data && data.disease_status !== "unknown" ? `${data.cropName}: ${data.disease_status}` : t('diagnosis.unknown_disease') }
     </Text>
   </View>
 
@@ -59,7 +71,6 @@ const DiagnosisResultScreen = () => {
               alignSelf: "center",
               borderRadius: 12,
               overflow: 'hidden',
-              marginBottom: 15,
               backgroundColor: '#f0f0f0',
             }}
           >
