@@ -1,0 +1,284 @@
+{
+  "landing": {
+    "description": "Igisubizo cyawe cy’uyu munsi n’ejo hazaza.",
+    "getStarted": "Tangira"
+  },
+  "auth": {
+    "login": {
+      "welcome": "Murakaza neza kuri AgriModel",
+      "email_label": "Imeyili",
+      "email_placeholder": "Injiza imeyili yawe",
+      "password_label": "Ijambo ry'ibanga",
+      "password_placeholder": "Injiza ijambo ry'ibanga",
+      "forgot_password": "Wibagiwe ijambo ry'ibanga?",
+      "login": "Injira",
+      "signup_prompt": "Nta konti ufite?",
+      "signup_link": "Iyandikishe",
+      "or_text": "- CYANGWA -",
+      "google_login": "Komeza na Google",
+      "switch_theme": "Hindura Uburyo"
+    },
+    "signup": {
+      "create_account": "Fungura Konti",
+      "names_label": "Izina",
+      "names_placeholder": "Injiza Izina",
+      "email_label": "Imeyili",
+      "email_placeholder": "Injiza imeyili yawe",
+      "phone_label": "Telefone",
+      "phone_placeholder": "Injiza nimero ya telefone yawe",
+      "password_label": "Ijambo ry'ibanga",
+      "password_placeholder": "Injiza ijambo ry'ibanga",
+      "confirm_password_label": "Emeza Ijambo ry'ibanga",
+      "confirm_password_placeholder": "Emeza ijambo ry'ibanga",
+      "agree_terms": "Nemeranya n'ibyerekeye",
+      "terms_and_conditions": "amategeko & amateka",
+      "already_have_account": "Ufite konti?",
+      "login_link": "Injira",
+      "google_signup": "Iyandikishe ukoresheje Google",
+      "or_text": "- CYANGWA -"
+    },
+    "forgot_password": {
+      "title": "Wibagiwe ijambo ry'ibanga",
+      "description": "Injiza imeri yawe kugira ngo usubizeho konti yawe",
+      "email_label": "Imeli",
+      "email_placeholder": "Injiza imeri yawe",
+      "continue": "Komeza",
+      "cancel": "Hagarika"
+    },
+    "verification": {
+      "title": "Injiza Umubare W'ibyemezo",
+      "description": "Twakohereje umubare kuri email yawe {{email}}",
+      "verify": "Emeza",
+      "resend_prompt": "Ntabwo wakiriye umubare?",
+      "resend_code": "Ohereza nanone",
+      "back_to_login": "Subira kwinjira",
+      "back": "Garuka",
+      "next": "Komeza"
+
+    },
+    "reset_password": {
+      "title": "Shyiramo Ijambo Ry'ibanga Rishya",
+      "description": "Ijambo ry’ibanga rigomba kuba ritarakoreshejwe mbere",
+      "password_label": "Ijambo ry'ibanga rishya",
+      "password_placeholder": "Injiza ijambo ry'ibanga rishya",
+      "confirm_password_label": "Emeza ijambo ry'ibanga",
+      "confirm_password_placeholder": "Emeza ijambo ry'ibanga",
+      "continue": "Emeza",
+      "cancel": "Hagarika"
+    },
+    "success": {
+      "title": "Byakozwe Neza",
+      "description": "Mwakoze neza! Konti yawe yashyizwe mu buryo neza. Urashobora kwinjira ubu.",
+      "continue": "Komeza"
+    }
+  },
+  "terms": {
+    "title": "Amategeko n'Amabwiriza",
+    "subtitle": "Gukoresha Urubuga Rusange",
+    "last_revised": "Igihe Gishya Cyavuguruwe:",
+    "last_revised_date": "Nzeri 11, 2024",
+    "content": [
+      {
+        "header": "1. AMASEZERANO YAWE",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vel diam eget dolor vehicula dictum sit amet id lectus. Integer blandit nulla ac risus consequat, nec elementum metus aliquam. Quisque fringilla nisi in felis facilisis, a gravida enim dignissim. Donec eget justo ut lectus ultrices fermentum vitae id nisl."
+      },
+      {
+        "header": "NYIRIRINDE",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vel diam eget dolor vehicula dictum sit amet id lectus. Integer blandit nulla ac risus consequat, nec elementum metus aliquam. Quisque fringilla nisi in felis facilisis."
+      },
+      {
+        "header": "AMASEZERANO YACU",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vel diam eget dolor vehicula dictum sit amet id lectus. Integer blandit nulla ac risus consequat, nec elementum metus aliquam."
+      }
+    ]
+  },
+  "home": {
+    "greeting": "Murakaza neza",
+    "today_weather": "Ikirere Cy'uyu munsi",
+    "good_weather_advice": "Uyu munsi ni ikirere cyiza cyo gukoresha imiti yica udukoko",
+    "crops_detected": "Imyaka Tubasha Gusesengura no Guhishura",
+    "community": "Umuryango",
+    "members": "Abanyamuryango",
+    "join": "Injira",
+    "humidity": "Ubushuhe",
+    "leave": "Sohoka",
+    "leave_confirmation_title": "Sohoka muri iyi group",
+    "leave_confirmation_message": "Uzi neza ko ushaka gusohoka muri iyi group? Ushobora kongera kuyinjiramo nyuma.",
+    "confirm_leave": "Yego, sohoka",
+    "cancel": "Reka",
+    "joining": "Kwinjira...",
+    "leaving": "Gusohoka...",
+    "viewAll": "Reba byose"
+  }, 
+  "profile": {
+    "edit_profile": "Hindura Umwirondoro",
+    "preferences": "Ibyifuzo",
+    "change_theme": "Hindura Insanganyamatsiko",
+    "change_language": "Hindura Ururimi",
+    "actions": "Ibikorwa",
+    "terms_and_conditions": "Amategeko n'Amabwiriza",
+    "logout": "Sohoka",
+    "change_password": "Hindura Ijambo ry’ibanga",
+    "block_account": "Funga konti",
+    "help": "Ubufasha",
+    "blockAccountConfirmation": {
+      "title": "Emeza gufunga konti",
+      "description": "Wizeye ko ushaka gufunga iyi konti? Iyi ngingo ntishobora gusubirwaho.",
+      "cancel": "Hagarika",
+      "confirm": "Emeza"
+    },
+    "select_language": "Hitamo Ururimi"
+  },
+  "profileEdit": {
+    "edit_profile": "Hindura Umwirondoro",
+    "save_changes": "Bika Impinduka",
+    "select_district": "Hitamo Akarere Kawe",
+    "close": "Funga",
+    "take_photo": "Fata Ifoto",
+    "choose_from_gallery": "Hitamo Muri Galeri",
+    "cancel": "Hagarika",
+    "permission_denied": "Uburenganzira Bwanze",
+    "enable_permissions_camera": "Ugomba kwemerera gukoresha Camera."
+  },
+  "profileChangePassword": {
+    "page_title": "Hindura Ijambo ry'Ibanga",
+    "title": "Bikira Konti Yawe",
+    "description": "Kubera umutekano, nyuma yo guhindura ijambo ry'ibanga, uzasohoka mu buryo bwikora. Nyamuneka, menya neza ko ijambo ry'ibanga rishya atari iryo wabanje gukoresha. Ijambo ry'ibanga rishya n'iryemezo bigomba guhura kugirango ukomeze.",
+    "current_password_label": "Ijambo ry'ibanga ry'ubu",
+    "current_password_placeholder": "Shyiramo ijambo ry'ibanga ry'ubu",
+    "password_label": "Ijambo ry'ibanga rishya",
+    "password_placeholder": "Shyiramo ijambo ry'ibanga rishya",
+    "confirm_password_label": "Emeza ijambo ry'ibanga",
+    "confirm_password_placeholder": "Emeza ijambo ry'ibanga",
+    "continue": "Hindura Ijambo ry'Ibanga"
+  },
+  "community": {
+    "community": "Umuryango",
+    "search": "Shakisha",
+    "askCommunity": "Baza Umuryango",
+    "likes": "Ishyigikiye",
+    "comments": "Ibitekerezo",
+    "menu": "Ibirimo",
+    "manageCommunities": "Bungura Imiryango",
+    "manageCommunitiesContent": "Bungura imiryango yawe y'ubuhinzi. Injira mu miryango isanzweho, kandi uhuze n'abandi bashakashatsi. Sangiye ubumenyi, ubunararibonye n'imyitwarire myiza n'abandi banyamuryango b'umuryango.",
+    "myPosts": "Imyandiko yanjye",
+    "myPostsContent": "Reba kandi ukore ku myandiko yawe y'umuryango. Hindura ibikubiye, kandi urebe uko imyandiko yawe ifasha abandi bashakashatsi. Sangiye urugendo rwawe rw'ubuhinzi n'ibitekerezo n'umuryango.",
+    "inputPlaceholder": "Tanga igitekerezo",
+    "post": "Ohereza",
+    "noCommentsYet": "Nta gitekerezo kiraboneka",
+    "beTheFirstToComment": "Ba uwa mbere utanga igitekerezo!",
+    "emptyPosts": {
+      "title": "Nta Byanditse Biriho",
+      "description": "Kurikira imiryango myinshi kugirango ubone ibyanditse bishimishije kandi wihuze n'abandi basangira inyungu nawe."
+    },
+    "deleteConfirm": "Emeza gusiba",
+    "deleteDescription": "Wizeye ko ushaka gusiba iyi post?",
+    "cancel": "Hagarika",
+    "delete": "Siba"
+  },
+  "communityDetails": {
+    "about_community": "Ibyerekeye Umuryango.",
+    "members": "Abanyamuryango",
+    "posts": "Ibipositi",
+    "created_on": "Yaremewe kuri"
+  },
+  "time": {
+    "justNow": "Ubu nyine",
+    "minute": "iminota 1 ishize",
+    "minutes": "iminota {{count}} ishize",
+    "hour": "isaha 1 ishize",
+    "hours": "amasaha {{count}} ashize",
+    "day": "umunsi 1 ushize",
+    "days": "iminsi {{count}} ishize",
+    "week": "icyumweru 1 gishize",
+    "weeks": "ibyumweru {{count}} bishize",
+    "month": "ukwezi 1 gushize",
+    "months": "amezi {{count}} ashize",
+    "year": "umwaka 1 ushize",
+    "years": "imyaka {{count}} ishize"
+  },
+  "createPost": {
+    "title": "Shyiraho ubutumwa bushya mu muryango",
+    "close": "Funga",
+    "uploadImage": "Shyiraho ifoto",
+    "description": "Andika ubusobanuro",
+    "selectCommunity": "Hitamo umuryango",
+    "post": "Ohereza",
+    "pleaseUploadImage": "Nyamuneka hitamo ifoto.",
+    "pleaseSelectCommunity": "Nyamuneka hitamo umuryango wo gutangamo ubutumwa.",
+    "pleaseEnterDescription": "Nyamuneka andika ibisobanuro.",
+    "postSuccess": "Ibyo watangaje byoherejwe neza!"
+  },
+  "diagnosis": {
+    "title": "Isuzuma ry'Igihingwa & Inyoboranyobozi y'Ubuvuzi",
+    "take_photo": {
+      "title": "Fata cyangwa Ohereza Ifoto",
+      "description": "Urupapuro nyamukuru rwerekana amahitamo abiri: 'Fata Ifoto' cyangwa 'Ohereza Ifoto'."
+    },
+    "crop_detection": {
+      "title": "Gusuzuma Igihingwa",
+      "description": "Nyuma yo gufata cyangwa kohereza ifoto, porogaramu ihita itunganya ishusho."
+    },
+    "instant_diagnosis": {
+      "title": "Isuzuma ako kanya",
+      "description": "Iyo ishusho imaze gutunganywa, porogaramu ihita itanga ibisubizo by’isuzuma."
+    },
+    "treatment_suggestions": {
+      "title": "Inama z’Ubuvuzi",
+      "description": "Tanga urutonde ruto rw’imiti cyangwa intambwe z’icyakorwa."
+    },
+    "option": "Hitamo imwe mu mahitamo",
+    "take_phone_btn": "Fata Ifoto",
+    "choose_from_gallery": "Hitamo Muri Album",
+    "take_phone_alert": "Fata Ifoto",
+    "cancel": "Hagarika",
+    "listen": "Umva ibimenyetso n'ubuvuzi",
+    "hands_full": "Ufite amaboko yuzuye? Koresha buto yo gukina kugira ngo wumve.",
+    "symptopms": "Ibimenyetso",
+    "treatment": "Ubuvuzi",
+    "picture_captured": "Ifoto yawe yafashwe!",
+    "camera_error": "Ntibishobotse kugera kuri kamera.",
+    "camera_permission": "Uburenganzira bwo gukoresha kamera burakenewe!",
+    "media_permission": "Uburenganzira bwo gukoresha ububiko bw'amashusho burakenewe!",
+    "select_district": "Hitamo akarere mbere yo gukomeza gukora isuzuma",
+    "confirm_district": "Waba wizeye ko ushaka kwemeza akarere?",
+    "change": "Hindura",
+    "confirm": "Emeza",
+    "updatedSuccess": "Akarere kemejwe neza. Ubu ushobora gukomeza isuzuma.",
+    "prevention": "Gukumira",
+    "unknown_disease": "Indwara Itazwi",
+    "unknown_title": "Ntidushoboye kumenya iyi ndwara",
+    "unknown_message": "Ishusho watanze ntijyanye n'indwara iri mu bubiko bwacu. Ibi bishobora guterwa n'ubwiza bw'ishusho cyangwa ikibazo kitari mu buryo bwacu.",
+    "suggestions": "Ibyo wakora",
+    "try_another_image": "Gerageza indi shusho ifite urumuri rwiza",
+    "check_plant_health": "Reba ibindi bimenyetso kuri iyi gihingwa",
+    "consult_expert": "Baza inzobere mu bihingwa",
+    "try_again": "Fata indi foto",
+    "no_image_available": "Nta shusho ihari",
+    "better_photo_tips": "Koresha urumuri rwiza kandi werekeze neza ku bice byangiritse",
+    "examine_plant_parts": "Suzuma amababi, igiti n'ubutaka ku bindi bimenyetso",
+    "expert_specific_advice": "Inzobere z'ubuhinzi zo mu karere bashobora gutanga inama zihariye"
+
+  },
+  "menus": {
+    "home": "Ahabanza",
+    "profile": "Umwirondoro",
+    "diagnosis": "Isuzuma",
+    "community": "Umuryango"
+  },
+  "help": {
+    "title": "Ubufasha",
+    "subject": "Ingingo",
+    "description": "Ibisobanuro",
+    "type": "Ubwoko",
+    "send_request": "Ohereza Ibisabwa",
+    "request_sent": "Ibisabwa byoherejwe",
+    "request_sent_success": "Ibisabwa byoherejwe neza. Ibindi bizahuzwa binyuze kuri email.",
+    "error": "Ikosa",
+    "unexpected_error": "Habaye ikosa ritunguranye.",
+    "failed_to_send_request": "Ntibyashoboye kohereza ibisabwa."
+  },
+  "notifications": "Amatangazo",
+  "no_notifications": "Nta matangazo ahari"
+    
+}
