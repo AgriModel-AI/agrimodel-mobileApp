@@ -8,7 +8,7 @@ import { setNetworkStatus } from '../redux/slices/networkSlice';
 import { processPendingActions } from '../redux/slices/userDetailsSlice';
 
 export const NetworkMonitor: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
   const { isConnected } = useSelector((state: RootState) => state.network);
   const { pendingActions } = useSelector((state: RootState) => state.userDetails);
 

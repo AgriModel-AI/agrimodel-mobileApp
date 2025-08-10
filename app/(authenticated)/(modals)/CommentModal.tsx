@@ -2,17 +2,18 @@
 import { Comment } from '@/types/community';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-    ActivityIndicator,
-    FlatList,
-    KeyboardAvoidingView,
-    Modal,
-    Platform,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  ActivityIndicator,
+  FlatList,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../../contexts/ThemeContext';
@@ -35,6 +36,7 @@ const CommentModal = ({
   comments 
 }: CommentModalProps) => {
   const { theme } = useTheme();
+  const { t } = useTranslation(); // Added useTranslation hook
   const insets = useSafeAreaInsets();
   const [newComment, setNewComment] = useState('');
   const [loading, setLoading] = useState(false);
@@ -79,13 +81,13 @@ const CommentModal = ({
               <Ionicons name="close" size={24} color={theme.colors.text} />
             </TouchableOpacity>
             <Text style={[styles.title, { color: theme.colors.text }]}>
-              Comments
+              {t('community.comments', 'Comments')}
             </Text>
             <View style={styles.placeholder} />
           </View>
           
           <Text style={[styles.postAuthor, { color: theme.colors.placeholder }]}>
-            Post by {postAuthor}
+            {t('community.postBy', 'Post by {{author}}', { author: postAuthor })}
           </Text>
           
           {loading ? (
@@ -100,7 +102,7 @@ const CommentModal = ({
               contentContainerStyle={styles.commentsList}
               ListEmptyComponent={
                 <Text style={[styles.noComments, { color: theme.colors.placeholder }]}>
-                  No comments yet. Be the first to comment!
+                  {t('community.noComments', 'No comments yet. Be the first to comment!')}
                 </Text>
               }
             />
@@ -110,7 +112,7 @@ const CommentModal = ({
             <TextInput
               value={newComment}
               onChangeText={setNewComment}
-              placeholder="Add a comment..."
+              placeholder={t('community.addCommentPlaceholder', 'Add a comment...')}
               placeholderTextColor={theme.colors.placeholder}
               style={[styles.input, { color: theme.colors.text }]}
               multiline

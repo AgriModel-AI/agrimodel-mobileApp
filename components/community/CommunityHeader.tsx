@@ -2,6 +2,7 @@ import { Community } from '@/types/community';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -23,7 +24,7 @@ export const CommunityHeader = ({
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  
+  const { t } = useTranslation();
   // Animation values - Fixed ranges
   const headerHeight = 180; // Full height
   const collapsedHeight = 55; // Collapsed height (smaller for better effect)
@@ -100,7 +101,7 @@ export const CommunityHeader = ({
           }}
         >
           <Text style={[styles.title, { color: theme.colors.text }]}>
-            Community
+            {t('community.title', 'Community')}
           </Text>
         </Animated.View>
         
@@ -141,7 +142,7 @@ export const CommunityHeader = ({
         transform: [{ translateY: contentTranslateY }]
       }]}>
         <Text style={[styles.subtitle, { color: theme.colors.text }]}>
-          Connect with your agricultural communities and share knowledge
+          {t('community.subtitle', 'Connect with your agricultural communities and share knowledge')}
         </Text>
         
         <View style={styles.selectorContainer}>

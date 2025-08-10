@@ -1,17 +1,17 @@
-import RatingModal from '@/components/diagnosis/RatingModal';
 import { useTheme } from '@/contexts/ThemeContext';
 import { AppDispatch, RootState } from '@/redux/persistConfig';
-import { clearCurrentDiagnosis, rateDiagnosis } from '@/redux/slices/diagnosisSlice';
-import { Ionicons } from '@expo/vector-icons';
+import { fetchDiagnosisResults } from '@/redux/slices/predictSlice';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-  Alert,
+  ActivityIndicator,
+  FlatList,
   Image,
   Platform,
-  ScrollView,
-  Share,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -19,219 +19,177 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-const DiagnosisResultScreen = () => {
-  const {theme} = useTheme();
+const HistoryScreen = () => {
+  const { theme } = useTheme();
+  const { t } = useTranslation(); // Added useTranslation hook
   const navigation = useNavigation<StackNavigationProp<any>>();
   const dispatch = useDispatch<AppDispatch>();
   
-  const diagnosis = useSelector((state: RootState) => state.diagnosis.currentDiagnosis);
-  
-  const [showRating, setShowRating] = useState(false);
-  const [activeTab, setActiveTab] = useState<'symptoms' | 'treatment' | 'prevention'>('symptoms');
-  
-  const handleBack = () => {
-    dispatch(clearCurrentDiagnosis());
-    navigation.goBack();
-  };
-  
-  const handleShare = async () => {
-    if (!diagnosis) return;
-    
-    try {
-      await Share.share({
-        message: `I found ${diagnosis.diseaseName} in my ${diagnosis.cropName || 'plant'} using the Plant Disease Diagnosis app!`,
-        url: diagnosis.serverImageUrl,
-        title: 'Plant Disease Diagnosis Result'
-      });
-    } catch (error) {
-      console.error('Error sharing diagnosis:', error);
-      Alert.alert('Error', 'Failed to share diagnosis');
+  const { results, loading, hasFetched } = useSelector((state: RootState) => state.predict);
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    if (!hasFetched) {
+      dispatch(fetchDiagnosisResults());
     }
+  }, [dispatch, hasFetched]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await dispatch(fetchDiagnosisResults());
+    setRefreshing(false);
   };
-  
-  const handleRating = async (rating: number, feedback?: string, isCorrect?: boolean) => {
-    if (!diagnosis) return;
-    
-    try {
-      await dispatch(rateDiagnosis({
-        diagnosisId: diagnosis.diagnosisId,
-        rating,
-        feedback,
-        isCorrect
-      })).unwrap();
-      
-      setShowRating(false);
-      Alert.alert('Thank You', 'Your feedback helps us improve our diagnosis system.');
-    } catch (error) {
-      console.error('Error submitting rating:', error);
-      Alert.alert('Error', 'Failed to submit rating. Please try again.');
-    }
+
+  const formatDate = (dateString: any) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
   };
-  
-  if (!diagnosis) {
-    return (
-      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-        <Text style={{ color: theme.colors.text }}>No diagnosis available</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Diagnosis')}>
-          <Text style={{ color: theme.colors.primary }}>Go to Diagnosis</Text>
-        </TouchableOpacity>
+
+  const handleResultPress = (result: any) => {
+    navigation.navigate('DiagnosisDetail', { result });
+  };
+
+  const renderHistoryItem = ({ item }: any) => (
+    <TouchableOpacity
+      style={[styles.historyCard, { backgroundColor: theme.colors.card }]}
+      onPress={() => handleResultPress(item)}
+      activeOpacity={0.7}
+    >
+      <View style={styles.cardLayout}>
+        <Image 
+          source={{ uri: item.image_path }} 
+          style={styles.historyImage}
+          resizeMode="cover"
+        />
+        
+        <View style={styles.historyContent}>
+          <Text style={[styles.diseaseTitle, { color: theme.colors.text }]} numberOfLines={1}>
+            {item.detected ? 
+              (item.disease?.name || t('diagnosis.history.unknownDisease', 'Unknown Disease')) : 
+              t('diagnosis.history.healthyPlant', 'Healthy Plant')}
+          </Text>
+          
+          <View style={styles.infoRow}>
+            <Ionicons name="calendar-outline" size={12} color={theme.colors.text} style={styles.infoIcon} />
+            <Text style={[styles.infoText, { color: theme.colors.text }]}>
+              {formatDate(item.date)}
+            </Text>
+          </View>
+          
+          <View style={styles.infoRow}>
+            <Ionicons name="location-outline" size={12} color={theme.colors.text} style={styles.infoIcon} />
+            <Text style={[styles.infoText, { color: theme.colors.text }]} numberOfLines={1}>
+              {item.district?.districtName || t('diagnosis.history.unknownLocation', 'Unknown')}
+            </Text>
+          </View>
+          
+          <View style={styles.badgeRow}>
+            <View style={[
+              styles.statusBadge, 
+              { backgroundColor: item.detected ? theme.colors.notification + '15' : theme.colors.success + '15' }
+            ]}>
+              <View style={[
+                styles.statusDot, 
+                { backgroundColor: item.detected ? theme.colors.notification : theme.colors.success }
+              ]} />
+              <Text style={[
+                styles.statusText, 
+                { color: item.detected ? theme.colors.notification : theme.colors.success }
+              ]}>
+                {item.detected ? 
+                  t('diagnosis.history.diseaseDetected', 'Disease Detected') : 
+                  t('diagnosis.history.healthy', 'Healthy')}
+              </Text>
+            </View>
+            
+            {item.rated && (
+              <View style={[styles.ratedBadge, { backgroundColor: theme.colors.primary + '20' }]}>
+                <Ionicons name="star" size={10} color={theme.colors.primary} />
+                <Text style={[styles.ratedText, { color: theme.colors.primary }]}>
+                  {t('diagnosis.history.rated', 'Rated')}
+                </Text>
+              </View>
+            )}
+          </View>
+        </View>
       </View>
-    );
-  }
-  
+    </TouchableOpacity>
+  );
+
+  const renderEmptyState = () => (
+    <View style={styles.emptyState}>
+      <MaterialCommunityIcons 
+        name="leaf-maple-off" 
+        size={80} 
+        color={theme.colors.placeholder} 
+        style={styles.emptyIcon}
+      />
+      <Text style={[styles.emptyTitle, { color: theme.colors.text }]}>
+        {t('diagnosis.history.noDiagnosesYet', 'No Diagnoses Yet')}
+      </Text>
+      <Text style={[styles.emptyText, { color: theme.colors.placeholder }]}>
+        {t('diagnosis.history.emptyMessage', 'Your plant disease diagnosis history will appear here')}
+      </Text>
+      <TouchableOpacity
+        style={[styles.newDiagnosisButton, { backgroundColor: theme.colors.primary }]}
+        onPress={() => navigation.navigate('diagnosis')}
+      >
+        <MaterialCommunityIcons name="leaf-maple" size={20} color="white" style={styles.buttonIcon} />
+        <Text style={styles.newDiagnosisText}>
+          {t('diagnosis.history.startNewDiagnosis', 'Start New Diagnosis')}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       {/* Header */}
       <View style={[styles.header, { backgroundColor: theme.colors.card }]}>
-        <TouchableOpacity onPress={handleBack}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
           <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
         </TouchableOpacity>
         <Text style={[styles.headerTitle, { color: theme.colors.text }]}>
-          Diagnosis Result
+          {t('diagnosis.history.title', 'Diagnosis History')}
         </Text>
-        <TouchableOpacity onPress={handleShare}>
-          <Ionicons name="share-outline" size={24} color={theme.colors.primary} />
-        </TouchableOpacity>
+        <View style={styles.headerRight} />
       </View>
       
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Plant Image */}
-        <View style={[styles.imageContainer, { backgroundColor: theme.colors.card }]}>
-          <Image 
-            source={{ uri: diagnosis.imageUri }} 
-            style={styles.image}
-            resizeMode="cover"
-          />
-        </View>
-        
-        {/* Diagnosis Info */}
-        <View style={[styles.resultCard, { backgroundColor: theme.colors.card }]}>
-          <View style={styles.resultHeader}>
-            <View>
-              <Text style={[styles.cropName, { color: theme.colors.text }]}>
-                {diagnosis.cropName || 'Unknown Plant'}
-              </Text>
-              <Text style={[styles.diseaseName, { color: theme.colors.danger }]}>
-                {diagnosis.diseaseName}
-              </Text>
-            </View>
-            <View style={[styles.confidenceTag, { backgroundColor: getConfidenceColor(diagnosis.confidence, theme) }]}>
-              <Text style={styles.confidenceText}>
-                {(diagnosis.confidence * 100).toFixed(0)}% Confidence
-              </Text>
-            </View>
-          </View>
-          
-          <Text style={[styles.description, { color: theme.colors.text }]}>
-            {diagnosis.diseaseDescription || 'No description available'}
+      {/* Main Content */}
+      {loading && !refreshing ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+          <Text style={[styles.loadingText, { color: theme.colors.text }]}>
+            {t('diagnosis.history.loading', 'Loading your diagnosis history...')}
           </Text>
-          
-          {/* Tabs */}
-          <View style={styles.tabs}>
-            <TouchableOpacity 
-              style={[
-                styles.tab, 
-                activeTab === 'symptoms' && { borderBottomColor: theme.colors.primary }
-              ]}
-              onPress={() => setActiveTab('symptoms')}
-            >
-              <Text style={[
-                styles.tabText, 
-                { color: activeTab === 'symptoms' ? theme.colors.primary : theme.colors.text }
-              ]}>
-                Symptoms
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={[
-                styles.tab, 
-                activeTab === 'treatment' && { borderBottomColor: theme.colors.primary }
-              ]}
-              onPress={() => setActiveTab('treatment')}
-            >
-              <Text style={[
-                styles.tabText, 
-                { color: activeTab === 'treatment' ? theme.colors.primary : theme.colors.text }
-              ]}>
-                Treatment
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={[
-                styles.tab, 
-                activeTab === 'prevention' && { borderBottomColor: theme.colors.primary }
-              ]}
-              onPress={() => setActiveTab('prevention')}
-            >
-              <Text style={[
-                styles.tabText, 
-                { color: activeTab === 'prevention' ? theme.colors.primary : theme.colors.text }
-              ]}>
-                Prevention
-              </Text>
-            </TouchableOpacity>
-          </View>
-          
-          {/* Tab Content */}
-          <View style={styles.tabContent}>
-            {activeTab === 'symptoms' && (
-              <Text style={[styles.tabContentText, { color: theme.colors.text }]}>
-                {diagnosis.diseaseSymptoms || 'No symptom information available'}
-              </Text>
-            )}
-            {activeTab === 'treatment' && (
-              <Text style={[styles.tabContentText, { color: theme.colors.text }]}>
-                {diagnosis.diseaseTreatment || 'No treatment information available'}
-              </Text>
-            )}
-            {activeTab === 'prevention' && (
-              <Text style={[styles.tabContentText, { color: theme.colors.text }]}>
-                {diagnosis.diseasePrevention || 'No prevention information available'}
-              </Text>
-            )}
-          </View>
-          
-          {/* Footer */}
-          <View style={styles.resultFooter}>
-            <Text style={[styles.resultTimestamp, { color: theme.colors.placeholder }]}>
-              Diagnosed on {new Date(diagnosis.timestamp).toLocaleString()}
-            </Text>
-            <Text style={[styles.resultVersion, { color: theme.colors.placeholder }]}>
-              Model v{diagnosis.modelVersion}
-            </Text>
-          </View>
         </View>
-      </ScrollView>
-      
-      {/* Rate Button */}
-      {!diagnosis.isRated && (
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[styles.rateButton, { backgroundColor: theme.colors.accent }]}
-            onPress={() => setShowRating(true)}
-          >
-            <Ionicons name="star" size={20} color="white" />
-            <Text style={styles.rateButtonText}>Rate This Diagnosis</Text>
-          </TouchableOpacity>
-        </View>
+      ) : (
+        <FlatList
+          data={results}
+          renderItem={renderHistoryItem}
+          keyExtractor={(item:any) => item.resultId.toString()}
+          contentContainerStyle={styles.listContainer}
+          ListEmptyComponent={renderEmptyState}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={[theme.colors.primary]}
+              tintColor={theme.colors.primary}
+            />
+          }
+        />
       )}
-      
-      {/* Rating Modal */}
-      <RatingModal
-        visible={showRating}
-        onClose={() => setShowRating(false)}
-        onSubmit={handleRating}
-      />
     </View>
   );
-};
-
-// Helper function to get confidence color
-const getConfidenceColor = (confidence: number, theme: any) => {
-  if (confidence >= 0.9) return theme.colors.success;
-  if (confidence >= 0.75) return theme.colors.info;
-  if (confidence >= 0.5) return theme.colors.warning;
-  return theme.colors.danger;
 };
 
 const styles = StyleSheet.create({
@@ -251,129 +209,145 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3,
   },
+  backButton: {
+    padding: 4,
+  },
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
   },
-  scrollContent: {
-    padding: 16,
-    paddingBottom: 100,
+  headerRight: {
+    width: 32,
   },
-  imageContainer: {
-    borderRadius: 12,
-    overflow: 'hidden',
-    marginBottom: 16,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-  },
-  image: {
-    width: '100%',
-    height: 200,
-  },
-  resultCard: {
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-  },
-  resultHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 12,
-  },
-  cropName: {
-    fontSize: 16,
-    marginBottom: 4,
-  },
-  diseaseName: {
-    fontSize: 22,
-    fontWeight: 'bold',
-  },
-  confidenceTag: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 16,
-  },
-  confidenceText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 12,
-  },
-  description: {
-    fontSize: 14,
-    lineHeight: 20,
-    marginBottom: 16,
-  },
-  tabs: {
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: '#EEEEEE',
-    marginBottom: 16,
-  },
-  tab: {
+  loadingContainer: {
     flex: 1,
-    paddingVertical: 12,
-    alignItems: 'center',
-    borderBottomWidth: 2,
-    borderBottomColor: 'transparent',
-  },
-  tabText: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  tabContent: {
-    minHeight: 100,
-  },
-  tabContentText: {
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  resultFooter: {
-    marginTop: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  resultTimestamp: {
-    fontSize: 12,
-  },
-  resultVersion: {
-    fontSize: 12,
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 16,
-    backgroundColor: 'transparent',
-  },
-  rateButton: {
-    borderRadius: 12,
-    paddingVertical: 16,
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    padding: 20,
   },
-  rateButtonText: {
+  loadingText: {
+    marginTop: 12,
+    fontSize: 16,
+  },
+  listContainer: {
+    padding: 16,
+    paddingBottom: 80,
+  },
+  historyCard: {
+    borderRadius: 12,
+    marginBottom: 10,
+    overflow: 'hidden',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  cardLayout: {
+    flexDirection: 'row',
+    height: 110,
+  },
+  historyImage: {
+    width: 110,
+    height: '100%',
+  },
+  historyContent: {
+    flex: 1,
+    padding: 10,
+    justifyContent: 'space-between',
+  },
+  diseaseTitle: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  infoIcon: {
+    marginRight: 4,
+  },
+  infoText: {
+    fontSize: 12,
+  },
+  badgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  statusBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  statusDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginRight: 4,
+  },
+  statusText: {
+    fontWeight: '600',
+    fontSize: 12,
+  },
+  ratedBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 8,
+  },
+  ratedText: {
+    fontSize: 10,
+    fontWeight: '600',
+    marginLeft: 2,
+  },
+  emptyState: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+    height: 500,
+  },
+  emptyIcon: {
+    marginBottom: 24,
+    opacity: 0.7,
+  },
+  emptyTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  emptyText: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 32,
+    maxWidth: '80%',
+    lineHeight: 22,
+  },
+  newDiagnosisButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 14,
+    borderRadius: 12,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
+  buttonIcon: {
+    marginRight: 8,
+  },
+  newDiagnosisText: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 16,
-    marginLeft: 8,
   },
 });
 
-export default DiagnosisResultScreen;
+export default HistoryScreen;

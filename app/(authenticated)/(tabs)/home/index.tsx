@@ -1,26 +1,22 @@
 // app/(authenticated)/(tabs)/home/index.tsx
+import { useOfflineData } from '@/hooks/useOfflineData';
+import { fetchNotifications } from '@/redux/slices/notificationSlice';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useDispatch, useSelector } from 'react-redux';
 import { CommunityPreview } from '../../../../components/home/CommunityPreview';
 import { HomeHeader } from '../../../../components/home/HomeHeader';
 import { QuickActions } from '../../../../components/home/QuickActions';
-// import { RecentDiagnosis } from '../../../../components/home/RecentDiagnosis';
-import { useOfflineData } from '@/hooks/useOfflineData';
-import { fetchNotifications } from '@/redux/slices/notificationSlice';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useDispatch, useSelector } from 'react-redux';
 import { WeatherCard } from '../../../../components/home/WeatherCard';
 import { Card } from '../../../../components/ui/Card';
 import { useTheme } from '../../../../contexts/ThemeContext';
 import { useNetworkStatus } from '../../../../hooks/useNetworkStatus';
 
-
-
-// import { DiagnosisService } from '../../../../services/api/diagnosisService';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -32,9 +28,6 @@ export default function HomeScreen() {
   const dispatch = useDispatch<any>();
   
   const [refreshing, setRefreshing] = useState(false);
-  // const [recentDiagnoses, setRecentDiagnoses] = useState([]);
-  // const [loading, setLoading] = useState(true);
-
   const { notifications, hasFetched: hasFetchedNotification } = useSelector((state: any) => state.notifications);
 
   useEffect(() => {
@@ -57,33 +50,11 @@ export default function HomeScreen() {
       }
     }, [hasOfflineData, refreshData]);
     
-    
-  
-  
-  
-  // const loadInitialData = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const diagnoses:any = [];
-  //     // const diagnoses = await DiagnosisService.getDiagnosisHistory(1, 3);
-  //     setRecentDiagnoses(diagnoses);
-  //   } catch (error) {
-  //     console.error('Error loading initial data:', error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   loadInitialData();
-  // }, []);
-  
   const onRefresh = async () => {
     if (!isConnected) return;
     
     setRefreshing(true);
     try {
-      // await loadInitialData();
     } finally {
       setRefreshing(false);
     }
@@ -133,17 +104,6 @@ export default function HomeScreen() {
         />
         
         <WeatherCard isConnected={isConnected} />
-        
-        <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
-          {t('home.recentDiagnosis')}
-        </Text>
-        
-        {/* <RecentDiagnosis
-          diagnoses={recentDiagnoses}
-          loading={loading}
-          onViewAll={() => router.push('/(authenticated)/(tabs)/diagnosis/history')}
-          onItemPress={(id) => router.push(`/(authenticated)/(modals)/diagnosis-result?id=${id}`)}
-        /> */}
         
         {isConnected && (
           <>

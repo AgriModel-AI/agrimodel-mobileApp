@@ -3,6 +3,7 @@ import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
 import { Tabs } from 'expo-router';
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Platform, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Animated, {
   Easing,
@@ -24,6 +25,7 @@ interface CenteredTabBarButtonProps {
 }
 
 export default function TabsLayout() {
+  const { t } = useTranslation();
   const { theme, isDark } = useTheme();
   const insets = useSafeAreaInsets();
   const activeIndex = useSharedValue(0);
@@ -173,7 +175,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="home"
         options={{
-          title: 'Home',
+          title: t('tabs.home'),
           tabBarIcon: ({ focused }) => (
             <Animated.View style={[styles.iconContainer, getIconAnimatedStyle(0)]}>
               <Ionicons name={focused ? 'home' : 'home-outline'} size={24} color={getIconColor(focused)} />
@@ -185,7 +187,7 @@ export default function TabsLayout() {
               fontSize: 11,
               fontWeight: focused ? '600' : '400',
             }}>
-              Home
+              {t('tabs.home')}
             </Animated.Text>
           ),
         }}
@@ -194,7 +196,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="explore"
         options={{
-          title: 'Explore',
+          title: t('tabs.explore'),
           tabBarIcon: ({ focused }) => (
             <Animated.View style={[styles.iconContainer, getIconAnimatedStyle(1)]}>
               <Ionicons name={focused ? 'compass' : 'compass-outline'} size={24} color={getIconColor(focused)} />
@@ -206,7 +208,7 @@ export default function TabsLayout() {
               fontSize: 11,
               fontWeight: focused ? '600' : '400',
             }}>
-              Explore
+              {t('tabs.explore')}
             </Animated.Text>
           ),
         }}
@@ -215,7 +217,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="diagnosis"
         options={{
-          title: 'Scan',
+          title: t('tabs.scan'),
           tabBarLabel: () => null, // No label for the center tab
           tabBarIcon: () => (
             <Animated.View style={[styles.centeredIconContainer, getIconAnimatedStyle(2)]}>
@@ -228,7 +230,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="community"
         options={{
-          title: 'Community',
+          title: t('tabs.community'),
           tabBarIcon: ({ focused }) => (
             <Animated.View style={[styles.iconContainer, getIconAnimatedStyle(3)]}>
               <Ionicons name={focused ? 'people' : 'people-outline'} size={24} color={getIconColor(focused)} />
@@ -240,7 +242,7 @@ export default function TabsLayout() {
               fontSize: 11,
               fontWeight: focused ? '600' : '400',
             }}>
-              Community
+              {t('tabs.community')}
             </Animated.Text>
           ),
         }}
@@ -249,7 +251,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'Profile',
+          title: t('tabs.profile'),
           tabBarIcon: ({ focused }) => (
             <Animated.View style={[styles.iconContainer, getIconAnimatedStyle(4)]}>
               <Ionicons name={focused ? 'person' : 'person-outline'} size={24} color={getIconColor(focused)} />
@@ -261,7 +263,7 @@ export default function TabsLayout() {
               fontSize: 11,
               fontWeight: focused ? '600' : '400',
             }}>
-              Profile
+              {t('tabs.profile')}
             </Animated.Text>
           ),
         }}

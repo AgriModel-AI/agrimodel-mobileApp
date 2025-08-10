@@ -30,8 +30,6 @@ export default function Login() {
     login, 
     isLoginLoading
   } = useAuth();
-  
-  // ...other state management
     
   const { theme, isDark } = useTheme();
   const { t } = useTranslation();
@@ -131,7 +129,7 @@ export default function Login() {
                   <Ionicons name="leaf" size={40} color="#fff" />
                 </LinearGradient>
                 <Text style={styles.appName}>AgriModel</Text>
-                <Text style={styles.tagline}>Sustainable living made simple</Text>
+                <Text style={styles.tagline}>{t('login.subtitle')}</Text>
               </Animated.View>
               
               <Animated.View 

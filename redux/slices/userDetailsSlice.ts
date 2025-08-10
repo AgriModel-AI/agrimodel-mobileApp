@@ -151,7 +151,6 @@ export const processPendingActions = createAsyncThunk<
     } else if (action.type === 'userDetails/addDistrict') {
       await dispatch(addDistrict(action.payload));
     }
-    // Add other action types as needed
   }
   
   // Clear pending actions after processing

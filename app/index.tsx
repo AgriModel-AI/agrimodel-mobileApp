@@ -1,4 +1,3 @@
-import { useAppStateSync } from '@/hooks/useAppStateSync';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Redirect } from 'expo-router';
 import { useEffect, useState } from 'react';
@@ -10,9 +9,6 @@ export default function Index() {
   const { theme } = useTheme();
   const [isLoading, setIsLoading] = useState(true);
   const [initialRoute, setInitialRoute] = useState<string | null>(null);
-  const [hasTokens, setHasTokens] = useState<boolean>(false);
-
-  useAppStateSync(hasTokens);
 
   useEffect(() => {
     const checkInitialRoute = async () => {
@@ -27,7 +23,6 @@ export default function Index() {
         
         // Check if user is authenticated
         const hasToken = await TokenManager.hasTokens();
-        setHasTokens(hasToken);
           
         if (hasToken) {
             setInitialRoute('/(authenticated)/(tabs)/home/');

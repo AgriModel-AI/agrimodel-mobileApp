@@ -1,16 +1,16 @@
 // components/DistrictSelector.tsx
-import { useTheme } from '@/contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-    FlatList,
-    Modal,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  FlatList,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
+import { useTheme } from '../../contexts/ThemeContext';
 
 // Rwanda districts
 const rwandaDistricts = [
@@ -25,50 +25,67 @@ interface DistrictSelectorProps {
   visible: boolean;
   onClose: () => void;
   onSelectDistrict: (district: string) => void;
+  currentDistrict?: string | null;
 }
 
 const DistrictSelector: React.FC<DistrictSelectorProps> = ({
   visible,
   onClose,
-  onSelectDistrict
+  onSelectDistrict,
+  currentDistrict
 }) => {
-  const {theme} = useTheme();
-  const [searchText, setSearchText] = useState('');
-  const [selectedDistrict, setSelectedDistrict] = useState('');
+  const { theme } = useTheme();
+  const { t } = useTranslation();
+  const [selectedDistrict, setSelectedDistrict] = useState<string>('');
   
-  // Filter districts based on search text
-  const filteredDistricts = rwandaDistricts.filter(district => 
-    district.toLowerCase().includes(searchText.toLowerCase())
-  );
+  useEffect(() => {
+    if (visible) {
+      setSelectedDistrict(currentDistrict || '');
+    }
+  }, [visible, currentDistrict]);
   
   const handleSelect = (district: string) => {
     setSelectedDistrict(district);
+    // Immediately select and close
+    onSelectDistrict(district);
+    onClose();
   };
   
-  const handleConfirm = () => {
-    onSelectDistrict(selectedDistrict);
+  const renderDistrict = ({ item }: { item: string }) => {
+    const isSelected = selectedDistrict === item;
+    
+    return (
+      <TouchableOpacity
+        style={[
+          styles.districtItem,
+          { borderBottomColor: theme.colors.border },
+          isSelected && { 
+            backgroundColor: theme.colors.primary + '20'
+          }
+        ]}
+        onPress={() => handleSelect(item)}
+        activeOpacity={0.7}
+      >
+        <Text style={[
+          styles.districtText, 
+          { color: theme.colors.text },
+          isSelected && { 
+            color: theme.colors.primary, 
+            fontWeight: '600' 
+          }
+        ]}>
+          {item}
+        </Text>
+        {isSelected && (
+          <Ionicons 
+            name="checkmark-circle" 
+            size={20} 
+            color={theme.colors.primary} 
+          />
+        )}
+      </TouchableOpacity>
+    );
   };
-  
-  const renderDistrict = ({ item }: { item: string }) => (
-    <TouchableOpacity
-      style={[
-        styles.districtItem,
-        selectedDistrict === item && { backgroundColor: theme.colors.primary + '20' }
-      ]}
-      onPress={() => handleSelect(item)}
-    >
-      <Text style={[
-        styles.districtText, 
-        { color: theme.colors.text },
-        selectedDistrict === item && { color: theme.colors.primary, fontWeight: 'bold' }
-      ]}>
-        {item}
-      </Text>
-      {selectedDistrict === item && (
-        <Ionicons name="checkmark-circle" size={20} color={theme.colors.primary} />
-      )}
-    </TouchableOpacity>
-  );
   
   return (
     <Modal
@@ -78,58 +95,32 @@ const DistrictSelector: React.FC<DistrictSelectorProps> = ({
       onRequestClose={onClose}
     >
       <View style={styles.modalOverlay}>
-        <View style={[styles.modalContainer, { backgroundColor: theme.colors.card }]}>
+        <View style={[
+          styles.modalContainer, 
+          { backgroundColor: theme.colors.card }
+        ]}>
+          {/* Header */}
           <View style={styles.modalHeader}>
             <Text style={[styles.modalTitle, { color: theme.colors.text }]}>
-              Select Your District
+              {t('profile.select_district', 'Select District')}
             </Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+            <TouchableOpacity 
+              onPress={onClose} 
+              style={styles.closeButton}
+            >
               <Ionicons name="close" size={24} color={theme.colors.text} />
             </TouchableOpacity>
           </View>
           
-          <Text style={[styles.modalSubtitle, { color: theme.colors.text }]}>
-            Please select your district to help us provide location-specific disease information.
-          </Text>
-          
-          <View style={[styles.searchContainer, { backgroundColor: theme.colors.background }]}>
-            <Ionicons name="search" size={20} color={theme.colors.placeholder} />
-            <TextInput
-              style={[styles.searchInput, { color: theme.colors.text }]}
-              placeholder="Search districts..."
-              placeholderTextColor={theme.colors.placeholder}
-              value={searchText}
-              onChangeText={setSearchText}
-            />
-            {searchText.length > 0 && (
-              <TouchableOpacity onPress={() => setSearchText('')}>
-                <Ionicons name="close-circle" size={20} color={theme.colors.placeholder} />
-              </TouchableOpacity>
-            )}
-          </View>
-          
+          {/* District List */}
           <FlatList
-            data={filteredDistricts}
+            data={rwandaDistricts}
             renderItem={renderDistrict}
             keyExtractor={(item) => item}
             style={styles.districtList}
-            contentContainerStyle={styles.districtListContent}
-            showsVerticalScrollIndicator={false}
+            showsVerticalScrollIndicator={true}
+            keyboardShouldPersistTaps="handled"
           />
-          
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={[
-                styles.confirmButton,
-                { backgroundColor: theme.colors.primary },
-                !selectedDistrict && { opacity: 0.5 }
-              ]}
-              onPress={handleConfirm}
-              disabled={!selectedDistrict}
-            >
-              <Text style={styles.confirmButtonText}>Confirm Selection</Text>
-            </TouchableOpacity>
-          </View>
         </View>
       </View>
     </Modal>
@@ -142,13 +133,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
+    padding: 20,
   },
   modalContainer: {
     width: '100%',
-    maxHeight: '80%',
+    height: '70%',
     borderRadius: 16,
-    padding: 16,
+    overflow: 'hidden',
     elevation: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -159,62 +150,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0,0,0,0.1)',
   },
   modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontWeight: '600',
+    flex: 1,
   },
   closeButton: {
     padding: 4,
   },
-  modalSubtitle: {
-    fontSize: 14,
-    marginBottom: 16,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 8,
-    marginBottom: 16,
-  },
-  searchInput: {
-    flex: 1,
-    paddingVertical: 8,
-    paddingHorizontal: 8,
-    fontSize: 16,
-  },
   districtList: {
     flex: 1,
-  },
-  districtListContent: {
-    paddingBottom: 8,
   },
   districtItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 8,
-    borderRadius: 8,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
   districtText: {
     fontSize: 16,
-  },
-  buttonContainer: {
-    marginTop: 16,
-  },
-  confirmButton: {
-    borderRadius: 8,
-    paddingVertical: 12,
-    alignItems: 'center',
-  },
-  confirmButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
+    flex: 1,
   },
 });
 

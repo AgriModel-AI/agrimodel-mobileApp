@@ -2,6 +2,7 @@ import { Community } from '@/types/community';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   Image,
@@ -34,6 +35,7 @@ const AskCommunityModal = ({
   isLoading
 }: AskCommunityModalProps) => {
   const { theme } = useTheme();
+  const { t } = useTranslation(); // Added useTranslation hook
   const insets = useSafeAreaInsets();
   const [selectedCommunityId, setSelectedCommunityId] = useState<number | null>(null);
   const [content, setContent] = useState('');
@@ -99,14 +101,14 @@ const AskCommunityModal = ({
               <Ionicons name="close" size={24} color={theme.colors.text} />
             </TouchableOpacity>
             <Text style={[styles.title, { color: theme.colors.text }]}>
-              Ask Community
+              {t('community.askCommunity', 'Ask Community')}
             </Text>
             <View style={styles.placeholder} />
           </View>
           
           <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
             <Text style={[styles.label, { color: theme.colors.text }]}>
-              Select Community
+              {t('community.selectCommunity', 'Select Community')}
             </Text>
             
             <ScrollView 
@@ -141,19 +143,19 @@ const AskCommunityModal = ({
                 ))
               ) : (
                 <Text style={[styles.noCommunitiesText, { color: theme.colors.placeholder }]}>
-                  {"You haven't joined any communities yet."}
+                  {t('community.noCommunitiesJoined', "You haven't joined any communities yet.")}
                 </Text>
               )}
             </ScrollView>
 
             <Text style={[styles.label, { color: theme.colors.text }]}>
-              Content
+              {t('community.content', 'Content')}
             </Text>
             <TextInput
               ref={contentInputRef}
               value={content}
               onChangeText={setContent}
-              placeholder="Share your thoughts, questions, or insights..."
+              placeholder={t('community.contentPlaceholder', 'Share your thoughts, questions, or insights...')}
               placeholderTextColor={theme.colors.placeholder}
               style={[
                 styles.contentInput, 
@@ -187,7 +189,7 @@ const AskCommunityModal = ({
             >
               <Ionicons name="image-outline" size={24} color={theme.colors.primary} />
               <Text style={[styles.imageButtonText, { color: theme.colors.primary }]}>
-                Add Image
+                {t('community.addImage', 'Add Image')}
               </Text>
             </TouchableOpacity>
           </ScrollView>
@@ -206,7 +208,9 @@ const AskCommunityModal = ({
               {isLoading ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
-                <Text style={styles.submitButtonText}>Post</Text>
+                <Text style={styles.submitButtonText}>
+                  {t('community.post', 'Post')}
+                </Text>
               )}
             </TouchableOpacity>
           </View>

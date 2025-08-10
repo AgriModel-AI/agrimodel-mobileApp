@@ -3,18 +3,19 @@ import { Post } from '@/types/community';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-    ActivityIndicator,
-    Image,
-    KeyboardAvoidingView,
-    Modal,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  ActivityIndicator,
+  Image,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../../contexts/ThemeContext';
@@ -32,6 +33,7 @@ const EditPostModal = ({
   post
 }: EditPostModalProps) => {
   const { theme } = useTheme();
+  const { t } = useTranslation(); // Added useTranslation hook
   const insets = useSafeAreaInsets();
   const { editPost } = useCommunity();
   
@@ -124,19 +126,19 @@ const EditPostModal = ({
               <Ionicons name="close" size={24} color={theme.colors.text} />
             </TouchableOpacity>
             <Text style={[styles.title, { color: theme.colors.text }]}>
-              Edit Post
+              {t('community.editPost', 'Edit Post')}
             </Text>
             <View style={styles.placeholder} />
           </View>
           
           <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
             <Text style={[styles.label, { color: theme.colors.text }]}>
-              Content
+              {t('community.content', 'Content')}
             </Text>
             <TextInput
               value={content}
               onChangeText={setContent}
-              placeholder="Update your post content..."
+              placeholder={t('community.updatePostPlaceholder', 'Update your post content...')}
               placeholderTextColor={theme.colors.placeholder}
               style={[
                 styles.contentInput, 
@@ -170,7 +172,7 @@ const EditPostModal = ({
             >
               <Ionicons name="image-outline" size={24} color={theme.colors.primary} />
               <Text style={[styles.imageButtonText, { color: theme.colors.primary }]}>
-                {image ? 'Change Image' : 'Add Image'}
+                {image ? t('community.changeImage', 'Change Image') : t('community.addImage', 'Add Image')}
               </Text>
             </TouchableOpacity>
           </ScrollView>
@@ -189,7 +191,9 @@ const EditPostModal = ({
               {isLoading ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
-                <Text style={styles.submitButtonText}>Update Post</Text>
+                <Text style={styles.submitButtonText}>
+                  {t('community.updatePost', 'Update Post')}
+                </Text>
               )}
             </TouchableOpacity>
           </View>

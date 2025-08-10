@@ -1,84 +1,175 @@
 // screens/DiagnosisResultScreen.tsx
-import RatingModal from '@/components/diagnosis/RatingModal';
 import { useTheme } from '@/contexts/ThemeContext';
 import { AppDispatch, RootState } from '@/redux/persistConfig';
-import { clearCurrentDiagnosis, rateDiagnosis } from '@/redux/slices/diagnosisSlice';
+import { setLocalImage } from '@/redux/slices/predictSlice';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-    Alert,
-    Image,
-    Platform,
-    ScrollView,
-    Share,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  Alert,
+  Image,
+  Platform,
+  ScrollView,
+  Share,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 const DiagnosisResultScreen = () => {
   const {theme} = useTheme();
+  const { t } = useTranslation(); // Added useTranslation hook
   const navigation = useNavigation<StackNavigationProp<any>>();
   const dispatch = useDispatch<AppDispatch>();
   
-  const diagnosis = useSelector((state: RootState) => state.diagnosis.currentDiagnosis);
+  const predictData:any = useSelector((state: RootState) => state.predict.data);
+  const localImage:any = useSelector((state: RootState) => state.predict.localImage);
+
+  useEffect(()=>{
+    console.log(predictData)
+  }, [predictData])
   
-  const [showRating, setShowRating] = useState(false);
   const [activeTab, setActiveTab] = useState<'symptoms' | 'treatment' | 'prevention'>('symptoms');
   
   const handleBack = () => {
-    dispatch(clearCurrentDiagnosis());
+    dispatch(setLocalImage(null));
     navigation.goBack();
   };
   
   const handleShare = async () => {
-    if (!diagnosis) return;
+    if (!predictData) return;
+    
+    const message = predictData.detected 
+      ? t('diagnosis.shareMessageDetected', 'I found {{disease}} in my {{plant}} plant using the Plant Disease Diagnosis app!', {
+          disease: predictData.diseaseName || predictData.disease_status,
+          plant: predictData.cropName || predictData.plant_type
+        })
+      : t('diagnosis.shareMessageNotDetected', 'I scanned a plant using the Plant Disease Diagnosis app!');
     
     try {
       await Share.share({
-        message: `I found ${diagnosis.diseaseName} in my ${diagnosis.cropName || 'plant'} using the Plant Disease Diagnosis app!`,
-        url: diagnosis.serverImageUrl,
-        title: 'Plant Disease Diagnosis Result'
+        message,
+        url: predictData.image_url || localImage,
+        title: t('diagnosis.shareTitle', 'Plant Disease Diagnosis Result')
       });
     } catch (error) {
       console.error('Error sharing diagnosis:', error);
-      Alert.alert('Error', 'Failed to share diagnosis');
+      Alert.alert(t('common.error', 'Error'), t('diagnosis.shareError', 'Failed to share diagnosis'));
     }
   };
   
-  const handleRating = async (rating: number, feedback?: string, isCorrect?: boolean) => {
-    if (!diagnosis) return;
-    
-    try {
-      await dispatch(rateDiagnosis({
-        diagnosisId: diagnosis.diagnosisId,
-        rating,
-        feedback,
-        isCorrect
-      })).unwrap();
-      
-      setShowRating(false);
-      Alert.alert('Thank You', 'Your feedback helps us improve our diagnosis system.');
-    } catch (error) {
-      console.error('Error submitting rating:', error);
-      Alert.alert('Error', 'Failed to submit rating. Please try again.');
-    }
-  };
-  
-  if (!diagnosis) {
+  if (!predictData) {
     return (
       <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-        <Text style={{ color: theme.colors.text }}>No diagnosis available</Text>
+        <Text style={{ color: theme.colors.text }}>
+          {t('diagnosis.noDiagnosis', 'No diagnosis available')}
+        </Text>
         <TouchableOpacity onPress={() => navigation.navigate('Diagnosis')}>
-          <Text style={{ color: theme.colors.primary }}>Go to Diagnosis</Text>
+          <Text style={{ color: theme.colors.primary }}>
+            {t('diagnosis.goToDiagnosis', 'Go to Diagnosis')}
+          </Text>
         </TouchableOpacity>
       </View>
     );
   }
+  
+  // Handle the case when no disease is detected
+  if (!predictData.detected) {
+    return (
+      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+        {/* Header */}
+        <View style={[styles.header, { backgroundColor: theme.colors.card }]}>
+          <TouchableOpacity onPress={handleBack}>
+            <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
+          </TouchableOpacity>
+          <Text style={[styles.headerTitle, { color: theme.colors.text }]}>
+            {t('diagnosis.resultTitle', 'Diagnosis Result')}
+          </Text>
+          <TouchableOpacity onPress={handleShare}>
+            <Ionicons name="share-outline" size={24} color={theme.colors.primary} />
+          </TouchableOpacity>
+        </View>
+        
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          {/* Plant Image */}
+          <View style={[styles.imageContainer, { backgroundColor: theme.colors.card }]}>
+            <Image 
+              source={{ uri: localImage }} 
+              style={styles.image}
+              resizeMode="cover"
+            />
+          </View>
+          
+          {/* No Disease Detected Card */}
+          <View style={[styles.resultCard, { backgroundColor: theme.colors.card }]}>
+            <View style={[styles.noResultContainer, { borderColor: theme.colors.border }]}>
+              <Ionicons name="leaf-outline" size={48} color={theme.colors.placeholder} />
+              <Text style={[styles.noResultTitle, { color: theme.colors.text }]}>
+                {t('diagnosis.noDisease', 'No Disease Detected')}
+              </Text>
+              <Text style={[styles.noResultDescription, { color: theme.colors.text }]}>
+                {t('diagnosis.noDiseaseMeaning', "Our system couldn't identify any diseases in this plant. This could mean:")}
+              </Text>
+              <View style={styles.noResultList}>
+                <Text style={[styles.noResultListItem, { color: theme.colors.text }]}>
+                  {t('diagnosis.noDiseaseReason1', '• The plant is healthy')}
+                </Text>
+                <Text style={[styles.noResultListItem, { color: theme.colors.text }]}>
+                  {t('diagnosis.noDiseaseReason2', '• The disease is not visible in the image')}
+                </Text>
+                <Text style={[styles.noResultListItem, { color: theme.colors.text }]}>
+                  {t('diagnosis.noDiseaseReason3', '• The disease is not in our database yet')}
+                </Text>
+              </View>
+              <Text style={[styles.noResultNote, { color: theme.colors.text }]}>
+                {t('diagnosis.plantType', 'Plant type:')} {predictData.plant_type === "unknown" ? 
+                  t('diagnosis.notIdentified', 'Not identified') : 
+                  predictData.plant_type}
+              </Text>
+              <TouchableOpacity 
+                style={[styles.tryAgainButton, { backgroundColor: theme.colors.primary }]}
+                onPress={handleBack}
+              >
+                <Text style={styles.tryAgainButtonText}>
+                  {t('diagnosis.tryAgain', 'Try Another Image')}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            
+            {/* Footer */}
+            <View style={styles.resultFooter}>
+              <Text style={[styles.resultTimestamp, { color: theme.colors.placeholder }]}>
+                {t('diagnosis.analyzedIn', 'Analyzed in')} {predictData.prediction_time || "0 seconds"}
+              </Text>
+              <Text style={[styles.resultVersion, { color: theme.colors.placeholder }]}>
+                {t('diagnosis.modelVersion', 'Model v')}{predictData.model_version || "1.0"}
+              </Text>
+            </View>
+          </View>
+        </ScrollView>
+      </View>
+    );
+  }
+  
+  // Extract data for when disease is detected
+  const {
+    diseaseName = predictData.disease_status || t('diagnosis.unknownDisease', 'Unknown Disease'),
+    cropName = predictData.plant_type || t('diagnosis.unknownPlant', 'Unknown Plant'),
+    diseaseDescription = t('diagnosis.noDescription', 'No description available'),
+    diseaseSymptoms = t('diagnosis.noSymptoms', 'No symptom information available'),
+    diseaseTreatment = t('diagnosis.noTreatment', 'No treatment information available'),
+    diseasePrevention = t('diagnosis.noPrevention', 'No prevention information available'),
+    image_url,
+    model_version = '1.0',
+    prediction_time
+  } = predictData;
+  
+  // Default confidence value if not provided
+  const confidence = 0.8; // You might want to use a real value if available in your API
   
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -88,7 +179,7 @@ const DiagnosisResultScreen = () => {
           <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
         </TouchableOpacity>
         <Text style={[styles.headerTitle, { color: theme.colors.text }]}>
-          Diagnosis Result
+          {t('diagnosis.resultTitle', 'Diagnosis Result')}
         </Text>
         <TouchableOpacity onPress={handleShare}>
           <Ionicons name="share-outline" size={24} color={theme.colors.primary} />
@@ -99,7 +190,7 @@ const DiagnosisResultScreen = () => {
         {/* Plant Image */}
         <View style={[styles.imageContainer, { backgroundColor: theme.colors.card }]}>
           <Image 
-            source={{ uri: diagnosis.imageUri }} 
+            source={{ uri: image_url || localImage }} 
             style={styles.image}
             resizeMode="cover"
           />
@@ -110,21 +201,21 @@ const DiagnosisResultScreen = () => {
           <View style={styles.resultHeader}>
             <View>
               <Text style={[styles.cropName, { color: theme.colors.text }]}>
-                {diagnosis.cropName || 'Unknown Plant'}
+                {cropName}
               </Text>
               <Text style={[styles.diseaseName, { color: theme.colors.danger }]}>
-                {diagnosis.diseaseName}
+                {diseaseName}
               </Text>
             </View>
-            <View style={[styles.confidenceTag, { backgroundColor: getConfidenceColor(diagnosis.confidence, theme) }]}>
+            <View style={[styles.confidenceTag, { backgroundColor: getConfidenceColor(confidence, theme) }]}>
               <Text style={styles.confidenceText}>
-                {(diagnosis.confidence * 100).toFixed(0)}% Confidence
+                {t('diagnosis.diseaseDetected', 'Disease Detected')}
               </Text>
             </View>
           </View>
           
           <Text style={[styles.description, { color: theme.colors.text }]}>
-            {diagnosis.diseaseDescription || 'No description available'}
+            {diseaseDescription}
           </Text>
           
           {/* Tabs */}
@@ -140,7 +231,7 @@ const DiagnosisResultScreen = () => {
                 styles.tabText, 
                 { color: activeTab === 'symptoms' ? theme.colors.primary : theme.colors.text }
               ]}>
-                Symptoms
+                {t('diagnosis.symptoms', 'Symptoms')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity 
@@ -154,7 +245,7 @@ const DiagnosisResultScreen = () => {
                 styles.tabText, 
                 { color: activeTab === 'treatment' ? theme.colors.primary : theme.colors.text }
               ]}>
-                Treatment
+                {t('diagnosis.treatment', 'Treatment')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity 
@@ -168,7 +259,7 @@ const DiagnosisResultScreen = () => {
                 styles.tabText, 
                 { color: activeTab === 'prevention' ? theme.colors.primary : theme.colors.text }
               ]}>
-                Prevention
+                {t('diagnosis.prevention', 'Prevention')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -177,17 +268,17 @@ const DiagnosisResultScreen = () => {
           <View style={styles.tabContent}>
             {activeTab === 'symptoms' && (
               <Text style={[styles.tabContentText, { color: theme.colors.text }]}>
-                {diagnosis.diseaseSymptoms || 'No symptom information available'}
+                {diseaseSymptoms}
               </Text>
             )}
             {activeTab === 'treatment' && (
               <Text style={[styles.tabContentText, { color: theme.colors.text }]}>
-                {diagnosis.diseaseTreatment || 'No treatment information available'}
+                {diseaseTreatment}
               </Text>
             )}
             {activeTab === 'prevention' && (
               <Text style={[styles.tabContentText, { color: theme.colors.text }]}>
-                {diagnosis.diseasePrevention || 'No prevention information available'}
+                {diseasePrevention}
               </Text>
             )}
           </View>
@@ -195,34 +286,14 @@ const DiagnosisResultScreen = () => {
           {/* Footer */}
           <View style={styles.resultFooter}>
             <Text style={[styles.resultTimestamp, { color: theme.colors.placeholder }]}>
-              Diagnosed on {new Date(diagnosis.timestamp).toLocaleString()}
+              {t('diagnosis.analyzedIn', 'Analyzed in')} {prediction_time || "0 seconds"}
             </Text>
             <Text style={[styles.resultVersion, { color: theme.colors.placeholder }]}>
-              Model v{diagnosis.modelVersion}
+              {t('diagnosis.modelVersion', 'Model v')}{model_version}
             </Text>
           </View>
         </View>
       </ScrollView>
-      
-      {/* Rate Button */}
-      {!diagnosis.isRated && (
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[styles.rateButton, { backgroundColor: theme.colors.accent }]}
-            onPress={() => setShowRating(true)}
-          >
-            <Ionicons name="star" size={20} color="white" />
-            <Text style={styles.rateButtonText}>Rate This Diagnosis</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-      
-      {/* Rating Modal */}
-      <RatingModal
-        visible={showRating}
-        onClose={() => setShowRating(false)}
-        onSubmit={handleRating}
-      />
     </View>
   );
 };
@@ -258,7 +329,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 16,
-    paddingBottom: 100,
+    paddingBottom: 40, // Reduced since there's no rating button
   },
   imageContainer: {
     borderRadius: 12,
@@ -313,6 +384,50 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     marginBottom: 16,
   },
+  // No result styles
+  noResultContainer: {
+    alignItems: 'center',
+    paddingVertical: 20,
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderRadius: 12,
+    marginBottom: 16,
+  },
+  noResultTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  noResultDescription: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 16,
+    paddingHorizontal: 16,
+  },
+  noResultList: {
+    alignSelf: 'stretch',
+    paddingHorizontal: 32,
+    marginBottom: 16,
+  },
+  noResultListItem: {
+    fontSize: 14,
+    marginBottom: 8,
+  },
+  noResultNote: {
+    fontSize: 14,
+    fontStyle: 'italic',
+    marginBottom: 20,
+  },
+  tryAgainButton: {
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  tryAgainButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
   tabs: {
     flexDirection: 'row',
     borderBottomWidth: 1,
@@ -348,32 +463,6 @@ const styles = StyleSheet.create({
   },
   resultVersion: {
     fontSize: 12,
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 16,
-    backgroundColor: 'transparent',
-  },
-  rateButton: {
-    borderRadius: 12,
-    paddingVertical: 16,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-  },
-  rateButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginLeft: 8,
   },
 });
 

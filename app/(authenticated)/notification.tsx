@@ -14,12 +14,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@/contexts/ThemeContext';
 import useRelativeTime from '@/hooks/useRelativeTime';
 import { fetchNotifications, markNotificationsAsRead } from '@/redux/slices/notificationSlice';
+import { useTranslation } from 'react-i18next';
 
 
 export default function NotificationScreen() {
   const dispatch = useDispatch<any>();
   const { theme } = useTheme();
   const getRelativeTime = useRelativeTime();
+  const { t } = useTranslation();
 
   const { notifications, loading, hasFetched } = useSelector((state: any) => state.notifications);
 
@@ -70,7 +72,7 @@ export default function NotificationScreen() {
         <Text style={[styles.headerTitle, { color: theme.colors.text }]}>Notifications</Text>
         {notifications.length > 0 && (
           <TouchableOpacity onPress={handleMarkAllAsRead}>
-            <Text style={[styles.markReadText, { color: theme.colors.primary }]}>Mark all as read</Text>
+            <Text style={[styles.markReadText, { color: theme.colors.primary }]}>{t('notifications.markAllAsRead', 'Mark all as read')}</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -90,7 +92,7 @@ export default function NotificationScreen() {
             <View style={styles.emptyContainer}>
               <Ionicons name="notifications-off-outline" size={48} color={theme.colors.border} />
               <Text style={[styles.emptyText, { color: theme.colors.text }]}>
-                No notifications yet.
+                {t('notifications.empty', 'No notifications yet.')}
               </Text>
             </View>
           }
