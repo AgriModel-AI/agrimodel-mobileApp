@@ -61,7 +61,7 @@ export default function Success() {
             </Text>
             
             <Text style={styles.message}>
-              {t('success.passwordReset', 'Your password has been reset successfully. You can now log in with your new password.')}
+              {t('success.passwordReset', 'Your account is now ready to use. You can log in with your credentials.')}
             </Text>
           </Animated.View>
           

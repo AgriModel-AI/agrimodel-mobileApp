@@ -65,7 +65,6 @@ export default function ExploreScreen() {
   const filters = [
     { id: 'all', label: t('explore.all') },
     { id: 'ONLINE-SERVICES', label: t('explore.onlineServices') },
-    { id: 'DISEASE-LIBRARY', label: t('explore.diseaseLibrary') },
     { id: 'UPDATES', label: t('explore.updates') },
   ];
 
