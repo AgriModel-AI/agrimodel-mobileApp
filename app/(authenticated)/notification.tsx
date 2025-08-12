@@ -59,7 +59,7 @@ export default function NotificationScreen() {
             {item.message}
           </Text>
           <Text style={[styles.timestamp, { color: theme.colors.accent }]}>
-            {getRelativeTime(item.timestamp)}
+            {item.timestamp}
           </Text>
         </View>
       </View>

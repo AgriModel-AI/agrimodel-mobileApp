@@ -55,7 +55,7 @@ class ModelService {
       await this.initDatabase();
       this.initialized = true;
     } catch (error) {
-      console.error('Error initializing ModelService:', error);
+      // console.error('Error initializing ModelService:', error);
       throw error;
     }
   }
@@ -97,16 +97,16 @@ class ModelService {
         )
       `);
 
-      console.log('Database initialized successfully');
+      // console.log('Database initialized successfully');
     } catch (error) {
-      console.error('Database init failed:', error);
+      // console.error('Database init failed:', error);
       throw error;
     }
   }
 
   async checkForUpdates(): Promise<boolean> {
     if (!NetworkService.isNetworkConnected()) {
-      console.log('No network connection, skipping model update check');
+      // console.log('No network connection, skipping model update check');
       return false;
     }
 
@@ -122,17 +122,17 @@ class ModelService {
 
       // If we already have the latest model, skip download
       if (currentModel && currentModel.modelId === latestModel.modelId) {
-        console.log('Already have the latest model version');
+        // console.log('Already have the latest model version');
         return false;
       }
 
       // Download the model
-      console.log(`New model available: v${latestModel.version}`);
+      // console.log(`New model available: v${latestModel.version}`);
       await this.downloadModel(latestModel);
       
       return true;
     } catch (error) {
-      console.error('Error checking for model updates:', error);
+      // console.error('Error checking for model updates:', error);
       return false;
     }
   }
@@ -154,7 +154,7 @@ class ModelService {
           await FileSystem.deleteAsync(filePath);
         }
       } catch (error) {
-        console.warn(`Could not delete file ${filePath}:`, error);
+        // console.warn(`Could not delete file ${filePath}:`, error);
       }
     };
 
@@ -181,7 +181,7 @@ class ModelService {
       const arrayBuffer = response.data;
       const uint8Array = new Uint8Array(arrayBuffer);
       
-      console.log('File size:', uint8Array.length);
+      // console.log('File size:', uint8Array.length);
 
       // Convert ArrayBuffer to Base64 (this represents the raw binary data)
       const chunkSize = 8192;
@@ -199,8 +199,8 @@ class ModelService {
         { encoding: Crypto.CryptoEncoding.BASE64 }
       );
       
-      console.log('Calculated hash (Base64 method):', hash);
-      console.log('Expected hash:', expectedHash);
+      // console.log('Calculated hash (Base64 method):', hash);
+      // console.log('Expected hash:', expectedHash);
 
       if (hash === expectedHash) {
         console.log('✅ Hash matches!');
@@ -208,17 +208,17 @@ class ModelService {
       }
 
       // If that doesn't work, try alternative approaches
-      console.log('Trying alternative hash methods...');
+      // console.log('Trying alternative hash methods...');
 
       // Method 2: Hash the raw binary string directly (without Base64 encoding)
       const hash2 = await Crypto.digestStringAsync(
         Crypto.CryptoDigestAlgorithm.SHA256,
         binaryString
       );
-      console.log('Calculated hash (binary string method):', hash2);
+      // console.log('Calculated hash (binary string method):', hash2);
 
       if (hash2 === expectedHash) {
-        console.log('✅ Binary string method matches!');
+        // console.log('✅ Binary string method matches!');
         return { hash: hash2, data: arrayBuffer };
       }
 
@@ -228,17 +228,17 @@ class ModelService {
           Crypto.CryptoDigestAlgorithm.SHA256,
           base64Data
         );
-        console.log('Calculated hash (Base64 without encoding):', hash3);
+        // console.log('Calculated hash (Base64 without encoding):', hash3);
 
         if (hash3 === expectedHash) {
-          console.log('✅ Base64 without encoding matches!');
+          // console.log('✅ Base64 without encoding matches!');
           return { hash: hash3, data: arrayBuffer };
         }
       } catch (e: any) {
-        console.log('Method 3 failed', e);
+        // console.log('Method 3 failed', e);
       }
 
-      console.log('❌ All hash methods failed');
+      // console.log('❌ All hash methods failed');
       return { hash, data: arrayBuffer };
     };
 
@@ -264,22 +264,22 @@ class ModelService {
     const modelResult = await calculateBinaryHash(`/models/${modelInfo.modelId}/download`, modelInfo.fileHash);
 
     if (modelResult.hash !== modelInfo.fileHash) {
-      console.error('Model hash mismatch');
-      // For now, let's continue and see what happens with config
-      console.log('⚠️ Continuing despite model hash mismatch for debugging...');
+      // console.error('Model hash mismatch');
+      // // For now, let's continue and see what happens with config
+      // console.log('⚠️ Continuing despite model hash mismatch for debugging...');
     }
 
     // Save model file
     await saveArrayBufferToFile(modelResult.data, modelPath);
 
     // Download and verify config file
-    console.log('=== Downloading Config ===');
+    // console.log('=== Downloading Config ===');
     try {
       const configResult = await calculateBinaryHash(`/models/${modelInfo.modelId}/config`, modelInfo.configHash);
 
       if (configResult.hash !== modelInfo.configHash) {
-        console.error('Config hash mismatch');
-        console.log('⚠️ Continuing despite config hash mismatch for debugging...');
+        // console.error('Config hash mismatch');
+        // console.log('⚠️ Continuing despite config hash mismatch for debugging...');
       }
 
       // Save config file
@@ -291,7 +291,7 @@ class ModelService {
     }
 
     // For debugging, let's skip hash validation and save the model
-    console.log('⚠️ Saving model without hash validation for testing...');
+    // console.log('⚠️ Saving model without hash validation for testing...');
 
     // Save model info to database using transaction
     await this.db.withTransactionAsync(async () => {
@@ -330,10 +330,10 @@ class ModelService {
       }
     });
 
-    console.log(`Model v${modelInfo.version} downloaded successfully`);
+    // console.log(`Model v${modelInfo.version} downloaded successfully`);
     return true;
   } catch (error) {
-    console.error('Error downloading model:', error);
+    // console.error('Error downloading model:', error);
     throw error;
   }
 }
@@ -361,7 +361,7 @@ class ModelService {
 
       return null;
     } catch (error) {
-      console.error('Error getting current model:', error);
+      // console.error('Error getting current model:', error);
       throw error;
     }
   }
@@ -383,7 +383,7 @@ class ModelService {
 
       return null;
     } catch (error) {
-      console.error('Error getting model paths:', error);
+      // console.error('Error getting model paths:', error);
       throw error;
     }
   }
@@ -417,7 +417,7 @@ class ModelService {
 
       return offlineId;
     } catch (error) {
-      console.error('Error saving model rating:', error);
+      // console.error('Error saving model rating:', error);
       throw error;
     }
   }
@@ -444,7 +444,7 @@ class ModelService {
 
       return ratings;
     } catch (error) {
-      console.error('Error getting unsynced ratings:', error);
+      // console.error('Error getting unsynced ratings:', error);
       throw error;
     }
   }
@@ -461,7 +461,7 @@ class ModelService {
       
       await this.db.runAsync(query, offlineIds);
     } catch (error) {
-      console.error('Error marking ratings as synced:', error);
+      // console.error('Error marking ratings as synced:', error);
       throw error;
     }
   }
@@ -481,15 +481,6 @@ class ModelService {
 
       // Clear data in a single transaction
       await this.db.withTransactionAsync(async () => {
-        // Clear all data
-        // await this.db!.runAsync('DELETE FROM crops WHERE 1=1');
-        // await this.db!.runAsync('DELETE FROM diseases WHERE 1=1');
-        // await this.db!.runAsync('DELETE FROM diagnoses WHERE 1=1');
-        // await this.db!.runAsync('DELETE FROM subscription_plans WHERE 1=1');
-        // await this.db!.runAsync('DELETE FROM user_subscription WHERE 1=1');
-        // await this.db!.runAsync('DELETE FROM daily_usage WHERE 1=1');
-        // await this.db!.runAsync('DELETE FROM model WHERE 1=1');
-        // await this.db!.runAsync('DELETE FROM model_ratings WHERE 1=1');
         
         // Reset auto-increment sequences
         await this.db!.runAsync('DELETE FROM sqlite_sequence WHERE 1=1');
@@ -503,9 +494,9 @@ class ModelService {
         await FileSystem.makeDirectoryAsync(modelDir, { intermediates: true });
       }
 
-      console.log('✅ All data cleared successfully');
+      // console.log('✅ All data cleared successfully');
     } catch (error) {
-      console.error('Error clearing data:', error);
+      // console.error('Error clearing data:', error);
       throw error;
     }
   }

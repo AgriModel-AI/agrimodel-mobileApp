@@ -99,7 +99,7 @@ const DiagnosisScreen = () => {
       await dispatch(addDistrict(formData)).unwrap();
       setShowDistrictSelector(false);
     } catch (error) {
-      console.error('Failed to add district:', error);
+      // console.error('Failed to add district:', error);
       Alert.alert(
         t('common.error', 'Error'), 
         t('diagnosis.districtUpdateError', 'Failed to update district. Please try again.')
@@ -172,7 +172,7 @@ const DiagnosisScreen = () => {
         processDiagnosisImage(uri);
       }
     } catch (error) {
-      console.error('Error taking picture:', error);
+      // console.error('Error taking picture:', error);
       Alert.alert(
         t('common.error', 'Error'), 
         t('diagnosis.takePictureError', 'Failed to take picture. Please try again.')
@@ -204,7 +204,7 @@ const DiagnosisScreen = () => {
         processDiagnosisImage(uri);
       }
     } catch (error) {
-      console.error('Error selecting image:', error);
+      // console.error('Error selecting image:', error);
       Alert.alert(
         t('common.error', 'Error'), 
         t('diagnosis.selectImageError', 'Failed to select image. Please try again.')
@@ -221,7 +221,7 @@ const DiagnosisScreen = () => {
         router.push('/(authenticated)/(modals)/diagnosisResultScreen');
       })
       .catch((error) => {
-        console.error('Diagnosis error:', error);
+        // console.error('Diagnosis error:', error);
         Alert.alert(
           t('common.error', 'Error'), 
           t('diagnosis.processError', 'Failed to process diagnosis. Please try again.')

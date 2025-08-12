@@ -38,7 +38,7 @@ export const useAuth = () => {
           isLoading: false
         }));
       } catch (error) {
-        console.error('Auth check error:', error);
+        // console.error('Auth check error:', error);
         setAuthState(prev => ({
           ...prev,
           isLoading: false,

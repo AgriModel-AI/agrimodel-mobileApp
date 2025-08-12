@@ -16,33 +16,11 @@ class SyncService {
 
     try {
       this.isSyncing = true;
-      console.log('Starting sync operation...');
 
-      // await ModelService.clearAllData()
-
-      // Process any pending user detail updates
-      // await this.processPendingUserDetailActions();
-
-      // 1. Check for model updates
-      // await ModelService.checkForUpdates();
-
-      // 2. Sync crops and diseases
-      // await CropDiseaseService.syncCrops();
-      // await CropDiseaseService.syncDiseases();
-
-      // 3. Sync unsynced model ratings
-      // await this.syncModelRatings();
-
-      // 4. Sync unsynced diagnoses
-      // await this.syncDiagnoses();
-
-      // 5. Sync subscription usage
-      // await SubscriptionService.fetchSubscriptionUsage(true);
-
-      console.log('Sync completed successfully');
+      // console.log('Sync completed successfully');
       return true;
     } catch (error) {
-      console.error('Error during sync:', error);
+      // console.error('Error during sync:', error);
       return false;
     } finally {
       this.isSyncing = false;
@@ -56,7 +34,7 @@ class SyncService {
       return;
     }
     
-    console.log(`Syncing ${unsynced.length} model ratings...`);
+    // console.log(`Syncing ${unsynced.length} model ratings...`);
     
     const syncedIds: string[] = [];
     
@@ -74,13 +52,13 @@ class SyncService {
         
         syncedIds.push(rating.offlineId);
       } catch (error) {
-        console.error(`Error syncing rating ${rating.offlineId}:`, error);
+        // console.error(`Error syncing rating ${rating.offlineId}:`, error);
       }
     }
     
     if (syncedIds.length > 0) {
       await ModelService.markRatingsAsSynced(syncedIds);
-      console.log(`Successfully synced ${syncedIds.length} model ratings`);
+      // console.log(`Successfully synced ${syncedIds.length} model ratings`);
     }
   }
 
@@ -91,7 +69,7 @@ class SyncService {
       return;
     }
     
-    console.log(`Syncing ${unsynced.length} diagnoses...`);
+    // console.log(`Syncing ${unsynced.length} diagnoses...`);
     
     const syncedIds: string[] = [];
     
@@ -112,13 +90,13 @@ class SyncService {
         
         syncedIds.push(diagnosis.diagnosisId);
       } catch (error) {
-        console.error(`Error syncing diagnosis ${diagnosis.diagnosisId}:`, error);
+        // console.error(`Error syncing diagnosis ${diagnosis.diagnosisId}:`, error);
       }
     }
     
     if (syncedIds.length > 0) {
       await DiagnosisService.markDiagnosesAsSynced(syncedIds);
-      console.log(`Successfully synced ${syncedIds.length} diagnoses`);
+      // console.log(`Successfully synced ${syncedIds.length} diagnoses`);
     }
   }
 
@@ -130,7 +108,7 @@ class SyncService {
       return;
     }
     
-    console.log(`Processing ${pendingActions.length} pending user detail actions...`);
+    // console.log(`Processing ${pendingActions.length} pending user detail actions...`);
     
     for (const action of pendingActions) {
       try {
@@ -139,7 +117,7 @@ class SyncService {
         }
         // Add other action types as needed
       } catch (error) {
-        console.error(`Error processing action ${action.type}:`, error);
+        // console.error(`Error processing action ${action.type}:`, error);
       }
     }
   }

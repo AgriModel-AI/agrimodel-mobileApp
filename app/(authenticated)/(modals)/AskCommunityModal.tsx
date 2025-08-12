@@ -64,7 +64,7 @@ const AskCommunityModal = ({
       resetForm();
       onClose();
     } catch (error) {
-      console.error('Error creating post:', error);
+      // console.error('Error creating post:', error);
     }
   };
 

@@ -48,7 +48,7 @@ export async function translateText(text: any, targetLang: any) {
       throw new Error("Translation failed");
     }
   } catch (error) {
-    console.error("Translation error:", error);
+    // console.error("Translation error:", error);
     return null;
   }
 }
@@ -178,7 +178,7 @@ const DiagnosisDetailScreen = () => {
         [{ text: t('diagnosis.ok') }]
       );
     } catch (error) {
-      console.error('Error in component:', error);
+      // console.error('Error in component:', error);
     }
   };
   

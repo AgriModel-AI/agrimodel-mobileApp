@@ -30,7 +30,7 @@ export default function Index() {
             setInitialRoute('/(auth)/login');
         }
       } catch (error) {
-        console.error('Error determining initial route:', error);
+        // console.error('Error determining initial route:', error);
         setInitialRoute('/(onboarding)/welcome');
 
       } finally {

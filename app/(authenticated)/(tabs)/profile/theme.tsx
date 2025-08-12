@@ -6,11 +6,11 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../../../../contexts/ThemeContext';
@@ -25,7 +25,7 @@ export default function ThemeScreen() {
       await AsyncStorage.setItem('theme-mode', mode);
       setThemeMode(mode);
     } catch (error) {
-      console.error('Failed to save theme preference:', error);
+      // console.error('Failed to save theme preference:', error);
     }
   };
 

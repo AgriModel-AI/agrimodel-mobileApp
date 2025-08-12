@@ -37,7 +37,7 @@ const languageDetector = {
       // Default to English
       return callback('en');
     } catch (error) {
-      console.error('Error detecting language:', error);
+      // console.error('Error detecting language:', error);
       callback('en');
     }
   },
@@ -45,7 +45,7 @@ const languageDetector = {
     try {
       await AsyncStorage.setItem('userLanguage', lng);
     } catch (error) {
-      console.error('Error caching language:', error);
+      // console.error('Error caching language:', error);
     }
   },
 };

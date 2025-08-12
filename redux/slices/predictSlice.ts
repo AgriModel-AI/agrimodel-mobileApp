@@ -12,10 +12,10 @@ export const createPredict = createAsyncThunk<any, FormData, { rejectValue: stri
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log(response.data)
+      // console.log(response.data)
       return response.data;
     } catch (error:any) {
-      console.log(error.response?.data)
+      // console.log(error.response?.data)
       return rejectWithValue(error.response?.data || "Error creating prediction");
     }
   }
@@ -29,7 +29,7 @@ export const fetchDiagnosisResults = createAsyncThunk(
       // console.log(response.data.data)
       return response.data.data;
     } catch (error: any) {
-      console.log(error.response?.data);
+      // console.log(error.response?.data);
       return rejectWithValue(error.response?.data || "Error fetching diagnosis results");
     }
   }
@@ -50,7 +50,7 @@ export const rateDiagnosis = createAsyncThunk<any, RatingData, { rejectValue: st
       const response = await axiosInstance.post('/models/ratings', ratingData);
       return response.data;
     } catch (error: any) {
-      console.log(error.response?.data);
+      // console.log(error.response?.data);
       return rejectWithValue(error.response?.data?.message || "Error submitting rating");
     }
   }

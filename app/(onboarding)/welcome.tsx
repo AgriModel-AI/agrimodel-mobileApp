@@ -66,7 +66,7 @@ const LandingPage = () => {
       await AsyncStorage.setItem('language', lang);
       i18n.changeLanguage(lang);
     } catch (error) {
-      console.error('Error saving language to AsyncStorage:', error);
+      // console.error('Error saving language to AsyncStorage:', error);
     }
   };
 

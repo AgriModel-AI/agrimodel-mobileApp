@@ -59,7 +59,7 @@ export default function CommunityScreen() {
             await getPosts();
           }
         } catch (error) {
-          console.error('Error loading data:', error);
+          // console.error('Error loading data:', error);
         }
       };
       

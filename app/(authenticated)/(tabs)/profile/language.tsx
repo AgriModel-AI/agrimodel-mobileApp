@@ -6,12 +6,12 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-    Alert,
-    FlatList,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../../../../contexts/ThemeContext';
@@ -43,7 +43,7 @@ export default function LanguageScreen() {
         t('language.success_message', 'The application language has been changed successfully.')
       );
     } catch (error) {
-      console.error('Failed to change language:', error);
+      // console.error('Failed to change language:', error);
       Alert.alert(
         t('common.error', 'Error'),
         t('language.error_message', 'Failed to change language. Please try again.')

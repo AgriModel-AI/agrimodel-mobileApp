@@ -28,7 +28,7 @@ export const WeatherCard: React.FC<WeatherCardProps> = ({ isConnected }) => {
         setWeatherData(response.data);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching weather data:', error);
+        // console.error('Error fetching weather data:', error);
       }
     };
 

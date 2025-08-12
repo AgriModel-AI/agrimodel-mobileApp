@@ -27,7 +27,7 @@ const useSocket = (): Socket | null => {
       try {
         const token = TokenManager.getAccessToken();
         if (!token) {
-          console.log("No JWT token found");
+          // console.log("No JWT token found");
           return;
         }
 
@@ -37,11 +37,11 @@ const useSocket = (): Socket | null => {
         });
 
         newSocket.on("connect", () => {
-          console.log("Connected to WebSocket server");
+          // console.log("Connected to WebSocket server");
         });
 
         newSocket.on("disconnect", () => {
-          console.log("Disconnected from WebSocket server");
+          // console.log("Disconnected from WebSocket server");
         });
 
         newSocket.on("new_notification", () => {
@@ -66,7 +66,7 @@ const useSocket = (): Socket | null => {
           newSocket.disconnect();
         };
       } catch (error) {
-        console.error("Socket connection error:", error);
+        // console.error("Socket connection error:", error);
       }
     };
 

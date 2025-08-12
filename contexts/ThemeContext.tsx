@@ -34,7 +34,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           setThemeMode(savedTheme as ThemeMode);
         }
       } catch (error) {
-        console.error('Failed to load theme preference:', error);
+        // console.error('Failed to load theme preference:', error);
       }
     };
     

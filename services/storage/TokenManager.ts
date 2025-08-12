@@ -10,7 +10,7 @@ class TokenManager {
       await AsyncStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
       await AsyncStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
     } catch (error) {
-      console.error('Error setting tokens:', error);
+      // console.error('Error setting tokens:', error);
       throw error;
     }
   }
@@ -19,7 +19,7 @@ class TokenManager {
     try {
       return await AsyncStorage.getItem(ACCESS_TOKEN_KEY);
     } catch (error) {
-      console.error('Error getting access token:', error);
+      // console.error('Error getting access token:', error);
       return null;
     }
   }
@@ -28,7 +28,7 @@ class TokenManager {
     try {
       return await AsyncStorage.getItem(REFRESH_TOKEN_KEY);
     } catch (error) {
-      console.error('Error getting refresh token:', error);
+      // console.error('Error getting refresh token:', error);
       return null;
     }
   }
@@ -37,7 +37,7 @@ class TokenManager {
     try {
       await AsyncStorage.multiRemove([ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY]);
     } catch (error) {
-      console.error('Error clearing tokens:', error);
+      // console.error('Error clearing tokens:', error);
     }
   }
 

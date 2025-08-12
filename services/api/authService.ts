@@ -110,7 +110,7 @@ class AuthService {
       // Clear tokens
       await TokenManager.clearTokens();
     } catch (error) {
-      console.error('Error during logout:', error);
+      // console.error('Error during logout:', error);
       // Always clear tokens even if API call fails
       await TokenManager.clearTokens();
     }
@@ -120,7 +120,7 @@ class AuthService {
     try {
       return await TokenManager.hasTokens();
     } catch (error) {
-      console.error('Error checking auth status:', error);
+      // console.error('Error checking auth status:', error);
       return false;
     }
   }
@@ -132,7 +132,7 @@ class AuthService {
       status: error.response?.status
     };
     
-    console.error('API Error:', apiError);
+    // console.error('API Error:', apiError);
     throw apiError;
   }
 }

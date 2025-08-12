@@ -51,7 +51,7 @@ const CommentModal = ({
       await addComment(postId, newComment.trim());
       setNewComment('');
     } catch (error) {
-      console.error('Error adding comment:', error);
+      // console.error('Error adding comment:', error);
     }
     setLoading(false);
   };

@@ -104,7 +104,7 @@ export default function SlidesScreen(): React.JSX.Element {
       await AsyncStorage.setItem('hasCompletedOnboarding', 'true');
       router.replace('/(auth)/login');
     } catch (error) {
-      console.error('Error marking onboarding as completed:', error);
+      // console.error('Error marking onboarding as completed:', error);
     }
   };
   

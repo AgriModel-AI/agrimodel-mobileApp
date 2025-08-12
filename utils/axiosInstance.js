@@ -35,8 +35,8 @@ const refreshAccessToken = async () => {
 
     return access_token;
   } catch (error) {
-    console.error("Failed to refresh access token", error);
-    await TokenManager.clearTokens(); // Clear tokens if refresh fails
+    // console.error("Failed to refresh access token", error);
+    await TokenManager.clearTokens();
     return null;
   }
 };

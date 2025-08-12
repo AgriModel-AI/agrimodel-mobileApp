@@ -47,7 +47,7 @@ async function translateText(text: any, targetLang: any) {
       throw new Error("Translation failed");
     }
   } catch (error) {
-    console.error("Translation error:", error);
+    // console.error("Translation error:", error);
     return null;
   }
 }
@@ -62,7 +62,7 @@ const DiagnosisResultScreen = () => {
   const localImage:any = useSelector((state: RootState) => state.predict.localImage);
 
   useEffect(()=>{
-    console.log(predictData)
+    // console.log(predictData)
   }, [predictData])
   
   const [activeTab, setActiveTab] = useState<'symptoms' | 'treatment' | 'prevention'>('symptoms');
@@ -160,7 +160,7 @@ const DiagnosisResultScreen = () => {
         title: t('diagnosis.shareTitle', 'Plant Disease Diagnosis Result')
       });
     } catch (error) {
-      console.error('Error sharing diagnosis:', error);
+      // console.error('Error sharing diagnosis:', error);
       Alert.alert(t('common.error', 'Error'), t('diagnosis.shareError', 'Failed to share diagnosis'));
     }
   };

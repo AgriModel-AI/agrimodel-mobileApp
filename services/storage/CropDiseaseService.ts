@@ -45,7 +45,7 @@ class CropDiseaseService {
       await this.initDatabase();
       this.initialized = true;
     } catch (error) {
-      console.error('Error initializing CropDiseaseService:', error);
+      // console.error('Error initializing CropDiseaseService:', error);
       throw error;
     }
   }
@@ -87,16 +87,16 @@ class CropDiseaseService {
         )
       `);
 
-      console.log('Crop and Disease database initialized successfully');
+      // console.log('Crop and Disease database initialized successfully');
     } catch (error) {
-      console.error('Database init failed:', error);
+      // console.error('Database init failed:', error);
       throw error;
     }
   }
 
   async syncCrops(): Promise<boolean> {
     if (!NetworkService.isNetworkConnected()) {
-      console.log('No network connection, skipping crop sync');
+      // console.log('No network connection, skipping crop sync');
       return false;
     }
 
@@ -112,14 +112,14 @@ class CropDiseaseService {
       
       return true;
     } catch (error) {
-      console.error('Error syncing crops:', error);
+      // console.error('Error syncing crops:', error);
       return false;
     }
   }
 
   async syncDiseases(): Promise<boolean> {
     if (!NetworkService.isNetworkConnected()) {
-      console.log('No network connection, skipping disease sync');
+      // console.log('No network connection, skipping disease sync');
       return false;
     }
 
@@ -135,7 +135,7 @@ class CropDiseaseService {
       
       return true;
     } catch (error) {
-      console.error('Error syncing diseases:', error);
+      // console.error('Error syncing diseases:', error);
       return false;
     }
   }
@@ -165,9 +165,9 @@ class CropDiseaseService {
         );
       }
 
-      console.log(`Saved ${crops.length} crops to local database`);
+      // console.log(`Saved ${crops.length} crops to local database`);
     } catch (error) {
-      console.error('Error saving crops:', error);
+      // console.error('Error saving crops:', error);
       throw error;
     }
   }
@@ -202,9 +202,9 @@ class CropDiseaseService {
         );
       }
 
-      console.log(`Saved ${diseases.length} diseases to local database`);
+      // console.log(`Saved ${diseases.length} diseases to local database`);
     } catch (error) {
-      console.error('Error saving diseases:', error);
+      // console.error('Error saving diseases:', error);
       throw error;
     }
   }
@@ -228,7 +228,7 @@ class CropDiseaseService {
 
       return crops;
     } catch (error) {
-      console.error('Error getting crops:', error);
+      // console.error('Error getting crops:', error);
       throw error;
     }
   }
@@ -262,7 +262,7 @@ class CropDiseaseService {
 
       return diseases;
     } catch (error) {
-      console.error('Error getting diseases:', error);
+      // console.error('Error getting diseases:', error);
       throw error;
     }
   }
@@ -297,7 +297,7 @@ class CropDiseaseService {
 
       return null;
     } catch (error) {
-      console.error('Error getting disease:', error);
+      // console.error('Error getting disease:', error);
       throw error;
     }
   }
@@ -332,7 +332,7 @@ class CropDiseaseService {
 
       return null;
     } catch (error) {
-      console.error('Error getting disease:', error);
+      // console.error('Error getting disease:', error);
       throw error;
     }
   }

@@ -45,7 +45,7 @@ class DiagnosisService {
       await this.initDatabase();
       this.initialized = true;
     } catch (error) {
-      console.error('Error initializing DiagnosisService:', error);
+      // console.error('Error initializing DiagnosisService:', error);
       throw error;
     }
   }
@@ -78,9 +78,9 @@ class DiagnosisService {
         )
       `);
 
-      console.log('Diagnosis database initialized successfully');
+      // console.log('Diagnosis database initialized successfully');
     } catch (error) {
-      console.error('Database init failed:', error);
+      // console.error('Database init failed:', error);
       throw error;
     }
   }
@@ -93,7 +93,7 @@ class DiagnosisService {
       try {
         return await this.diagnoseOnline(imageUri);
       } catch (error) {
-        console.error('Online diagnosis failed, falling back to local model:', error);
+        // console.error('Online diagnosis failed, falling back to local model:', error);
       }
     }
 
@@ -114,39 +114,9 @@ class DiagnosisService {
       name: `diagnosis.${extension}`,
       type: `image/${extension === 'jpg' ? 'jpeg' : extension}`
     } as any);
-
-    // Send to server
-    // const response = await axiosInstance.post(`/predict`, formData, {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data',
-    //   },
-    // });
-
-    // const result = response.data;
     
     // Generate a unique ID for this diagnosis
     const diagnosisId = this.generateUUID();
-    
-    // Create diagnosis result object
-    // const diagnosisResult: DiagnosisResult = {
-    //   diagnosisId,
-    //   modelId: result.modelId,
-    //   modelVersion: result.version,
-    //   cropId: result.cropId,
-    //   cropName: result.cropName,
-    //   imageUri,
-    //   serverImageUrl: result.image_url,
-    //   diseaseId: result.diseaseId,
-    //   diseaseName: result.diseaseName,
-    //   diseaseLabel: result.diseaseLabel,
-    //   diseaseDescription: result.diseaseDescription,
-    //   diseaseSymptoms: result.diseaseSymptoms,
-    //   diseaseTreatment: result.diseaseTreatment,
-    //   diseasePrevention: result.diseasePrevention,
-    //   confidence: result.confident,
-    //   timestamp: new Date().toISOString(),
-    //   isRated: false
-    // };
 
     const diagnosisResult: DiagnosisResult = {
       diagnosisId,
@@ -363,7 +333,7 @@ class DiagnosisService {
         ]
       );
     } catch (error) {
-      console.error('Error saving diagnosis:', error);
+      // console.error('Error saving diagnosis:', error);
       throw error;
     }
   }
@@ -397,7 +367,7 @@ class DiagnosisService {
 
       return diagnoses;
     } catch (error) {
-      console.error('Error getting diagnoses:', error);
+      // console.error('Error getting diagnoses:', error);
       throw error;
     }
   }
@@ -437,7 +407,7 @@ class DiagnosisService {
 
       return null;
     } catch (error) {
-      console.error('Error getting diagnosis:', error);
+      // console.error('Error getting diagnosis:', error);
       throw error;
     }
   }
@@ -452,7 +422,7 @@ class DiagnosisService {
         [diagnosisId]
       );
     } catch (error) {
-      console.error('Error marking diagnosis as rated:', error);
+      // console.error('Error marking diagnosis as rated:', error);
       throw error;
     }
   }
@@ -486,7 +456,7 @@ class DiagnosisService {
 
       return diagnoses;
     } catch (error) {
-      console.error('Error getting unsynced diagnoses:', error);
+      // console.error('Error getting unsynced diagnoses:', error);
       throw error;
     }
   }
@@ -503,7 +473,7 @@ class DiagnosisService {
       
       await this.db.runAsync(query, diagnosisIds);
     } catch (error) {
-      console.error('Error marking diagnoses as synced:', error);
+      // console.error('Error marking diagnoses as synced:', error);
       throw error;
     }
   }

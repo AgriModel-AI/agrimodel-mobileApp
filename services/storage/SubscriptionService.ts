@@ -61,7 +61,7 @@ class SubscriptionService {
       await this.initDatabase();
       this.initialized = true;
     } catch (error) {
-      console.error('Error initializing SubscriptionService:', error);
+      // console.error('Error initializing SubscriptionService:', error);
       throw error;
     }
   }
@@ -119,9 +119,9 @@ class SubscriptionService {
         )
       `);
 
-      console.log('Subscription database initialized successfully');
+      // console.log('Subscription database initialized successfully');
     } catch (error) {
-      console.error('Database init failed:', error);
+      // console.error('Database init failed:', error);
       throw error;
     }
   }
@@ -134,13 +134,13 @@ class SubscriptionService {
       try {
         const response = await axiosInstance.get(`/subscriptions/usage`);
         const usage = response.data.data;
-        console.log(usage)
+        // console.log(usage)
         // Save to local database
         await this.saveSubscriptionUsage(usage, true);
         
         return usage;
       } catch (error) {
-        console.error('Error fetching subscription usage:', error);
+        // console.error('Error fetching subscription usage:', error);
       }
     }
 
@@ -157,13 +157,13 @@ class SubscriptionService {
       try {
         const response = await axiosInstance.get(`/subscriptions/usage`);
         const usage = response.data.data;
-        console.log(usage)
+        // console.log(usage)
         // Save to local database
         await this.saveSubscriptionUsage(usage, true);
         
         return usage;
       } catch (error) {
-        console.error('Error fetching subscription usage:', error);
+        // console.error('Error fetching subscription usage:', error);
       }
     }
     
@@ -190,7 +190,7 @@ class SubscriptionService {
           const currentUsage = await this.fetchSubscriptionUsage(true);
           return currentUsage;
         }
-        console.error('Error recording usage attempt:', error);
+        // console.error('Error recording usage attempt:', error);
       }
     }
 
@@ -212,7 +212,7 @@ class SubscriptionService {
       // Save updated usage
       await this.saveSubscriptionUsage(currentUsage, false);
 
-      console.log(currentUsage)
+      // console.log(currentUsage)
       
       return currentUsage;
     }
@@ -260,7 +260,7 @@ class SubscriptionService {
         );
       });
     } catch (error) {
-      console.error('Error saving subscription usage:', error);
+      // console.error('Error saving subscription usage:', error);
       throw error;
     }
   }
@@ -324,7 +324,7 @@ class SubscriptionService {
       
       return usage;
     } catch (error) {
-      console.error('Error getting local subscription usage:', error);
+      // console.error('Error getting local subscription usage:', error);
       throw error;
     }
   }
