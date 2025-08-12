@@ -20,12 +20,46 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
+
+// translate.js
+export async function translateText(text: any, targetLang: any) {
+  const apiKey = "AIzaSyBJ--pBJYnkZ_Ppg28rkO-fDGESYo94AA4";
+
+  try {
+    const res = await fetch(
+      `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          q: text,
+          target: targetLang,
+          source: 'en',
+          format: "text",
+        }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (data?.data?.translations?.[0]?.translatedText) {
+      return data.data.translations[0].translatedText;
+    } else {
+      throw new Error("Translation failed");
+    }
+  } catch (error) {
+    console.error("Translation error:", error);
+    return null;
+  }
+}
+
+
 const DiagnosisDetailScreen = () => {
   const { theme } = useTheme();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const route = useRoute();
   const dispatch = useDispatch<AppDispatch>();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   
   const { result } = route.params as { result: any };
   const { ratingLoading, ratingError } = useSelector((state: any) => state.predict);
@@ -37,6 +71,58 @@ const DiagnosisDetailScreen = () => {
   const [imageLoading, setImageLoading] = useState(true);
   const [localRated, setLocalRated] = useState(result.rated);
   
+  // Add state for translated content
+  const [translatedSymptoms, setTranslatedSymptoms] = useState('');
+  const [translatedTreatment, setTranslatedTreatment] = useState('');
+  const [translatedPrevention, setTranslatedPrevention] = useState('');
+  const [translatedDescription, setTranslatedDescription] = useState('');
+  
+  // Effect to listen for language changes
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      // This will trigger the translation effect when i18n language changes
+      translateContent();
+    };
+    
+    // Initial translation
+    translateContent();
+    
+    // Add listener for language changes
+    i18n.on('languageChanged', handleLanguageChange);
+    
+    // Cleanup
+    return () => {
+      i18n.off('languageChanged', handleLanguageChange);
+    };
+  }, [i18n, result.disease]);
+  
+  // Function to translate all relevant content
+  const translateContent = async () => {
+    if (result.detected && result.disease) {
+      const currentLang = i18n.language;
+      
+      if (result.disease.description) {
+        const description = await translateText(result.disease.description, currentLang);
+        setTranslatedDescription(description || result.disease.description);
+      }
+      
+      if (result.disease.symptoms) {
+        const symptoms = await translateText(result.disease.symptoms, currentLang);
+        setTranslatedSymptoms(symptoms || result.disease.symptoms);
+      }
+      
+      if (result.disease.treatment) {
+        const treatment = await translateText(result.disease.treatment, currentLang);
+        setTranslatedTreatment(treatment || result.disease.treatment);
+      }
+      
+      if (result.disease.prevention) {
+        const prevention = await translateText(result.disease.prevention, currentLang);
+        setTranslatedPrevention(prevention || result.disease.prevention);
+      }
+    }
+  };
+  
   // Handle rating errors
   useEffect(() => {
     if (ratingError) {
@@ -45,8 +131,11 @@ const DiagnosisDetailScreen = () => {
   }, [ratingError, t]);
   
   const formatDate = (dateString:any) => {
+    // Get current language for date formatting
+    const currentLang = i18n.language;
+    
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString(currentLang, {
       weekday: 'long',
       month: 'long',
       day: 'numeric',
@@ -219,7 +308,7 @@ const DiagnosisDetailScreen = () => {
               {t('diagnosis.about_disease')}
             </Text>
             <Text style={[styles.sectionText, { color: theme.colors.text }]}>
-              {result.disease.description}
+              {translatedDescription || result.disease.description}
             </Text>
             
             <View style={[styles.divider, { backgroundColor: theme.colors.border }]} />
@@ -228,7 +317,7 @@ const DiagnosisDetailScreen = () => {
               {t('diagnosis.symptoms')}
             </Text>
             <Text style={[styles.sectionText, { color: theme.colors.text }]}>
-              {result.disease.symptoms}
+              {translatedSymptoms || result.disease.symptoms}
             </Text>
             
             <View style={[styles.divider, { backgroundColor: theme.colors.border }]} />
@@ -237,16 +326,16 @@ const DiagnosisDetailScreen = () => {
               {t('diagnosis.treatment')}
             </Text>
             <Text style={[styles.sectionText, { color: theme.colors.text }]}>
-              {result.disease.treatment}
+              {translatedTreatment || result.disease.treatment}
             </Text>
             
             <View style={[styles.divider, { backgroundColor: theme.colors.border }]} />
             
             <Text style={[styles.sectionSubtitle, { color: theme.colors.text }]}>
-              {t('diagnosis.prevention')}
+              {(t('diagnosis.prevention', ))}
             </Text>
             <Text style={[styles.sectionText, { color: theme.colors.text }]}>
-              {result.disease.prevention}
+              {translatedPrevention || result.disease.prevention}
             </Text>
           </View>
         )}

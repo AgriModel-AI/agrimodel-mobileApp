@@ -20,9 +20,41 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
+// Translation helper function
+async function translateText(text: any, targetLang: any) {
+  const apiKey = "AIzaSyBJ--pBJYnkZ_Ppg28rkO-fDGESYo94AA4";
+
+  try {
+    const res = await fetch(
+      `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          q: text,
+          target: targetLang,
+          source: 'en',
+          format: "text",
+        }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (data?.data?.translations?.[0]?.translatedText) {
+      return data.data.translations[0].translatedText;
+    } else {
+      throw new Error("Translation failed");
+    }
+  } catch (error) {
+    console.error("Translation error:", error);
+    return null;
+  }
+}
+
 const DiagnosisResultScreen = () => {
   const {theme} = useTheme();
-  const { t } = useTranslation(); // Added useTranslation hook
+  const { t, i18n } = useTranslation();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const dispatch = useDispatch<AppDispatch>();
   
@@ -34,6 +66,77 @@ const DiagnosisResultScreen = () => {
   }, [predictData])
   
   const [activeTab, setActiveTab] = useState<'symptoms' | 'treatment' | 'prevention'>('symptoms');
+  
+  // Add state for translated content
+  const [translatedDescription, setTranslatedDescription] = useState('');
+  const [translatedSymptoms, setTranslatedSymptoms] = useState('');
+  const [translatedTreatment, setTranslatedTreatment] = useState('');
+  const [translatedPrevention, setTranslatedPrevention] = useState('');
+  
+  // Effect to listen for language changes
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      // This will trigger the translation when i18n language changes
+      translateContent();
+    };
+    
+    // Initial translation
+    translateContent();
+    
+    // Add listener for language changes
+    i18n.on('languageChanged', handleLanguageChange);
+    
+    // Cleanup
+    return () => {
+      i18n.off('languageChanged', handleLanguageChange);
+    };
+  }, [i18n, predictData]);
+  
+  // Function to translate all relevant content
+  const translateContent = async () => {
+    if (predictData && predictData.detected) {
+      const currentLang = i18n.language;
+      
+      // Extract source data - use default texts if not available
+      const sourceDescription = predictData.diseaseDescription || 
+                               t('diagnosis.noDescription', 'No description available');
+      const sourceSymptoms = predictData.diseaseSymptoms || 
+                            t('diagnosis.noSymptoms', 'No symptom information available');
+      const sourceTreatment = predictData.diseaseTreatment || 
+                             t('diagnosis.noTreatment', 'No treatment information available');
+      const sourcePrevention = predictData.diseasePrevention || 
+                              t('diagnosis.noPrevention', 'No prevention information available');
+      
+      // Only translate if the content is not a default message
+      if (sourceDescription !== t('diagnosis.noDescription', 'No description available')) {
+        const description = await translateText(sourceDescription, currentLang);
+        setTranslatedDescription(description || sourceDescription);
+      } else {
+        setTranslatedDescription(sourceDescription);
+      }
+      
+      if (sourceSymptoms !== t('diagnosis.noSymptoms', 'No symptom information available')) {
+        const symptoms = await translateText(sourceSymptoms, currentLang);
+        setTranslatedSymptoms(symptoms || sourceSymptoms);
+      } else {
+        setTranslatedSymptoms(sourceSymptoms);
+      }
+      
+      if (sourceTreatment !== t('diagnosis.noTreatment', 'No treatment information available')) {
+        const treatment = await translateText(sourceTreatment, currentLang);
+        setTranslatedTreatment(treatment || sourceTreatment);
+      } else {
+        setTranslatedTreatment(sourceTreatment);
+      }
+      
+      if (sourcePrevention !== t('diagnosis.noPrevention', 'No prevention information available')) {
+        const prevention = await translateText(sourcePrevention, currentLang);
+        setTranslatedPrevention(prevention || sourcePrevention);
+      } else {
+        setTranslatedPrevention(sourcePrevention);
+      }
+    }
+  };
   
   const handleBack = () => {
     dispatch(setLocalImage(null));
@@ -215,7 +318,7 @@ const DiagnosisResultScreen = () => {
           </View>
           
           <Text style={[styles.description, { color: theme.colors.text }]}>
-            {diseaseDescription}
+            {translatedDescription || diseaseDescription}
           </Text>
           
           {/* Tabs */}
@@ -268,17 +371,17 @@ const DiagnosisResultScreen = () => {
           <View style={styles.tabContent}>
             {activeTab === 'symptoms' && (
               <Text style={[styles.tabContentText, { color: theme.colors.text }]}>
-                {diseaseSymptoms}
+                {translatedSymptoms || diseaseSymptoms}
               </Text>
             )}
             {activeTab === 'treatment' && (
               <Text style={[styles.tabContentText, { color: theme.colors.text }]}>
-                {diseaseTreatment}
+                {translatedTreatment || diseaseTreatment}
               </Text>
             )}
             {activeTab === 'prevention' && (
               <Text style={[styles.tabContentText, { color: theme.colors.text }]}>
-                {diseasePrevention}
+                {translatedPrevention || diseasePrevention}
               </Text>
             )}
           </View>
