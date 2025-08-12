@@ -23,11 +23,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // translate.js
 export async function translateText(text: any, targetLang: any) {
-  const apiKey = "AIzaSyBJ--pBJYnkZ_Ppg28rkO-fDGESYo94AA4";
 
   try {
     const res = await fetch(
-      `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`,
+      `https://translation.googleapis.com/language/translate/v2?key=${process.env.EXPO_PUBLIC_GOOGLE_TRANSLATE_API_KEY}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
